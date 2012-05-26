@@ -1,0 +1,26 @@
+﻿using System;
+
+namespace Bluedot.HabboServer.Network
+{
+    public delegate void GameSocketMessageEvent(object sender, GameSocketMessageEventArgs args);
+
+    public class GameSocketMessageEventArgs : EventArgs
+    {
+        public IInternalOutgoingMessage Message
+        {
+            get;
+            private set;
+        }
+        public GameSocketMessageEventArgs(IInternalOutgoingMessage message)
+        {
+            Message = message;
+        }
+    }
+
+    public interface IMessageable
+    {
+        event GameSocketMessageEvent OnMessageSent;
+
+        IMessageable SendMessage(IInternalOutgoingMessage message);
+    }
+}

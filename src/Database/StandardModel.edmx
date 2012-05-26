@@ -1,0 +1,704 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Bluedot.HabboServer.Database.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="BluedotHabboServerDatabaseStoreContainer">
+          <EntitySet Name="habbos" EntityType="Bluedot.HabboServer.Database.Store.habbos" store:Type="Tables" Schema="ihi_iii" />
+          <EntitySet Name="logins" EntityType="Bluedot.HabboServer.Database.Store.logins" store:Type="Tables" Schema="ihi_iii" />
+          <EntitySet Name="messenger_categories" EntityType="Bluedot.HabboServer.Database.Store.messenger_categories" store:Type="Tables" Schema="ihi_iii" />
+          <EntitySet Name="messenger_friend_requests" EntityType="Bluedot.HabboServer.Database.Store.messenger_friend_requests" store:Type="Tables" Schema="ihi_iii" />
+          <EntitySet Name="messenger_friendships" EntityType="Bluedot.HabboServer.Database.Store.messenger_friendships" store:Type="Tables" Schema="ihi_iii" />
+          <EntitySet Name="rooms" EntityType="Bluedot.HabboServer.Database.Store.rooms" store:Type="Tables" Schema="ihi_iii" />
+          <EntitySet Name="subscriptions" EntityType="Bluedot.HabboServer.Database.Store.subscriptions" store:Type="Tables" Schema="ihi_iii" />
+          <AssociationSet Name="habbos_ibfk_1" Association="Bluedot.HabboServer.Database.Store.habbos_ibfk_1">
+            <End Role="logins" EntitySet="logins" />
+            <End Role="habbos" EntitySet="habbos" />
+          </AssociationSet>
+          <AssociationSet Name="messenger_categories_ibfk_1" Association="Bluedot.HabboServer.Database.Store.messenger_categories_ibfk_1">
+            <End Role="habbos" EntitySet="habbos" />
+            <End Role="messenger_categories" EntitySet="messenger_categories" />
+          </AssociationSet>
+          <AssociationSet Name="messenger_friend_requests_ibfk_1" Association="Bluedot.HabboServer.Database.Store.messenger_friend_requests_ibfk_1">
+            <End Role="habbos" EntitySet="habbos" />
+            <End Role="messenger_friend_requests" EntitySet="messenger_friend_requests" />
+          </AssociationSet>
+          <AssociationSet Name="messenger_friend_requests_ibfk_2" Association="Bluedot.HabboServer.Database.Store.messenger_friend_requests_ibfk_2">
+            <End Role="habbos" EntitySet="habbos" />
+            <End Role="messenger_friend_requests" EntitySet="messenger_friend_requests" />
+          </AssociationSet>
+          <AssociationSet Name="messenger_friendships_ibfk_1" Association="Bluedot.HabboServer.Database.Store.messenger_friendships_ibfk_1">
+            <End Role="habbos" EntitySet="habbos" />
+            <End Role="messenger_friendships" EntitySet="messenger_friendships" />
+          </AssociationSet>
+          <AssociationSet Name="messenger_friendships_ibfk_2" Association="Bluedot.HabboServer.Database.Store.messenger_friendships_ibfk_2">
+            <End Role="messenger_categories" EntitySet="messenger_categories" />
+            <End Role="messenger_friendships" EntitySet="messenger_friendships" />
+          </AssociationSet>
+          <AssociationSet Name="messenger_friendships_ibfk_3" Association="Bluedot.HabboServer.Database.Store.messenger_friendships_ibfk_3">
+            <End Role="habbos" EntitySet="habbos" />
+            <End Role="messenger_friendships" EntitySet="messenger_friendships" />
+          </AssociationSet>
+          <AssociationSet Name="messenger_friendships_ibfk_4" Association="Bluedot.HabboServer.Database.Store.messenger_friendships_ibfk_4">
+            <End Role="messenger_categories" EntitySet="messenger_categories" />
+            <End Role="messenger_friendships" EntitySet="messenger_friendships" />
+          </AssociationSet>
+          <AssociationSet Name="rooms_ibfk_1" Association="Bluedot.HabboServer.Database.Store.rooms_ibfk_1">
+            <End Role="habbos" EntitySet="habbos" />
+            <End Role="rooms" EntitySet="rooms" />
+          </AssociationSet>
+          <AssociationSet Name="subscriptions_ibfk_1" Association="Bluedot.HabboServer.Database.Store.subscriptions_ibfk_1">
+            <End Role="habbos" EntitySet="habbos" />
+            <End Role="subscriptions" EntitySet="subscriptions" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="habbos">
+          <Key>
+            <PropertyRef Name="habbo_id" />
+          </Key>
+          <Property Name="habbo_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="login_id" Type="int" Nullable="false" />
+          <Property Name="username" Type="char" Nullable="false" MaxLength="16" />
+          <Property Name="creation_date" Type="date" Nullable="false" />
+          <Property Name="figure" Type="char" Nullable="false" />
+          <Property Name="swim_figure" Type="umediumint" Nullable="false" />
+          <Property Name="gender" Type="bool" Nullable="false" />
+          <Property Name="motto" Type="char" Nullable="false" MaxLength="64" />
+          <Property Name="credits" Type="int" Nullable="false" />
+          <Property Name="pixels" Type="int" Nullable="false" />
+          <Property Name="last_access" Type="datetime" />
+          <Property Name="sso_ticket" Type="char" MaxLength="39" />
+          <Property Name="origin_ip" Type="binary" MaxLength="16" />
+        </EntityType>
+        <EntityType Name="logins">
+          <Key>
+            <PropertyRef Name="login_id" />
+          </Key>
+          <Property Name="login_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="char" Nullable="false" MaxLength="254" />
+          <Property Name="password" Type="char" Nullable="false" MaxLength="64" />
+          <Property Name="date_of_birth" Type="date" Nullable="false" />
+          <Property Name="date_created" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="messenger_categories">
+          <Key>
+            <PropertyRef Name="category_id" />
+          </Key>
+          <Property Name="category_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="habbo_id" Type="int" Nullable="false" />
+          <Property Name="name" Type="char" Nullable="false" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="messenger_friend_requests">
+          <Key>
+            <PropertyRef Name="friend_request_id" />
+          </Key>
+          <Property Name="friend_request_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="habbo_from_id" Type="int" Nullable="false" />
+          <Property Name="habbo_to_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="messenger_friendships">
+          <Key>
+            <PropertyRef Name="friendship_id" />
+          </Key>
+          <Property Name="friendship_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="habbo_a_id" Type="int" Nullable="false" />
+          <Property Name="category_a_id" Type="int" />
+          <Property Name="habbo_b_id" Type="int" Nullable="false" />
+          <Property Name="category_b_id" Type="int" />
+        </EntityType>
+        <EntityType Name="rooms">
+          <Key>
+            <PropertyRef Name="room_id" />
+          </Key>
+          <Property Name="room_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="owner_id" Type="int" Nullable="false" />
+          <Property Name="name" Type="char" Nullable="false" MaxLength="80" />
+          <Property Name="description" Type="char" Nullable="false" MaxLength="200" />
+          <Property Name="category_id" Type="char" Nullable="false" MaxLength="20" />
+          <Property Name="last_entry" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="subscriptions">
+          <Key>
+            <PropertyRef Name="subscription_id" />
+          </Key>
+          <Property Name="subscription_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="habbo_id" Type="int" Nullable="false" />
+          <Property Name="subscription_type" Type="char" Nullable="false" MaxLength="16" />
+          <Property Name="total_bought" Type="int" Nullable="false" />
+          <Property Name="skipped_length" Type="int" Nullable="false" />
+          <Property Name="paused_start" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="habbos_ibfk_1">
+          <End Role="logins" Type="Bluedot.HabboServer.Database.Store.logins" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="habbos" Type="Bluedot.HabboServer.Database.Store.habbos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="logins">
+              <PropertyRef Name="login_id" />
+            </Principal>
+            <Dependent Role="habbos">
+              <PropertyRef Name="login_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="messenger_categories_ibfk_1">
+          <End Role="habbos" Type="Bluedot.HabboServer.Database.Store.habbos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="messenger_categories" Type="Bluedot.HabboServer.Database.Store.messenger_categories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="habbos">
+              <PropertyRef Name="habbo_id" />
+            </Principal>
+            <Dependent Role="messenger_categories">
+              <PropertyRef Name="habbo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="messenger_friend_requests_ibfk_1">
+          <End Role="habbos" Type="Bluedot.HabboServer.Database.Store.habbos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="messenger_friend_requests" Type="Bluedot.HabboServer.Database.Store.messenger_friend_requests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="habbos">
+              <PropertyRef Name="habbo_id" />
+            </Principal>
+            <Dependent Role="messenger_friend_requests">
+              <PropertyRef Name="habbo_from_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="messenger_friend_requests_ibfk_2">
+          <End Role="habbos" Type="Bluedot.HabboServer.Database.Store.habbos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="messenger_friend_requests" Type="Bluedot.HabboServer.Database.Store.messenger_friend_requests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="habbos">
+              <PropertyRef Name="habbo_id" />
+            </Principal>
+            <Dependent Role="messenger_friend_requests">
+              <PropertyRef Name="habbo_to_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="messenger_friendships_ibfk_1">
+          <End Role="habbos" Type="Bluedot.HabboServer.Database.Store.habbos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="messenger_friendships" Type="Bluedot.HabboServer.Database.Store.messenger_friendships" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="habbos">
+              <PropertyRef Name="habbo_id" />
+            </Principal>
+            <Dependent Role="messenger_friendships">
+              <PropertyRef Name="habbo_a_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="messenger_friendships_ibfk_2">
+          <End Role="messenger_categories" Type="Bluedot.HabboServer.Database.Store.messenger_categories" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="messenger_friendships" Type="Bluedot.HabboServer.Database.Store.messenger_friendships" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="messenger_categories">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="messenger_friendships">
+              <PropertyRef Name="category_a_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="messenger_friendships_ibfk_3">
+          <End Role="habbos" Type="Bluedot.HabboServer.Database.Store.habbos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="messenger_friendships" Type="Bluedot.HabboServer.Database.Store.messenger_friendships" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="habbos">
+              <PropertyRef Name="habbo_id" />
+            </Principal>
+            <Dependent Role="messenger_friendships">
+              <PropertyRef Name="habbo_b_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="messenger_friendships_ibfk_4">
+          <End Role="messenger_categories" Type="Bluedot.HabboServer.Database.Store.messenger_categories" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="messenger_friendships" Type="Bluedot.HabboServer.Database.Store.messenger_friendships" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="messenger_categories">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="messenger_friendships">
+              <PropertyRef Name="category_b_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rooms_ibfk_1">
+          <End Role="habbos" Type="Bluedot.HabboServer.Database.Store.habbos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="rooms" Type="Bluedot.HabboServer.Database.Store.rooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="habbos">
+              <PropertyRef Name="habbo_id" />
+            </Principal>
+            <Dependent Role="rooms">
+              <PropertyRef Name="owner_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="subscriptions_ibfk_1">
+          <End Role="habbos" Type="Bluedot.HabboServer.Database.Store.habbos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="subscriptions" Type="Bluedot.HabboServer.Database.Store.subscriptions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="habbos">
+              <PropertyRef Name="habbo_id" />
+            </Principal>
+            <Dependent Role="subscriptions">
+              <PropertyRef Name="habbo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Bluedot.HabboServer.Database" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="Session" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Habbos" EntityType="Bluedot.HabboServer.Database.DBHabbo" />
+          <EntitySet Name="Logins" EntityType="Bluedot.HabboServer.Database.DBLogin" />
+          <EntitySet Name="MessengerCategories" EntityType="Bluedot.HabboServer.Database.DBMessengerCategory" />
+          <EntitySet Name="MessengerFriendRequests" EntityType="Bluedot.HabboServer.Database.DBMessengerFriendRequest" />
+          <EntitySet Name="MessengerFriendships" EntityType="Bluedot.HabboServer.Database.DBMessengerFriendship" />
+          <EntitySet Name="Rooms" EntityType="Bluedot.HabboServer.Database.DBRoom" />
+          <EntitySet Name="Subscriptions" EntityType="Bluedot.HabboServer.Database.DBSubscription" />
+          <AssociationSet Name="habbos_ibfk_1" Association="Bluedot.HabboServer.Database.habbos_ibfk_1">
+            <End Role="DBLogin" EntitySet="Logins" />
+            <End Role="DBHabbo" EntitySet="Habbos" />
+          </AssociationSet>
+          <AssociationSet Name="messenger_categories_ibfk_1" Association="Bluedot.HabboServer.Database.messenger_categories_ibfk_1">
+            <End Role="DBHabbo" EntitySet="Habbos" />
+            <End Role="DBMessengerCategory" EntitySet="MessengerCategories" />
+          </AssociationSet>
+          <AssociationSet Name="messenger_friend_requests_ibfk_1" Association="Bluedot.HabboServer.Database.messenger_friend_requests_ibfk_1">
+            <End Role="DBHabbo" EntitySet="Habbos" />
+            <End Role="DBMessengerFriendRequest" EntitySet="MessengerFriendRequests" />
+          </AssociationSet>
+          <AssociationSet Name="messenger_friend_requests_ibfk_2" Association="Bluedot.HabboServer.Database.messenger_friend_requests_ibfk_2">
+            <End Role="DBHabbo" EntitySet="Habbos" />
+            <End Role="DBMessengerFriendRequest" EntitySet="MessengerFriendRequests" />
+          </AssociationSet>
+          <AssociationSet Name="messenger_friendships_ibfk_1" Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_1">
+            <End Role="DBHabbo" EntitySet="Habbos" />
+            <End Role="DBMessengerFriendship" EntitySet="MessengerFriendships" />
+          </AssociationSet>
+          <AssociationSet Name="messenger_friendships_ibfk_3" Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_3">
+            <End Role="DBHabbo" EntitySet="Habbos" />
+            <End Role="DBMessengerFriendship" EntitySet="MessengerFriendships" />
+          </AssociationSet>
+          <AssociationSet Name="rooms_ibfk_1" Association="Bluedot.HabboServer.Database.rooms_ibfk_1">
+            <End Role="DBHabbo" EntitySet="Habbos" />
+            <End Role="DBRoom" EntitySet="Rooms" />
+          </AssociationSet>
+          <AssociationSet Name="subscriptions_ibfk_1" Association="Bluedot.HabboServer.Database.subscriptions_ibfk_1">
+            <End Role="DBHabbo" EntitySet="Habbos" />
+            <End Role="DBSubscription" EntitySet="Subscriptions" />
+          </AssociationSet>
+          <AssociationSet Name="messenger_friendships_ibfk_2" Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_2">
+            <End Role="DBMessengerCategory" EntitySet="MessengerCategories" />
+            <End Role="DBMessengerFriendship" EntitySet="MessengerFriendships" />
+          </AssociationSet>
+          <AssociationSet Name="messenger_friendships_ibfk_4" Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_4">
+            <End Role="DBMessengerCategory" EntitySet="MessengerCategories" />
+            <End Role="DBMessengerFriendship" EntitySet="MessengerFriendships" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="DBHabbo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="LoginId" Nullable="false" />
+          <Property Type="String" Name="Username" Nullable="false" />
+          <Property Type="DateTime" Name="DateCreated" Nullable="false" />
+          <Property Type="String" Name="FigureString" Nullable="false" />
+          <Property Type="Int32" Name="RawSwimColour" Nullable="false" />
+          <Property Type="Boolean" Name="FigureGender" Nullable="false" />
+          <Property Type="String" Name="Motto" Nullable="false" />
+          <Property Type="Int32" Name="Credits" Nullable="false" />
+          <Property Type="Int32" Name="Pixels" Nullable="false" />
+          <Property Type="DateTime" Name="LastAccess" />
+          <Property Type="String" Name="SSOTicket" />
+          <Property Type="Binary" Name="RawOriginIP" />
+          </EntityType>
+        <EntityType Name="DBLogin">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Email" Nullable="false" />
+          <Property Type="String" Name="Password" Nullable="false" />
+          <Property Type="DateTime" Name="DateOfBirth" Nullable="false" />
+          <Property Type="DateTime" Name="DatedCreated" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DBMessengerCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="OwnerId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" />
+          <NavigationProperty Name="habbo" Relationship="Bluedot.HabboServer.Database.messenger_categories_ibfk_1" FromRole="DBMessengerCategory" ToRole="DBHabbo" />
+          <NavigationProperty Name="messenger_friendships" Relationship="Bluedot.HabboServer.Database.messenger_friendships_ibfk_2" FromRole="DBMessengerCategory" ToRole="DBMessengerFriendship" />
+          <NavigationProperty Name="messenger_friendships1" Relationship="Bluedot.HabboServer.Database.messenger_friendships_ibfk_4" FromRole="DBMessengerCategory" ToRole="DBMessengerFriendship" />
+          </EntityType>
+        <EntityType Name="DBMessengerFriendRequest">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="FromId" Nullable="false" />
+          <Property Type="Int32" Name="ToId" Nullable="false" />
+          </EntityType>
+        <EntityType Name="DBMessengerFriendship">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="HabboAId" Nullable="false" />
+          <Property Type="Int32" Name="CategoryAId" />
+          <Property Type="Int32" Name="HabboBId" Nullable="false" />
+          <Property Type="Int32" Name="CategoryBId" />
+          </EntityType>
+        <EntityType Name="DBRoom">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="OwnerId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="false" />
+          <Property Type="String" Name="CategoryId" Nullable="false" />
+          <Property Type="DateTime" Name="LastEntry" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DBSubscription">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="SubscriberId" Nullable="false" />
+          <Property Type="String" Name="Type" Nullable="false" />
+          <Property Type="Int32" Name="TotalBought" Nullable="false" />
+          <Property Type="Int32" Name="LengthSkipped" Nullable="false" />
+          <Property Type="Int32" Name="PausedStart" Nullable="false" />
+        </EntityType>
+        <Association Name="habbos_ibfk_1">
+          <End Type="Bluedot.HabboServer.Database.DBLogin" Role="DBLogin" Multiplicity="1" />
+          <End Type="Bluedot.HabboServer.Database.DBHabbo" Role="DBHabbo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DBLogin">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DBHabbo">
+              <PropertyRef Name="LoginId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="messenger_categories_ibfk_1">
+          <End Type="Bluedot.HabboServer.Database.DBHabbo" Role="DBHabbo" Multiplicity="1" />
+          <End Type="Bluedot.HabboServer.Database.DBMessengerCategory" Role="DBMessengerCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DBHabbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DBMessengerCategory">
+              <PropertyRef Name="OwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="messenger_friend_requests_ibfk_1">
+          <End Type="Bluedot.HabboServer.Database.DBHabbo" Role="DBHabbo" Multiplicity="1" />
+          <End Type="Bluedot.HabboServer.Database.DBMessengerFriendRequest" Role="DBMessengerFriendRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DBHabbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DBMessengerFriendRequest">
+              <PropertyRef Name="FromId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="messenger_friend_requests_ibfk_2">
+          <End Type="Bluedot.HabboServer.Database.DBHabbo" Role="DBHabbo" Multiplicity="1" />
+          <End Type="Bluedot.HabboServer.Database.DBMessengerFriendRequest" Role="DBMessengerFriendRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DBHabbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DBMessengerFriendRequest">
+              <PropertyRef Name="ToId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="messenger_friendships_ibfk_1">
+          <End Type="Bluedot.HabboServer.Database.DBHabbo" Role="DBHabbo" Multiplicity="1" />
+          <End Type="Bluedot.HabboServer.Database.DBMessengerFriendship" Role="DBMessengerFriendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DBHabbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DBMessengerFriendship">
+              <PropertyRef Name="HabboAId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="messenger_friendships_ibfk_3">
+          <End Type="Bluedot.HabboServer.Database.DBHabbo" Role="DBHabbo" Multiplicity="1" />
+          <End Type="Bluedot.HabboServer.Database.DBMessengerFriendship" Role="DBMessengerFriendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DBHabbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DBMessengerFriendship">
+              <PropertyRef Name="HabboBId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rooms_ibfk_1">
+          <End Type="Bluedot.HabboServer.Database.DBHabbo" Role="DBHabbo" Multiplicity="1" />
+          <End Type="Bluedot.HabboServer.Database.DBRoom" Role="DBRoom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DBHabbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DBRoom">
+              <PropertyRef Name="OwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="subscriptions_ibfk_1">
+          <End Type="Bluedot.HabboServer.Database.DBHabbo" Role="DBHabbo" Multiplicity="1" />
+          <End Type="Bluedot.HabboServer.Database.DBSubscription" Role="DBSubscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DBHabbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DBSubscription">
+              <PropertyRef Name="SubscriberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="messenger_friendships_ibfk_2">
+          <End Type="Bluedot.HabboServer.Database.DBMessengerCategory" Role="DBMessengerCategory" Multiplicity="0..1" />
+          <End Type="Bluedot.HabboServer.Database.DBMessengerFriendship" Role="DBMessengerFriendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DBMessengerCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DBMessengerFriendship">
+              <PropertyRef Name="CategoryAId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="messenger_friendships_ibfk_4">
+          <End Type="Bluedot.HabboServer.Database.DBMessengerCategory" Role="DBMessengerCategory" Multiplicity="0..1" />
+          <End Type="Bluedot.HabboServer.Database.DBMessengerFriendship" Role="DBMessengerFriendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DBMessengerCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DBMessengerFriendship">
+              <PropertyRef Name="CategoryBId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BluedotHabboServerDatabaseStoreContainer" CdmEntityContainer="Session">
+          <EntitySetMapping Name="Habbos">
+            <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBHabbo">
+              <MappingFragment StoreEntitySet="habbos">
+                <ScalarProperty Name="RawOriginIP" ColumnName="origin_ip" />
+                <ScalarProperty Name="SSOTicket" ColumnName="sso_ticket" />
+                <ScalarProperty Name="LastAccess" ColumnName="last_access" />
+                <ScalarProperty Name="Pixels" ColumnName="pixels" />
+                <ScalarProperty Name="Credits" ColumnName="credits" />
+                <ScalarProperty Name="Motto" ColumnName="motto" />
+                <ScalarProperty Name="FigureGender" ColumnName="gender" />
+                <ScalarProperty Name="RawSwimColour" ColumnName="swim_figure" />
+                <ScalarProperty Name="FigureString" ColumnName="figure" />
+                <ScalarProperty Name="DateCreated" ColumnName="creation_date" />
+                <ScalarProperty Name="Username" ColumnName="username" />
+                <ScalarProperty Name="LoginId" ColumnName="login_id" />
+                <ScalarProperty Name="Id" ColumnName="habbo_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Logins">
+            <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBLogin">
+              <MappingFragment StoreEntitySet="logins">
+                <ScalarProperty Name="DatedCreated" ColumnName="date_created" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="date_of_birth" />
+                <ScalarProperty Name="Password" ColumnName="password" />
+                <ScalarProperty Name="Email" ColumnName="email" />
+                <ScalarProperty Name="Id" ColumnName="login_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MessengerCategories">
+            <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBMessengerCategory">
+              <MappingFragment StoreEntitySet="messenger_categories">
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="OwnerId" ColumnName="habbo_id" />
+                <ScalarProperty Name="Id" ColumnName="category_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MessengerFriendRequests">
+            <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBMessengerFriendRequest">
+              <MappingFragment StoreEntitySet="messenger_friend_requests">
+                <ScalarProperty Name="ToId" ColumnName="habbo_to_id" />
+                <ScalarProperty Name="FromId" ColumnName="habbo_from_id" />
+                <ScalarProperty Name="Id" ColumnName="friend_request_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MessengerFriendships">
+            <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBMessengerFriendship">
+              <MappingFragment StoreEntitySet="messenger_friendships">
+                <ScalarProperty Name="CategoryBId" ColumnName="category_b_id" />
+                <ScalarProperty Name="HabboBId" ColumnName="habbo_b_id" />
+                <ScalarProperty Name="CategoryAId" ColumnName="category_a_id" />
+                <ScalarProperty Name="HabboAId" ColumnName="habbo_a_id" />
+                <ScalarProperty Name="Id" ColumnName="friendship_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rooms">
+            <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBRoom">
+              <MappingFragment StoreEntitySet="rooms">
+                <ScalarProperty Name="LastEntry" ColumnName="last_entry" />
+                <ScalarProperty Name="CategoryId" ColumnName="category_id" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="OwnerId" ColumnName="owner_id" />
+                <ScalarProperty Name="Id" ColumnName="room_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subscriptions">
+            <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBSubscription">
+              <MappingFragment StoreEntitySet="subscriptions">
+                <ScalarProperty Name="PausedStart" ColumnName="paused_start" />
+                <ScalarProperty Name="LengthSkipped" ColumnName="skipped_length" />
+                <ScalarProperty Name="TotalBought" ColumnName="total_bought" />
+                <ScalarProperty Name="Type" ColumnName="subscription_type" />
+                <ScalarProperty Name="SubscriberId" ColumnName="habbo_id" />
+                <ScalarProperty Name="Id" ColumnName="subscription_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="DDLGenerationTemplate" Value="$(VSEFTools)\DBGen\SSDLToMySQL.tt" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="StandardModel" ZoomLevel="97">
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBHabbo" Width="3.25" PointX="0.75" PointY="0.75" Height="3.0714322916666665" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBLogin" Width="3.25" PointX="4.75" PointY="0.75" Height="1.7566536458333331" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBMessengerCategory" Width="3.25" PointX="0.75" PointY="4.75" Height="1.4279589843749996" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBMessengerFriendRequest" Width="3.25" PointX="4.75" PointY="3.75" Height="1.4279589843749996" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBMessengerFriendship" Width="3.25" PointX="4.75" PointY="6.75" Height="1.7566536458333335" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBRoom" Width="3.25" PointX="8.75" PointY="0.75" Height="1.9210009765625" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBSubscription" Width="3.25" PointX="8.75" PointY="3.75" Height="1.9210009765624996" />
+        <AssociationConnector Association="Bluedot.HabboServer.Database.habbos_ibfk_1" >
+          <ConnectorPoint PointX="4.75" PointY="1.6283268229166665" />
+          <ConnectorPoint PointX="4" PointY="1.6283268229166665" />
+        </AssociationConnector>
+        <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_categories_ibfk_1" >
+          <ConnectorPoint PointX="2.3049975" PointY="3.8214322916666665" />
+          <ConnectorPoint PointX="2.3049975" PointY="4.75" />
+        </AssociationConnector>
+        <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friend_requests_ibfk_1" >
+          <ConnectorPoint PointX="4" PointY="3.774178487179487" />
+          <ConnectorPoint PointX="4.6875" PointY="4.461678487179487" />
+          <ConnectorPoint PointX="4.6875" PointY="3.6633355402644234" />
+          <ConnectorPoint PointX="4.7741644597355766" PointY="3.75" />
+        </AssociationConnector>
+        <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friend_requests_ibfk_2" >
+          <ConnectorPoint PointX="3.9976373597756409" PointY="3.8214322916666665" />
+          <ConnectorPoint PointX="4.5625" PointY="4.386294931891026" />
+          <ConnectorPoint PointX="4.5625" PointY="3.5855670297475961" />
+          <ConnectorPoint PointX="4.75" PointY="3.7730670297475961" />
+        </AssociationConnector>
+        <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_1" >
+          <ConnectorPoint PointX="3.9480219150641025" PointY="3.8214322916666665" />
+          <ConnectorPoint PointX="4.46875" PointY="4.342160376602564" />
+          <ConnectorPoint PointX="4.46875" PointY="7.4853352401126489" />
+          <ConnectorPoint PointX="4.75" PointY="7.4853352401126489" />
+        </AssociationConnector>
+        <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_3" >
+          <ConnectorPoint PointX="3.898406470352564" PointY="3.8214322916666665" />
+          <ConnectorPoint PointX="4.375" PointY="4.298025821314102" />
+          <ConnectorPoint PointX="4.375" PointY="7.2281621034473282" />
+          <ConnectorPoint PointX="4.385416666666667" PointY="7.2281621034473273" />
+          <ConnectorPoint PointX="4.552083333333333" PointY="7.2281621034473282" />
+          <ConnectorPoint PointX="4.75" PointY="7.2281621034473282" />
+        </AssociationConnector>
+        <AssociationConnector Association="Bluedot.HabboServer.Database.rooms_ibfk_1" >
+          <ConnectorPoint PointX="4" PointY="2.6200773111979165" />
+          <ConnectorPoint PointX="8.75" PointY="2.6200773111979165" />
+        </AssociationConnector>
+        <AssociationConnector Association="Bluedot.HabboServer.Database.subscriptions_ibfk_1" >
+          <ConnectorPoint PointX="4" PointY="3.7245630424679486" />
+          <ConnectorPoint PointX="4.3125" PointY="4.037063042467949" />
+          <ConnectorPoint PointX="4.3125" PointY="3.375" />
+          <ConnectorPoint PointX="8.3764766930588959" PointY="3.375" />
+          <ConnectorPoint PointX="8.7514766930588959" PointY="3.75" />
+        </AssociationConnector>
+        <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_2" >
+          <ConnectorPoint PointX="1.8130476513671876" PointY="6.177958984375" />
+          <ConnectorPoint PointX="1.8130476513671876" PointY="7.8463708775486154" />
+          <ConnectorPoint PointX="2.85444299235026" PointY="7.8463708775486145" />
+          <ConnectorPoint PointX="3.0211096590169269" PointY="7.8463708775486154" />
+          <ConnectorPoint PointX="4.75" PointY="7.8463708775486154" />
+        </AssociationConnector>
+        <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_4" >
+          <ConnectorPoint PointX="2.9377763256835934" PointY="6.177958984375" />
+          <ConnectorPoint PointX="2.9377763256835934" PointY="8.2077647616909744" />
+          <ConnectorPoint PointX="4.75" PointY="8.2077647616909744" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

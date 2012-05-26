@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C4A7184F-5843-4D97-889F-FBC8153007F1}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Bluedot.HabboServer</RootNamespace>
+    <AssemblyName>BluedotHabboServer</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG; </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.4.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>S:\Programming\Libs\MySQL\Connector Net\6.4.5\MySql.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Nito.Async">
+      <HintPath>S:\Programming\Libs\Nito Asnc\1.4\Nito.Async.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Nito.Async.Sockets">
+      <HintPath>S:\Programming\Libs\Nito Asnc\1.4\Nito.Async.Sockets.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="src\APIUsage\ApiCallerRoot.cs" />
+    <Compile Include="src\APIUsage\Debug\PrintPackets.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\LoginHandlers\SendAuthenticationOkay.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\LoginHandlers\ProcessSSOTicket.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\LoginHandlers\ProcessSessionRequest.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\LoginHandlers\ProcessEncryptionRequest.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\LoginSenders\MAuthenticationOkay.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\LoginSenders\MConnectionClosed.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\LoginSenders\MSessionParams.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\LoginSenders\MSetupEncryption.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\PacketHandlerRoot.cs" />
+    <Compile Include="src\Configuration\XMLConfig.cs" />
+    <Compile Include="src\CoreManager.cs" />
+    <Compile Include="src\Database\StandardModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StandardModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="src\EntryPoint.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\Extensions.cs" />
+    <Compile Include="src\FastSmartWeakEvent.cs" />
+    <Compile Include="src\Habbos\FigureParts\Body.cs" />
+    <Compile Include="src\Habbos\FigureParts\EyeAccessory.cs" />
+    <Compile Include="src\Habbos\FigureParts\FaceAccessory.cs" />
+    <Compile Include="src\Habbos\FigureParts\FigureFactory.cs" />
+    <Compile Include="src\Habbos\FigureParts\FigurePart.cs" />
+    <Compile Include="src\Habbos\FigureParts\FigureWaistAccessory.cs" />
+    <Compile Include="src\Habbos\FigureParts\Hair.cs" />
+    <Compile Include="src\Habbos\FigureParts\Hat.cs" />
+    <Compile Include="src\Habbos\FigureParts\HeadAccessory.cs" />
+    <Compile Include="src\Habbos\FigureParts\Jacket.cs" />
+    <Compile Include="src\Habbos\FigureParts\Legs.cs" />
+    <Compile Include="src\Habbos\FigureParts\Shirt.cs" />
+    <Compile Include="src\Habbos\FigureParts\ShirtAccessory.cs" />
+    <Compile Include="src\Habbos\FigureParts\Shoes.cs" />
+    <Compile Include="src\Habbos\FigureParts\WaistAccessory.cs" />
+    <Compile Include="src\Habbos\Habbo.cs" />
+    <Compile Include="src\Habbos\HabboDistributor.cs" />
+    <Compile Include="src\Habbos\HabboEventArgs.cs" />
+    <Compile Include="src\Habbos\HabboEventHandler.cs" />
+    <Compile Include="src\Habbos\HabboFigure.cs" />
+    <Compile Include="src\Habbos\Messenger\HabboMessenger.cs" />
+    <Compile Include="src\Install\Category.cs" />
+    <Compile Include="src\Install\InstallerCore.cs" />
+    <Compile Include="src\Install\InputException.cs" />
+    <Compile Include="src\Install\InstallationEventArgs.cs" />
+    <Compile Include="src\Install\InstallerIn.cs" />
+    <Compile Include="src\Install\InstallerOut.cs" />
+    <Compile Include="src\Install\Output.cs" />
+    <Compile Include="src\Install\Steps\ByteStep.cs" />
+    <Compile Include="src\Install\Steps\IntStep.cs" />
+    <Compile Include="src\Install\Steps\PasswordStep.cs" />
+    <Compile Include="src\Install\Steps\Step.cs" />
+    <Compile Include="src\Install\Steps\StringStep.cs" />
+    <Compile Include="src\Install\Steps\UShortStep.cs" />
+    <Compile Include="src\Network\Encoding\Base64Encoding.cs" />
+    <Compile Include="src\Network\GameSockets\Messages\Incoming\GameSocketMessageHandlerInvoker.cs" />
+    <Compile Include="src\Network\GameSockets\Messages\Incoming\IncomingMessage.cs" />
+    <Compile Include="src\Network\GameSockets\Messages\Incoming\GameSocketReader.cs" />
+    <Compile Include="src\Network\GameSockets\Messages\Incoming\Protocols\ClassicIncomingMessage.cs" />
+    <Compile Include="src\Network\GameSockets\Messages\Incoming\Protocols\BinaryIncomingMessage.cs" />
+    <Compile Include="src\Network\GameSockets\Messages\Incoming\Protocols\ClassicGameSocketReader.cs" />
+    <Compile Include="src\Network\GameSockets\Messages\Incoming\Protocols\BinaryGameSocketReader.cs" />
+    <Compile Include="src\Network\GameSockets\Messages\Incoming\Protocols\EarlyIncomingMessage.cs" />
+    <Compile Include="src\Network\GameSockets\Messages\Incoming\Protocols\EarlyGameSocketReader.cs" />
+    <Compile Include="src\Network\GameSockets\Messages\Outgoing\IInternalOutgoingMessage.cs" />
+    <Compile Include="src\Network\GameSockets\Messages\Outgoing\InternalOutgoingMessage.cs" />
+    <Compile Include="src\Network\GameSockets\Messages\Outgoing\OutgoingMessage.cs" />
+    <Compile Include="src\Network\Encoding\WireEncoding.cs" />
+    <Compile Include="src\Network\GameSockets\Messages\Outgoing\IMessageable.cs" />
+    <Compile Include="src\Network\GameSockets\Messages\Incoming\GameSocketMessageHandler.cs" />
+    <Compile Include="src\Network\GameSockets\Messages\Incoming\GameSocketMessageHandlerPriority.cs" />
+    <Compile Include="src\Network\GameSockets\GameSocket.cs" />
+    <Compile Include="src\Network\GameSockets\GameSocketManager.cs" />
+    <Compile Include="src\ServerCore.cs" />
+    <Compile Include="src\StandardOut.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="Properties\DataSources\Bluedot.HabboServer.Database.Session.datasource" />
+    <None Include="Properties\DataSources\Bluedot.HabboServer.src.Database.Session.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="src\Database\StandardModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>StandardModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reference Packaging\MySql.Data.dll" />
+    <EmbeddedResource Include="Reference Packaging\Nito.Async.dll" />
+    <EmbeddedResource Include="Reference Packaging\Nito.Async.Sockets.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reference Packaging\MySql.Data.Entity.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
