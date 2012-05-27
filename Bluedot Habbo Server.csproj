@@ -62,6 +62,13 @@
   <ItemGroup>
     <Compile Include="src\APIUsage\ApiCallerRoot.cs" />
     <Compile Include="src\APIUsage\Debug\PrintPackets.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\Extensions.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessBalanceRequest.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessHabboInfoRequest.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessGetVolumeLevel.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MVolumeLevel.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MCreditBalance.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MHabboData.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\LoginHandlers\SendAuthenticationOkay.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\LoginHandlers\ProcessSSOTicket.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\LoginHandlers\ProcessSessionRequest.cs" />
@@ -73,6 +80,8 @@
     <Compile Include="src\APIUsage\Packets\R36S\PacketHandlerRoot.cs" />
     <Compile Include="src\Configuration\XMLConfig.cs" />
     <Compile Include="src\CoreManager.cs" />
+    <Compile Include="src\Database\IPersistable.cs" />
+    <Compile Include="src\Database\PersistentStorage.cs" />
     <Compile Include="src\Database\StandardModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -160,6 +169,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Reference Packaging\MySql.Data.Entity.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

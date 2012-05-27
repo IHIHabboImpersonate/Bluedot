@@ -190,6 +190,22 @@ namespace Bluedot.HabboServer.Database
             }
         }
         private ObjectSet<DBSubscription> _Subscriptions;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<DBPersistentStorage> DBPersistentStorages
+        {
+            get
+            {
+                if ((_DBPersistentStorages == null))
+                {
+                    _DBPersistentStorages = base.CreateObjectSet<DBPersistentStorage>("DBPersistentStorages");
+                }
+                return _DBPersistentStorages;
+            }
+        }
+        private ObjectSet<DBPersistentStorage> _DBPersistentStorages;
 
         #endregion
         #region AddTo Methods
@@ -248,6 +264,14 @@ namespace Bluedot.HabboServer.Database
         public void AddToSubscriptions(DBSubscription dBSubscription)
         {
             base.AddObject("Subscriptions", dBSubscription);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the DBPersistentStorages EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToDBPersistentStorages(DBPersistentStorage dBPersistentStorage)
+        {
+            base.AddObject("DBPersistentStorages", dBPersistentStorage);
         }
 
         #endregion
@@ -1227,6 +1251,145 @@ namespace Bluedot.HabboServer.Database
         private Nullable<global::System.Int32> _CategoryBId;
         partial void OnCategoryBIdChanging(Nullable<global::System.Int32> value);
         partial void OnCategoryBIdChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="Bluedot.HabboServer.Database", Name="DBPersistentStorage")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class DBPersistentStorage : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new DBPersistentStorage object.
+        /// </summary>
+        /// <param name="typeName">Initial value of the TypeName property.</param>
+        /// <param name="instanceId">Initial value of the InstanceId property.</param>
+        /// <param name="variableName">Initial value of the VariableName property.</param>
+        /// <param name="value">Initial value of the Value property.</param>
+        public static DBPersistentStorage CreateDBPersistentStorage(global::System.String typeName, global::System.Int64 instanceId, global::System.String variableName, global::System.Byte[] value)
+        {
+            DBPersistentStorage dBPersistentStorage = new DBPersistentStorage();
+            dBPersistentStorage.TypeName = typeName;
+            dBPersistentStorage.InstanceId = instanceId;
+            dBPersistentStorage.VariableName = variableName;
+            dBPersistentStorage.Value = value;
+            return dBPersistentStorage;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String TypeName
+        {
+            get
+            {
+                return _TypeName;
+            }
+            set
+            {
+                if (_TypeName != value)
+                {
+                    OnTypeNameChanging(value);
+                    ReportPropertyChanging("TypeName");
+                    _TypeName = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("TypeName");
+                    OnTypeNameChanged();
+                }
+            }
+        }
+        private global::System.String _TypeName;
+        partial void OnTypeNameChanging(global::System.String value);
+        partial void OnTypeNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 InstanceId
+        {
+            get
+            {
+                return _InstanceId;
+            }
+            set
+            {
+                if (_InstanceId != value)
+                {
+                    OnInstanceIdChanging(value);
+                    ReportPropertyChanging("InstanceId");
+                    _InstanceId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("InstanceId");
+                    OnInstanceIdChanged();
+                }
+            }
+        }
+        private global::System.Int64 _InstanceId;
+        partial void OnInstanceIdChanging(global::System.Int64 value);
+        partial void OnInstanceIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String VariableName
+        {
+            get
+            {
+                return _VariableName;
+            }
+            set
+            {
+                if (_VariableName != value)
+                {
+                    OnVariableNameChanging(value);
+                    ReportPropertyChanging("VariableName");
+                    _VariableName = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("VariableName");
+                    OnVariableNameChanged();
+                }
+            }
+        }
+        private global::System.String _VariableName;
+        partial void OnVariableNameChanging(global::System.String value);
+        partial void OnVariableNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] Value
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_Value);
+            }
+            set
+            {
+                OnValueChanging(value);
+                ReportPropertyChanging("Value");
+                _Value = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Value");
+                OnValueChanged();
+            }
+        }
+        private global::System.Byte[] _Value;
+        partial void OnValueChanging(global::System.Byte[] value);
+        partial void OnValueChanged();
 
         #endregion
     

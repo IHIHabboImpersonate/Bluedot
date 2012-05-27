@@ -28,21 +28,24 @@ using System.Collections.Generic;
 
 namespace Bluedot.HabboServer.Habbos.Figure
 {
-    internal class HabboFigureFactory
+    public class HabboFigureFactory
     {
         private readonly Dictionary<ushort, Type> _figureModelIDs;
 
-        internal HabboFigureFactory()
+        public HabboFigureFactory()
         {
             _figureModelIDs = new Dictionary<ushort, Type>();
         }
 
-        internal HabboFigure Parse(string figureString, bool gender)
+        public HabboFigure Parse(string figureString, bool gender)
         {
             // TODO: Possible optimisation: Store unparsed string. Don't parse till needed. (Lazy parsing)
 
             // Create a new instance of HabboFigure to work on.
-            HabboFigure figureInProgress = new HabboFigure(gender);
+            HabboFigure figureInProgress = new HabboFigure
+                                               {
+                                                   Gender = gender
+                                               };
 
             // Split the input string into parts of the figure.
             string[] partStringArray = figureString.Split(new[] {'.'});
@@ -79,7 +82,7 @@ namespace Bluedot.HabboServer.Habbos.Figure
                         throw new FormatException("Figure ColourID is not a valid ushort in '" + partString + "'.");
 
                     //Set PrimaryColour for this part.
-                    part.SetPrimaryColour(colourID);
+                    part.PrimaryColour = colourID;
 
                     // Was a secondary colour provided?
                     if (detailsArray.Length > 3)
@@ -89,7 +92,7 @@ namespace Bluedot.HabboServer.Habbos.Figure
                             throw new FormatException("Figure ColourID is not a valid ushort in '" + partString + "'.");
 
                         // Set the SecondaryColour for this part.
-                        part.SetSecondaryColour(colourID);
+                        part.SecondaryColour = colourID;
                     }
                 }
 
@@ -106,7 +109,7 @@ namespace Bluedot.HabboServer.Habbos.Figure
                                                                " is a valid figure model but not a valid body.");
 
                             // Apply the part to the HabboFigure
-                            figureInProgress.SetBody(part as Body);
+                            figureInProgress.Body = part as Body;
                             break;
                         }
                     default:
@@ -121,7 +124,7 @@ namespace Bluedot.HabboServer.Habbos.Figure
         {
             if (part.IsSubclassOf(typeof (FigurePart)))
             {
-                ushort modelID = (part.GetConstructors()[0].Invoke(new object[0]) as FigurePart).GetModelID();
+                ushort modelID = (part.GetConstructors()[0].Invoke(new object[0]) as FigurePart).ModelId;
                 _figureModelIDs.Add(modelID, part);
             }
             return this;
@@ -131,7 +134,7 @@ namespace Bluedot.HabboServer.Habbos.Figure
         {
             if (part.IsSubclassOf(typeof (FigurePart)))
             {
-                ushort modelID = (part.GetConstructors()[0].Invoke(new object[0]) as FigurePart).GetModelID();
+                ushort modelID = (part.GetConstructors()[0].Invoke(new object[0]) as FigurePart).ModelId;
                 if (_figureModelIDs.ContainsKey(modelID))
                     _figureModelIDs.Remove(modelID);
             }

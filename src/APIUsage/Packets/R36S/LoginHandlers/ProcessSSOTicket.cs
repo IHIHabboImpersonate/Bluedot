@@ -25,7 +25,7 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
                     Reason = ConnectionClosedReason.InvalidSSOTicket
                 }.Send(sender);
                 
-                sender.Socket.Close(); // Invalid SSO Ticket - Disconnect!
+                sender.Socket.Disconnect(); // Invalid SSO Ticket - Disconnect!
             }
             else
             {
@@ -40,7 +40,7 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
                             {
                                 Reason = ConnectionClosedReason.ConcurrentLogin
                             }.Send(loggedInHabbo);
-                        loggedInHabbo.Socket.Close();
+                        loggedInHabbo.Socket.Disconnect();
                         loggedInHabbo.LoggedIn = false;
                     }
 

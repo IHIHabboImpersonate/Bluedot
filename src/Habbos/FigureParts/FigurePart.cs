@@ -27,67 +27,56 @@ using System.Text;
 
 namespace Bluedot.HabboServer.Habbos.Figure
 {
-    internal abstract class FigurePart
+    public abstract class FigurePart
     {
-        private ushort _primaryColour;
-        private ushort _secondaryColour;
-
-        internal ushort GetPrimaryColour()
+        #region Property: PrimaryColour
+        /// <summary>
+        /// The primary colour of this figure part.
+        /// </summary>
+        public ushort PrimaryColour
         {
-            return _primaryColour;
+            get;
+            set;
         }
-
-        internal ushort GetSecondaryColour()
+        #endregion
+        #region Property: SecondaryColour
+        /// <summary>
+        /// The secondary colour of this figure part.
+        /// </summary>
+        public ushort SecondaryColour
         {
-            return _secondaryColour;
+            get;
+            set;
         }
-
-        internal FigurePart SetPrimaryColour(ushort colour)
+        #endregion
+        
+        #region Property: ModelId
+        /// <summary>
+        /// The model ID of this figure part.
+        /// </summary>
+        public abstract ushort ModelId
         {
-            _primaryColour = colour;
-            return this;
+            get;
         }
-
-        internal FigurePart SetSecondaryColour(ushort colour)
+        #endregion
+        
+        #region Property: ColourCount\
+        /// <summary>
+        /// 
+        /// </summary>
+        public byte ColourCount
         {
-            _secondaryColour = colour;
-            return this;
-        }
-
-
-        internal abstract ushort GetModelID();
-
-        internal byte GetAmountOfColours()
-        {
-            if (_primaryColour == 0)
-                return 0;
-            if (_secondaryColour == 0)
-                return 1;
-            return 2;
-        }
-
-        internal string ToString(bool prefixRequired)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            sb.Append(prefixRequired ? ".hd-" : "hd-");
-
-
-            sb.Append(GetModelID());
-
-            if (_primaryColour != 0)
+            get
             {
-                sb.Append('-');
-                sb.Append(_primaryColour);
-
-                if (_secondaryColour != 0)
-                {
-                    sb.Append('-');
-                    sb.Append(_secondaryColour);
-                }
+                if (PrimaryColour == 0)
+                    return 0;
+                if (SecondaryColour == 0)
+                    return 1;
+                return 2;
             }
-
-            return sb.ToString();
         }
+        #endregion
+
+        public abstract string ToString(bool prefixRequired);
     }
 }

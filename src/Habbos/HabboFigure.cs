@@ -27,294 +27,226 @@ using System.Text;
 
 namespace Bluedot.HabboServer.Habbos.Figure
 {
-    internal class HabboFigure // : IFigure
+    public class HabboFigure
     {
-        private Body _body;
-        private EyeAccessory _eyeAccessory;
-        private FaceAccessory _faceAccessory;
-
+        #region Properties
+        #region Property: Gender
         /// <summary>
         ///   The gender of the user.
         ///   Male = True
         ///   Female = False
         /// </summary>
-        private bool _gender;
-
-        private Hair _hair;
-
-        private Hat _hat;
-        private HeadAccessory _headAccessory;
-        private Jacket _jacket;
-        private Legs _legs;
-        private Shirt _shirt;
-        private ShirtAccessory _shirtAccessory;
-        private Shoes _shoes;
-        private uint _swimFigure;
-        private WaistAccessory _waistAccessory;
-
-        internal HabboFigure(bool gender)
+        public bool Gender
         {
-            _gender = gender;
+            get;
+            set;
         }
-
-        #region Gender
-
-        internal bool GetGender()
+        #endregion
+        #region Property: GenderChar
+        public char GenderChar
         {
-            return _gender;
+            get
+            {
+                return Gender ? 'M' : 'F';
+            }
+            set
+            {
+                Gender = (value == 'M' ? false : true);
+            }
         }
-
-        internal char GetGenderChar()
-        {
-            return (_gender ? 'M' : 'F');
-        }
-
-        internal HabboFigure SetGender(bool gender)
-        {
-            _gender = gender;
-            return this;
-        }
-
         #endregion
 
-        #region IFigure Members
+        #region Property: Body
+        public Body Body
+        {
+            get;
+            set;
+        }
+        #endregion
+        #region Property: Hair
+        public Hair Hair
+        {
+            get;
+            set;
+        }
+        #endregion
+        #region Property: Shirt
+        public Shirt Shirt
+        {
+            get;
+            set;
+        }
+        #endregion
+        #region Property: Legs
+        public Legs Legs
+        {
+            get;
+            set;
+        }
+        #endregion
+        #region Property: Shoes
+        public Shoes Shoes
+        {
+            get;
+            set;
+        }
+        #endregion
+        #region Property: Hat
+        public Hat Hat
+        {
+            get;
+            set;
+        }
+        #endregion
+        #region Property: EyeAccessory
+        public EyeAccessory EyeAccessory
+        {
+            get;
+            set;
+        }
+        #endregion
+        #region Property: HeadAccessory
+        public HeadAccessory HeadAccessory
+        {
+            get;
+            set;
+        }
+        #endregion
+        #region Property: FaceAccessory
+        public FaceAccessory FaceAccessory
+        {
+            get;
+            set;
+        }
+        #endregion
+        #region Property: ShirtAccessory
+        public ShirtAccessory ShirtAccessory
+        {
+            get;
+            set;
+        }
+        #endregion
+        #region Property: WaistAccessory
+        public WaistAccessory WaistAccessory
+        {
+            get;
+            set;
+        }
+        #endregion
+        #region Property: Jacket
+        public Jacket Jacket
+        {
+            get;
+            set;
+        }
+        #endregion
 
+        #region Property: SwimFigure
+        private byte[] _swimFigure;
+        /// <summary>
+        ///   A byte array containing 3 values.
+        ///   The values are the RGB colour values of the swim figure.
+        /// </summary>
+        public byte[] SwimFigure
+        {
+            get
+            {
+                return _swimFigure;
+            }
+            set
+            {
+                _swimFigure = value;
+            }
+        }
+        #endregion
+        #region Property: FormattedSwimFigure
+        public string FormattedSwimFigure
+        {
+            get
+            {
+                return "ch=s0" + (Gender ? '1' : '2') + "/" + _swimFigure[0] + "," + _swimFigure[1] + "," + _swimFigure[2];
+            }
+        }
+        #endregion
+        #endregion
+
+        #region Methods
+        #region Method: ToString
         public override string ToString()
         {
             StringBuilder stringBuilder = new StringBuilder();
 
             bool prefixRequired = false;
 
-            if (_body != null)
+            if (Body != null)
             {
-                stringBuilder.Append(_body.ToString(false));
+                stringBuilder.Append(Body.ToString(false));
                 prefixRequired = true;
             }
-            if (_eyeAccessory != null)
+            if (EyeAccessory != null)
             {
-                stringBuilder.Append(_eyeAccessory.ToString(prefixRequired));
+                stringBuilder.Append(EyeAccessory.ToString(prefixRequired));
                 prefixRequired = true;
             }
-            if (_faceAccessory != null)
+            if (FaceAccessory != null)
             {
-                stringBuilder.Append(_faceAccessory.ToString(prefixRequired));
+                stringBuilder.Append(FaceAccessory.ToString(prefixRequired));
                 prefixRequired = true;
             }
-            if (_hair != null)
+            if (Hair != null)
             {
-                stringBuilder.Append(_hair.ToString(prefixRequired));
+                stringBuilder.Append(Hair.ToString(prefixRequired));
                 prefixRequired = true;
             }
-            if (_hat != null)
+            if (Hat != null)
             {
-                stringBuilder.Append(_hat.ToString(prefixRequired));
+                stringBuilder.Append(Hat.ToString(prefixRequired));
                 prefixRequired = true;
             }
-            if (_headAccessory != null)
+            if (HeadAccessory != null)
             {
-                stringBuilder.Append(_headAccessory.ToString(prefixRequired));
+                stringBuilder.Append(HeadAccessory.ToString(prefixRequired));
                 prefixRequired = true;
             }
-            if (_jacket != null)
+            if (Jacket != null)
             {
-                stringBuilder.Append(_jacket.ToString(prefixRequired));
+                stringBuilder.Append(Jacket.ToString(prefixRequired));
                 prefixRequired = true;
             }
-            if (_legs != null)
+            if (Legs != null)
             {
-                stringBuilder.Append(_legs.ToString(prefixRequired));
+                stringBuilder.Append(Legs.ToString(prefixRequired));
                 prefixRequired = true;
             }
-            if (_shirt != null)
+            if (Shirt != null)
             {
-                stringBuilder.Append(_shirt.ToString(prefixRequired));
+                stringBuilder.Append(Shirt.ToString(prefixRequired));
                 prefixRequired = true;
             }
-            if (_shirtAccessory != null)
+            if (Shirt != null)
             {
-                stringBuilder.Append(_shirtAccessory.ToString(prefixRequired));
+                stringBuilder.Append(Shirt.ToString(prefixRequired));
                 prefixRequired = true;
             }
-            if (_shoes != null)
+            if (Shoes != null)
             {
-                stringBuilder.Append(_shoes.ToString(prefixRequired));
+                stringBuilder.Append(Shoes.ToString(prefixRequired));
                 prefixRequired = true;
             }
-            if (_waistAccessory != null)
+            if (WaistAccessory != null)
             {
-                stringBuilder.Append(_waistAccessory.ToString(prefixRequired));
+                stringBuilder.Append(WaistAccessory.ToString(prefixRequired));
             }
 
             return stringBuilder.ToString();
         }
-
         #endregion
-
-        internal Body GetBody()
+        #region Method: GetHashCode
+        public override int GetHashCode()
         {
-            return _body;
+            return ToString().GetHashCode();
         }
-
-        internal HabboFigure SetBody(Body value)
-        {
-            _body = value;
-            return this;
-        }
-
-        internal Hair GetHair()
-        {
-            return _hair;
-        }
-
-        internal HabboFigure SetHair(Hair value)
-        {
-            _hair = value;
-            return this;
-        }
-
-        internal Shirt GetShirt()
-        {
-            return _shirt;
-        }
-
-        internal HabboFigure SetShirt(Shirt value)
-        {
-            _shirt = value;
-            return this;
-        }
-
-        internal Legs GeLegs()
-        {
-            return _legs;
-        }
-
-        internal HabboFigure SetLegs(Legs value)
-        {
-            _legs = value;
-            return this;
-        }
-
-        internal Shoes GetShoes()
-        {
-            return _shoes;
-        }
-
-        internal HabboFigure SetShoes(Shoes value)
-        {
-            _shoes = value;
-            return this;
-        }
-
-
-        internal Hat GetHat()
-        {
-            return _hat;
-        }
-
-        internal HabboFigure SetHat(Hat value)
-        {
-            _hat = value;
-            return this;
-        }
-
-        internal EyeAccessory GetEyeAccessory()
-        {
-            return _eyeAccessory;
-        }
-
-        internal HabboFigure SetEyeAccessory(EyeAccessory value)
-        {
-            _eyeAccessory = value;
-            return this;
-        }
-
-        internal HeadAccessory GetHeadAccessory()
-        {
-            return _headAccessory;
-        }
-
-        internal HabboFigure SetHeadAccessory(HeadAccessory value)
-        {
-            _headAccessory = value;
-            return this;
-        }
-
-        internal FaceAccessory GetFaceAccesory()
-        {
-            return _faceAccessory;
-        }
-
-        internal HabboFigure SetFaceAccessory(FaceAccessory value)
-        {
-            _faceAccessory = value;
-            return this;
-        }
-
-        internal ShirtAccessory GetShirtAccessory()
-        {
-            return _shirtAccessory;
-        }
-
-        internal HabboFigure SetShirtAccessories(ShirtAccessory value)
-        {
-            _shirtAccessory = value;
-            return this;
-        }
-
-        internal WaistAccessory GetWaistAccessory()
-        {
-            return _waistAccessory;
-        }
-
-        internal HabboFigure SetWaistAccessory(WaistAccessory value)
-        {
-            _waistAccessory = value;
-            return this;
-        }
-
-        internal Jacket GetJacket()
-        {
-            return _jacket;
-        }
-
-        internal HabboFigure SetJacket(Jacket value)
-        {
-            _jacket = value;
-            return this;
-        }
-
-
-        /// <summary>
-        ///   Returns a byte array containing 3 values.
-        ///   The values are the RGB colour values of the swim figure.
-        /// </summary>
-        internal byte[] GetSwimFigure()
-        {
-            return new[]
-                       {(byte) (_swimFigure >> 16), (byte) (_swimFigure << 8 >> 16), (byte) ((_swimFigure << 16) >> 16)};
-        }
-
-        /// <summary>
-        ///   Returns a byte array containing 3 values.
-        ///   The values are the RGB colour values of the swim figure.
-        /// </summary>
-        internal string GetFormattedSwimFigure()
-        {
-            return "ch=s0" + (GetGender() ? '1' : '2') + "/" + (_swimFigure >> 16) + "," + (_swimFigure << 8 >> 16) +
-                   "," + ((_swimFigure << 16) >> 16);
-        }
-
-        /// <summary>
-        ///   Sets the colour of the swim figure.
-        /// </summary>
-        /// <param name = "red">The amount of red in the colour.</param>
-        /// <param name = "green">The amount of green in the colour.</param>
-        /// <param name = "blue">The amount of blue in the colour.</param>
-        /// <returns></returns>
-        internal HabboFigure SetSwimFigure(byte red, byte green, byte blue)
-        {
-            _swimFigure = (uint) ((red << 16) | green << 8) | blue;
-            return this;
-        }
+        #endregion
+        #endregion
     }
 }

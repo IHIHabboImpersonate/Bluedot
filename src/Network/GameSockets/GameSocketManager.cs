@@ -133,7 +133,7 @@ namespace Bluedot.HabboServer.Network
                 if (connectionEventArgs.Cancelled)
                 {
                     CoreManager.ServerCore.StandardOut.PrintNotice("Incoming connection rejected: " + internalSocket.RemoteEndPoint);
-                    socket.Close();
+                    socket.Disconnect();
                     return;
                 }
             }

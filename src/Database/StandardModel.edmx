@@ -11,6 +11,7 @@
           <EntitySet Name="messenger_categories" EntityType="Bluedot.HabboServer.Database.Store.messenger_categories" store:Type="Tables" Schema="ihi_iii" />
           <EntitySet Name="messenger_friend_requests" EntityType="Bluedot.HabboServer.Database.Store.messenger_friend_requests" store:Type="Tables" Schema="ihi_iii" />
           <EntitySet Name="messenger_friendships" EntityType="Bluedot.HabboServer.Database.Store.messenger_friendships" store:Type="Tables" Schema="ihi_iii" />
+          <EntitySet Name="persistent_storage" EntityType="Bluedot.HabboServer.Database.Store.persistent_storage" store:Type="Tables" Schema="ihi_iii" />
           <EntitySet Name="rooms" EntityType="Bluedot.HabboServer.Database.Store.rooms" store:Type="Tables" Schema="ihi_iii" />
           <EntitySet Name="subscriptions" EntityType="Bluedot.HabboServer.Database.Store.subscriptions" store:Type="Tables" Schema="ihi_iii" />
           <AssociationSet Name="habbos_ibfk_1" Association="Bluedot.HabboServer.Database.Store.habbos_ibfk_1">
@@ -107,6 +108,17 @@
           <Property Name="category_a_id" Type="int" />
           <Property Name="habbo_b_id" Type="int" Nullable="false" />
           <Property Name="category_b_id" Type="int" />
+        </EntityType>
+        <EntityType Name="persistent_storage">
+          <Key>
+            <PropertyRef Name="type_name" />
+            <PropertyRef Name="instance_id" />
+            <PropertyRef Name="variable_name" />
+          </Key>
+          <Property Name="type_name" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="instance_id" Type="bigint" Nullable="false" />
+          <Property Name="variable_name" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="value" Type="blob" Nullable="false" />
         </EntityType>
         <EntityType Name="rooms">
           <Key>
@@ -322,6 +334,7 @@
             <End Role="DBMessengerCategory" EntitySet="MessengerCategories" />
             <End Role="DBMessengerFriendship" EntitySet="MessengerFriendships" />
           </AssociationSet>
+          <EntitySet Name="DBPersistentStorages" EntityType="Bluedot.HabboServer.Database.DBPersistentStorage" />
         </EntityContainer>
         <EntityType Name="DBHabbo">
           <Key>
@@ -522,6 +535,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="DBPersistentStorage">
+          <Key>
+            <PropertyRef Name="TypeName" />
+            <PropertyRef Name="InstanceId" />
+            <PropertyRef Name="VariableName" />
+          </Key>
+          <Property Type="String" Name="TypeName" Nullable="false" />
+          <Property Type="Int64" Name="InstanceId" Nullable="false" />
+          <Property Type="String" Name="VariableName" Nullable="false" />
+          <Property Type="Binary" Name="Value" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -611,6 +635,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="DBPersistentStorages">
+            <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBPersistentStorage">
+              <MappingFragment StoreEntitySet="persistent_storage">
+                <ScalarProperty Name="Value" ColumnName="value" />
+                <ScalarProperty Name="VariableName" ColumnName="variable_name" />
+                <ScalarProperty Name="InstanceId" ColumnName="instance_id" />
+                <ScalarProperty Name="TypeName" ColumnName="type_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -662,18 +696,16 @@
           <ConnectorPoint PointX="4.75" PointY="3.7730670297475961" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_1" >
-          <ConnectorPoint PointX="3.9480219150641025" PointY="3.8214322916666665" />
-          <ConnectorPoint PointX="4.46875" PointY="4.342160376602564" />
-          <ConnectorPoint PointX="4.46875" PointY="7.4853352401126489" />
-          <ConnectorPoint PointX="4.75" PointY="7.4853352401126489" />
+          <ConnectorPoint PointX="3.9291207932692309" PointY="3.8214322916666665" />
+          <ConnectorPoint PointX="4.40625" PointY="4.2985614983974356" />
+          <ConnectorPoint PointX="4.40625" PointY="7.2669334387743074" />
+          <ConnectorPoint PointX="4.75" PointY="7.2669334387743074" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_3" >
-          <ConnectorPoint PointX="3.898406470352564" PointY="3.8214322916666665" />
-          <ConnectorPoint PointX="4.375" PointY="4.298025821314102" />
-          <ConnectorPoint PointX="4.375" PointY="7.2281621034473282" />
-          <ConnectorPoint PointX="4.385416666666667" PointY="7.2281621034473273" />
-          <ConnectorPoint PointX="4.552083333333333" PointY="7.2281621034473282" />
-          <ConnectorPoint PointX="4.75" PointY="7.2281621034473282" />
+          <ConnectorPoint PointX="3.9480219150641025" PointY="3.8214322916666665" />
+          <ConnectorPoint PointX="4.46875" PointY="4.342160376602564" />
+          <ConnectorPoint PointX="4.46875" PointY="7.2669334387743074" />
+          <ConnectorPoint PointX="4.75" PointY="7.2669334387743074" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.rooms_ibfk_1" >
           <ConnectorPoint PointX="4" PointY="2.6200773111979165" />
@@ -687,17 +719,20 @@
           <ConnectorPoint PointX="8.7514766930588959" PointY="3.75" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_2" >
-          <ConnectorPoint PointX="1.8130476513671876" PointY="6.177958984375" />
-          <ConnectorPoint PointX="1.8130476513671876" PointY="7.8463708775486154" />
-          <ConnectorPoint PointX="2.85444299235026" PointY="7.8463708775486145" />
-          <ConnectorPoint PointX="3.0211096590169269" PointY="7.8463708775486154" />
-          <ConnectorPoint PointX="4.75" PointY="7.8463708775486154" />
+          <ConnectorPoint PointX="3.15625" PointY="6.6710009765625" />
+          <ConnectorPoint PointX="3.15625" PointY="6.9772142193871529" />
+          <ConnectorPoint PointX="3.5260441666666664" PointY="6.977214219387152" />
+          <ConnectorPoint PointX="3.6927108333333334" PointY="6.9772142193871529" />
+          <ConnectorPoint PointX="4.322916666666667" PointY="6.977214219387152" />
+          <ConnectorPoint PointX="4.552083333333333" PointY="6.9772142193871529" />
+          <ConnectorPoint PointX="4.75" PointY="6.9772142193871529" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_4" >
-          <ConnectorPoint PointX="2.9377763256835934" PointY="6.177958984375" />
-          <ConnectorPoint PointX="2.9377763256835934" PointY="8.2077647616909744" />
-          <ConnectorPoint PointX="4.75" PointY="8.2077647616909744" />
+          <ConnectorPoint PointX="3.6093775" PointY="6.6710009765625" />
+          <ConnectorPoint PointX="3.6093775" PointY="7.5084692193871545" />
+          <ConnectorPoint PointX="4.75" PointY="7.5084692193871545" />
         </AssociationConnector>
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBPersistentStorage" Width="2.25" PointX="8.875" PointY="6.375" Height="1.5923063151041674" />
       </Diagram>
     </Diagrams>
   </Designer>

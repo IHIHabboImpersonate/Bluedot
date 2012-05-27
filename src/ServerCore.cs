@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Data.EntityClient;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Security.Authentication;
-using System.Text;
-using System.Threading;
 using System.Xml;
 using Bluedot.HabboServer.ApiUsage;
 using Bluedot.HabboServer.Configuration;
 using Bluedot.HabboServer.Install;
+using Bluedot.HabboServer.Database;
 using MySql.Data.MySqlClient;
 using SmartWeakEvent;
 using HabbosUsing = Bluedot.HabboServer.Habbos;
-using Bluedot.HabboServer.Database;
 using Bluedot.HabboServer.Network;
 
 namespace Bluedot.HabboServer

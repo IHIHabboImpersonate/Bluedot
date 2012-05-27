@@ -13,48 +13,73 @@ namespace Bluedot.HabboServer.Network
 {
     public class GameSocket
     {
+        #region Events
         #region Event: PacketArrived
         /// <summary>
         /// Indicates the completion of a packet read from the socket.
         /// </summary>
         public event Action<AsyncResultEventArgs<byte[]>> PacketArrived;
         #endregion
+        #endregion
 
+        #region Fields
+        private ServerChildTcpSocket _internalSocket;
+        private int _bytesReceived;
+        private byte[] _lengthBuffer;
+        private byte[] _dataBuffer;
+        private GameSocketReader _protocolReader;
+        #endregion
+
+        #region Properties
+        #region Property: PacketHandlers
         public GameSocketMessageHandlerInvoker PacketHandlers
         {
             get;
             set;
         }
-
+        #endregion
+        #region Property: Habbo
         public Habbo Habbo
         {
             get;
             internal set;
         }
-
+        #endregion
+        #region Property: IPAddress
         public IPAddress IPAddress
         {
             get
             {
-                if (_internalSocket.RemoteEndPoint.AddressFamily == AddressFamily.InterNetwork)
+                try
                 {
-                    byte[] ipv6Bytes = new byte[]
-                                           {
-                                               // First 80 bits should be 0.
-                                               // Next 16 bits should be 1.
-                                               // The renaming 32 bits should be the IPv4 bits.
-                                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0
-                                           };
+                    if (_internalSocket.RemoteEndPoint.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        byte[] ipv6Bytes = new byte[]
+                                               {
+                                                   // First 80 bits should be 0.
+                                                   // Next 16 bits should be 1.
+                                                   // The renaming 32 bits should be the IPv4 bits.
+                                                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0
+                                               };
 
-                    byte[] ipv4Bytes = _internalSocket.RemoteEndPoint.Address.GetAddressBytes();
-                    ipv4Bytes.CopyTo(ipv6Bytes, 12);
+                        byte[] ipv4Bytes = _internalSocket.RemoteEndPoint.Address.GetAddressBytes();
+                        ipv4Bytes.CopyTo(ipv6Bytes, 12);
 
-                    return new IPAddress(ipv6Bytes);
+                        return new IPAddress(ipv6Bytes);
+                    }
+                    return _internalSocket.RemoteEndPoint.Address;
                 }
-                return _internalSocket.RemoteEndPoint.Address;
+                catch (ObjectDisposedException)
+                {
+                    return null;
+                }
             }
         }
+        #endregion
+        #endregion
 
+        #region Methods
+        #region Method: GameSocket (Constructor)
         internal GameSocket(ServerChildTcpSocket socket, GameSocketReader protocolReader)
         {
             _internalSocket = socket;
@@ -64,7 +89,9 @@ namespace Bluedot.HabboServer.Network
 
             Habbo = CoreManager.ServerCore.HabboDistributor.GetPreLoginHabbo(this);
         }
+        #endregion
 
+        #region Method: Start
         /// <summary>
         /// Begins reading from the socket.
         /// </summary>
@@ -72,37 +99,50 @@ namespace Bluedot.HabboServer.Network
         {
             _internalSocket.ReadCompleted += SocketReadCompleted;
             PacketArrived += ParsePacket;
-            
 
             ContinueReading();
-
             return this;
         }
-
-        /// <summary>
-        /// Parses a byte array as a packet.
-        /// </summary>
-        /// <param name="data">The byte array to parse.</param>
-        public GameSocket ParseByteData(byte[] data)
+        #endregion
+        #region Method: Disconnect
+        public GameSocket Disconnect()
         {
-            IncomingMessage message = _protocolReader.ParseMessage(data);
-            PacketHandlers.Invoke(Habbo, message);
+            if (_internalSocket != null)
+                _internalSocket.Close();
 
+            PacketHandlers = null;
+            Habbo = null;
             return this;
         }
+        #endregion
 
-        #region Behind The Scenes Socket Stuff
-        private ServerChildTcpSocket _internalSocket;
-        private int _bytesReceived;
-        private byte[] _lengthBuffer;
-        private byte[] _dataBuffer;
-        private GameSocketReader _protocolReader;
-
+        #region Method: ContinueReading
+        /// <summary>
+        /// Requests a read directly into the correct buffer.
+        /// </summary>
+        private void ContinueReading()
+        {
+            try
+            {
+                // Read into the appropriate buffer: length or data
+                if (_dataBuffer != null)
+                {
+                    _internalSocket.ReadAsync(_dataBuffer, _bytesReceived, _dataBuffer.Length - _bytesReceived);
+                }
+                else
+                {
+                    _internalSocket.ReadAsync(_lengthBuffer, _bytesReceived, _lengthBuffer.Length - _bytesReceived);
+                }
+            }
+            catch (ObjectDisposedException) { } // Socket closed.
+        }
+        #endregion
+        #region Method: SocketReadCompleted
         private void SocketReadCompleted(AsyncResultEventArgs<int> args)
         {
-            if(args.Error != null)
+            if (args.Error != null)
             {
-                if(PacketArrived != null)
+                if (PacketArrived != null)
                     PacketArrived.Invoke(new AsyncResultEventArgs<byte[]>(args.Error));
 
                 return;
@@ -110,16 +150,16 @@ namespace Bluedot.HabboServer.Network
 
             _bytesReceived += args.Result;
 
-            if(args.Result == 0)
+            if (args.Result == 0)
             {
                 if (PacketArrived != null)
                     PacketArrived.Invoke(new AsyncResultEventArgs<byte[]>(null as byte[]));
                 return;
             }
 
-            if(_dataBuffer == null)
+            if (_dataBuffer == null)
             {
-                if(_bytesReceived != _protocolReader.LengthBytes)
+                if (_bytesReceived != _protocolReader.LengthBytes)
                 {
                     ContinueReading();
                 }
@@ -134,7 +174,7 @@ namespace Bluedot.HabboServer.Network
             }
             else
             {
-                if(_bytesReceived != _dataBuffer.Length)
+                if (_bytesReceived != _dataBuffer.Length)
                 {
                     ContinueReading();
                 }
@@ -149,34 +189,34 @@ namespace Bluedot.HabboServer.Network
                 }
             }
         }
-
+        #endregion
+        #region Method: ParseByteData
         /// <summary>
-        /// Requests a read directly into the correct buffer.
+        /// Parses a byte array as a packet.
         /// </summary>
-        private void ContinueReading()
+        /// <param name="data">The byte array to parse.</param>
+        public GameSocket ParseByteData(byte[] data)
         {
-            // Read into the appropriate buffer: length or data
-            if (_dataBuffer != null)
-            {
-                _internalSocket.ReadAsync(_dataBuffer, _bytesReceived, _dataBuffer.Length - _bytesReceived);
-            }
-            else
-            {
-                _internalSocket.ReadAsync(_lengthBuffer, _bytesReceived, _lengthBuffer.Length - _bytesReceived);
-            }
-        }
+            IncomingMessage message = _protocolReader.ParseMessage(data);
+            PacketHandlers.Invoke(Habbo, message);
 
+            return this;
+        }
+        #endregion
+        #region Method: ParsePacket
         private void ParsePacket(AsyncResultEventArgs<byte[]> args)
         {
             try
             {
-                if(args.Error != null)
+                if (args.Error != null)
                     throw args.Error;
 
-                if(args.Result == null)
+                if (args.Result == null)
                 {
+                    if (Habbo.LoggedIn)
+                        Habbo.LoggedIn = false;
                     CoreManager.ServerCore.StandardOut.PrintNotice("Client Connection Closed: Gracefully close.");
-                    Close();
+                    Disconnect();
                     return;
                 }
 
@@ -193,25 +233,23 @@ namespace Bluedot.HabboServer.Network
 
             return;
         }
-        
-        public GameSocket Close()
-        {
-            if (_internalSocket != null)
-                _internalSocket.Close();
-
-            return this;
-        }
         #endregion
 
+        #region Method: Send
         public GameSocket Send(byte[] data)
         {
             _internalSocket.WriteAsync(data);
             return this;
         }
 
+        #endregion
+
+        #region Method: ToString
         public override string ToString()
         {
             return _internalSocket.ToString();
         }
+        #endregion
+        #endregion
     }
 }
