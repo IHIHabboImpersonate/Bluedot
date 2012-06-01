@@ -27,7 +27,7 @@ namespace Bluedot.HabboServer.Network
         /// </summary>
         public string Header
         {
-            get { return Encoding.UTF8.GetString(Base64Encoding.EncodeuUInt32(ID, 2)); }
+            get { return Encoding.UTF8.GetString(Base64Encoding.EncodeuUInt32(ID)); }
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace Bluedot.HabboServer.Network
         {
             byte[] data = new byte[ContentLength + 2 + 1];
 
-            byte[] headerBytes = Base64Encoding.EncodeuUInt32(ID, 2);
+            byte[] headerBytes = Base64Encoding.EncodeuUInt32(ID);
             data[0] = headerBytes[0];
             data[1] = headerBytes[1];
 

@@ -8,6 +8,7 @@ using Bluedot.HabboServer.ApiUsage;
 using Bluedot.HabboServer.Configuration;
 using Bluedot.HabboServer.Install;
 using Bluedot.HabboServer.Database;
+using Bluedot.HabboServer.Permissions;
 using MySql.Data.MySqlClient;
 using SmartWeakEvent;
 using HabbosUsing = Bluedot.HabboServer.Habbos;
@@ -17,6 +18,7 @@ namespace Bluedot.HabboServer
 {
     internal class ServerCore
     {
+        #region Events
         #region Event: OnShutdown
         private readonly FastSmartWeakEvent<EventHandler> _eventOnShutdown = new FastSmartWeakEvent<EventHandler>();
         /// <summary>
@@ -29,34 +31,61 @@ namespace Bluedot.HabboServer
             remove { _eventOnShutdown.Remove(value); }
         }
         #endregion
+        #endregion
 
-        internal StandardOut StandardOut
-        {
-            get;
-            private set;
-        }
-        internal XmlConfig Config
-        {
-            get;
-            private set;
-        }
-        internal HabbosUsing.HabboDistributor HabboDistributor
-        {
-            get;
-            private set;
-        }
-        internal HabbosUsing.Figure.HabboFigureFactory HabboFigureFactory
-        {
-            get;
-            private set;
-        }
+        #region Fields
+        #region Field: _databaseConnection
+        private EntityConnection _databaseConnection;
+        #endregion
+        #endregion
 
-        internal GameSocketManager GameSocketManager
+        #region Properties
+        #region Property: Config
+        public XmlConfig Config
         {
             get;
             private set;
         }
+        #endregion
+        #region Property: GameSocketManager
+        public GameSocketManager GameSocketManager
+        {
+            get;
+            private set;
+        }
+        #endregion
+        #region Property: HabboDistributor
+        public HabbosUsing.HabboDistributor HabboDistributor
+        {
+            get;
+            private set;
+        }
+        #endregion
+        #region Property: HabboFigureFactory
+        public HabbosUsing.Figure.HabboFigureFactory HabboFigureFactory
+        {
+            get;
+            private set;
+        }
+        #endregion
+        #region Property: PermissionDistributor
+        public PermissionDistributor PermissionDistributor
+        {
+            get;
+            private set;
+        }
+        #endregion
+        #region Property: StandardOut
+        public StandardOut StandardOut
+        {
+            get;
+            private set;
+        }
+        #endregion
+        #endregion
 
+        #region Methods
+        #region Method: Boot
         internal void Boot(string configPath)
         {
             #region Ensure Directory Structure
@@ -64,12 +93,11 @@ namespace Bluedot.HabboServer
             #endregion
 
             #region Standard Out
-
             StandardOut = new StandardOut();
             StandardOut.PrintNotice("Standard Out => Ready");
-
             #endregion
 
+            #region Config & Installation
             Config = new XmlConfig(configPath);
 
             bool mainInstallRequired = PreInstall(); // Register the main installation if required.
@@ -77,17 +105,14 @@ namespace Bluedot.HabboServer
             if (mainInstallRequired)
                 SaveConfigInstallation();
 
-            #region Config
-
             StandardOut.PrintNotice("Config File => Loaded");
             StandardOut.SetImportance(
                 (StandardOutImportance)
                 Config.ValueAsByte("/config/standardout/importance", (byte) StandardOutImportance.Debug));
-
             #endregion
 
             #region Database
-
+            #region Connection Setup
             StandardOut.PrintNotice("Database Manager => Preparing Connection...");
             MySqlConnectionStringBuilder mysqlConnectionString = new MySqlConnectionStringBuilder
                                                                      {
@@ -111,6 +136,8 @@ namespace Bluedot.HabboServer
                                                                                mysqlConnectionString.ToString()
                                                                        };
             _databaseConnection = new EntityConnection(entityConnectionString.ToString());
+            #endregion
+            #region Connection Start Up
             StandardOut.PrintNotice("Database Manager => Connecting...");
             try
             {
@@ -128,36 +155,30 @@ namespace Bluedot.HabboServer
                 return;
             }
             StandardOut.PrintNotice("Database Manager => Connected");
-
             #endregion
-
-            #region Distributors
-
-            StandardOut.PrintNotice("Habbo Distributor => Constructing...");
-            HabboDistributor = new HabbosUsing.HabboDistributor();
-            StandardOut.PrintNotice("Habbo Distributor => Ready");
-
             #endregion
 
             #region Figure Factory
-
             StandardOut.PrintNotice("Habbo Figure Factory => Constructing...");
             HabboFigureFactory = new HabbosUsing.Figure.HabboFigureFactory();
             StandardOut.PrintNotice("Habbo Figure Factory => Ready");
-
             #endregion
 
-
-            #region Permissions
-
-            StandardOut.PrintNotice("Permission Manager => Constructing...");
-            //PermissionManager = new HabbosUsing.Permissions.PermissionManager();
-            StandardOut.PrintNotice("Permission Manager => Ready");
-
+            #region Distributors
+            #region PermissionDistributor
+            StandardOut.PrintNotice("Permission Distributor => Constructing...");
+            PermissionDistributor = new PermissionDistributor();
+            StandardOut.PrintNotice("Permission Distributor => Ready");
+            #endregion
+            #region HabboDistributor
+            StandardOut.PrintNotice("Habbo Distributor => Constructing...");
+            HabboDistributor = new HabbosUsing.HabboDistributor();
+            StandardOut.PrintNotice("Habbo Distributor => Ready");
+            #endregion
             #endregion
 
             #region Network
-
+            #region Game Socket
             GameSocketManager = new GameSocketManager
                                     {
                                         Address = IPAddress.Any,
@@ -165,144 +186,22 @@ namespace Bluedot.HabboServer
                                         Reader = new ClassicGameSocketReader()
                                     };
             GameSocketManager.Start();
-
+            #endregion
             #endregion
 
-            StandardOut.PrintImportant("Bluedot Habbo Server is now functional!");
-
-            Console.Beep(500, 250);
-
+            StandardOut.PrintImportant("Starting Pseudo Plugin System...");
             ApiCallerRoot.Start();
+            Console.Beep(500, 250);
+            StandardOut.PrintImportant("Bluedot Habbo Server is now functional!");
         }
-
-        private void SaveConfigInstallation()
+        #endregion
+        #region Method: GetDatabaseSession
+        public Session GetDatabaseSession()
         {
-            InstallerCore installer = CoreManager.InstallerCore;
-
-
-            StandardOut.PrintImportant("Updating configuration file... (Install)");
-
-            XmlDocument doc = Config.GetInternalDocument();
-            XmlNode rootElement = doc.SelectSingleNode("/config");
-
-            XmlElement standardOutElement = doc.CreateElement("standardout");
-            XmlElement mySQLElement = doc.CreateElement("mysql");
-            XmlElement networkElement = doc.CreateElement("network");
-            XmlElement webAdminElement = doc.CreateElement("webadmin");
-
-            #region StandardOut
-
-            #region Importance
-
-            XmlElement valueElement = doc.CreateElement("importance");
-            valueElement.InnerText = installer.GetInstallerOutputValue("StandardOut", "Importance").ToString();
-            standardOutElement.AppendChild(valueElement);
-
-            #endregion
-
-            #endregion
-
-            #region MySQL
-
-            #region Host
-
-            valueElement = doc.CreateElement("host");
-            valueElement.InnerText = installer.GetInstallerOutputValue("Database", "Host").ToString();
-            mySQLElement.AppendChild(valueElement);
-
-            #endregion
-
-            #region Port
-
-            valueElement = doc.CreateElement("port");
-            valueElement.InnerText = installer.GetInstallerOutputValue("Database", "Port").ToString();
-            mySQLElement.AppendChild(valueElement);
-
-            #endregion
-
-            #region User
-
-            valueElement = doc.CreateElement("user");
-            valueElement.InnerText = installer.GetInstallerOutputValue("Database", "Username").ToString();
-            mySQLElement.AppendChild(valueElement);
-
-            #endregion
-
-            #region Password
-
-            valueElement = doc.CreateElement("password");
-            valueElement.InnerText = installer.GetInstallerOutputValue("Database", "Password").ToString();
-            mySQLElement.AppendChild(valueElement);
-
-            #endregion
-
-            #region Database
-
-            valueElement = doc.CreateElement("database");
-            valueElement.InnerText = installer.GetInstallerOutputValue("Database", "DatebaseName").ToString();
-            mySQLElement.AppendChild(valueElement);
-
-            #endregion
-
-            #region MinPoolSize
-
-            valueElement = doc.CreateElement("minpoolsize");
-            valueElement.InnerText = installer.GetInstallerOutputValue("Database", "MinimumPoolSize").ToString();
-            mySQLElement.AppendChild(valueElement);
-
-            #endregion
-
-            #region MaxPoolSize
-
-            valueElement = doc.CreateElement("maxpoolsize");
-            valueElement.InnerText = installer.GetInstallerOutputValue("Database", "MaximumPoolSize").ToString();
-            mySQLElement.AppendChild(valueElement);
-
-            #endregion
-
-            #endregion
-
-            #region Network
-
-            #region Host
-
-            valueElement = doc.CreateElement("host");
-            valueElement.InnerText = installer.GetInstallerOutputValue("Network", "GameHost").ToString();
-            networkElement.AppendChild(valueElement);
-
-            #endregion
-
-            #region Port
-
-            valueElement = doc.CreateElement("port");
-            valueElement.InnerText = installer.GetInstallerOutputValue("Network", "GamePort").ToString();
-            networkElement.AppendChild(valueElement);
-
-            #endregion
-
-            #endregion
-
-            #region WebAdmin
-
-            #region Port
-
-            valueElement = doc.CreateElement("port");
-            valueElement.InnerText = installer.GetInstallerOutputValue("Network", "WebAdminPort").ToString();
-            webAdminElement.AppendChild(valueElement);
-
-            #endregion
-
-            #endregion
-
-            rootElement.AppendChild(standardOutElement);
-            rootElement.AppendChild(mySQLElement);
-            rootElement.AppendChild(networkElement);
-            rootElement.AppendChild(webAdminElement);
-
-            Config.Save();
-            StandardOut.PrintImportant("Configuration file saved!");
+            return new Session(_databaseConnection);
         }
-
+        #endregion
+        #region Method: PreInstall
         private bool PreInstall()
         {
             if (Config.WasCreated) // Did the config file have to be created?
@@ -437,15 +336,137 @@ namespace Bluedot.HabboServer
             }
             return false;
         }
-
-
-        private EntityConnection _databaseConnection;
-
-        internal Session GetDatabaseSession()
+        #endregion
+        #region Method: SaveConfigInstallation
+        private void SaveConfigInstallation()
         {
-            return new Session(_databaseConnection);
-        }
+            InstallerCore installer = CoreManager.InstallerCore;
 
+
+            StandardOut.PrintImportant("Updating configuration file... (Install)");
+
+            XmlDocument doc = Config.GetInternalDocument();
+            XmlNode rootElement = doc.SelectSingleNode("/config");
+
+            XmlElement standardOutElement = doc.CreateElement("standardout");
+            XmlElement mySQLElement = doc.CreateElement("mysql");
+            XmlElement networkElement = doc.CreateElement("network");
+            XmlElement webAdminElement = doc.CreateElement("webadmin");
+
+            #region StandardOut
+
+            #region Importance
+
+            XmlElement valueElement = doc.CreateElement("importance");
+            valueElement.InnerText = installer.GetInstallerOutputValue("StandardOut", "Importance").ToString();
+            standardOutElement.AppendChild(valueElement);
+
+            #endregion
+
+            #endregion
+
+            #region MySQL
+
+            #region Host
+
+            valueElement = doc.CreateElement("host");
+            valueElement.InnerText = installer.GetInstallerOutputValue("Database", "Host").ToString();
+            mySQLElement.AppendChild(valueElement);
+
+            #endregion
+
+            #region Port
+
+            valueElement = doc.CreateElement("port");
+            valueElement.InnerText = installer.GetInstallerOutputValue("Database", "Port").ToString();
+            mySQLElement.AppendChild(valueElement);
+
+            #endregion
+
+            #region User
+
+            valueElement = doc.CreateElement("user");
+            valueElement.InnerText = installer.GetInstallerOutputValue("Database", "Username").ToString();
+            mySQLElement.AppendChild(valueElement);
+
+            #endregion
+
+            #region Password
+
+            valueElement = doc.CreateElement("password");
+            valueElement.InnerText = installer.GetInstallerOutputValue("Database", "Password").ToString();
+            mySQLElement.AppendChild(valueElement);
+
+            #endregion
+
+            #region Database
+
+            valueElement = doc.CreateElement("database");
+            valueElement.InnerText = installer.GetInstallerOutputValue("Database", "DatebaseName").ToString();
+            mySQLElement.AppendChild(valueElement);
+
+            #endregion
+
+            #region MinPoolSize
+
+            valueElement = doc.CreateElement("minpoolsize");
+            valueElement.InnerText = installer.GetInstallerOutputValue("Database", "MinimumPoolSize").ToString();
+            mySQLElement.AppendChild(valueElement);
+
+            #endregion
+
+            #region MaxPoolSize
+
+            valueElement = doc.CreateElement("maxpoolsize");
+            valueElement.InnerText = installer.GetInstallerOutputValue("Database", "MaximumPoolSize").ToString();
+            mySQLElement.AppendChild(valueElement);
+
+            #endregion
+
+            #endregion
+
+            #region Network
+
+            #region Host
+
+            valueElement = doc.CreateElement("host");
+            valueElement.InnerText = installer.GetInstallerOutputValue("Network", "GameHost").ToString();
+            networkElement.AppendChild(valueElement);
+
+            #endregion
+
+            #region Port
+
+            valueElement = doc.CreateElement("port");
+            valueElement.InnerText = installer.GetInstallerOutputValue("Network", "GamePort").ToString();
+            networkElement.AppendChild(valueElement);
+
+            #endregion
+
+            #endregion
+
+            #region WebAdmin
+
+            #region Port
+
+            valueElement = doc.CreateElement("port");
+            valueElement.InnerText = installer.GetInstallerOutputValue("Network", "WebAdminPort").ToString();
+            webAdminElement.AppendChild(valueElement);
+
+            #endregion
+
+            #endregion
+
+            rootElement.AppendChild(standardOutElement);
+            rootElement.AppendChild(mySQLElement);
+            rootElement.AppendChild(networkElement);
+            rootElement.AppendChild(webAdminElement);
+
+            Config.Save();
+            StandardOut.PrintImportant("Configuration file saved!");
+        }
+        #endregion
+        #region Method: Shutdown
         public void Shutdown(bool confirm = false)
         {
             Console.TreatControlCAsInput = true;
@@ -486,5 +507,7 @@ namespace Bluedot.HabboServer
             Console.Beep(1000, 100);
             return;
         }
+        #endregion
+        #endregion
     }
 }

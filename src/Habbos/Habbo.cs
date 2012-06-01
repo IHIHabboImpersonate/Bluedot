@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using Bluedot.HabboServer.Database;
 using Bluedot.HabboServer.Habbos.Figure;
 using Bluedot.HabboServer.Habbos.Messenger;
@@ -339,7 +337,7 @@ namespace Bluedot.HabboServer.Habbos
         #endregion
 
         #region Property: Figure
-        public HabboFigure _figure;
+        private HabboFigure _figure;
         public HabboFigure Figure
         {
             get

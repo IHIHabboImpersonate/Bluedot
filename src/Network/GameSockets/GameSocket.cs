@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using Bluedot.HabboServer.Habbos;
 using Nito.Async;
 using Nito.Async.Sockets;
-using SmartWeakEvent;
 
 namespace Bluedot.HabboServer.Network
 {
@@ -23,11 +19,11 @@ namespace Bluedot.HabboServer.Network
         #endregion
 
         #region Fields
-        private ServerChildTcpSocket _internalSocket;
+        private readonly ServerChildTcpSocket _internalSocket;
         private int _bytesReceived;
-        private byte[] _lengthBuffer;
+        private readonly byte[] _lengthBuffer;
         private byte[] _dataBuffer;
-        private GameSocketReader _protocolReader;
+        private readonly GameSocketReader _protocolReader;
         #endregion
 
         #region Properties
@@ -87,7 +83,7 @@ namespace Bluedot.HabboServer.Network
             _lengthBuffer = new byte[_protocolReader.LengthBytes];
             PacketHandlers = new GameSocketMessageHandlerInvoker();
 
-            Habbo = CoreManager.ServerCore.HabboDistributor.GetPreLoginHabbo(this);
+            Habbo = HabboDistributor.GetPreLoginHabbo(this);
         }
         #endregion
 

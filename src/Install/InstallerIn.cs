@@ -58,7 +58,7 @@ namespace Bluedot.HabboServer.Install
             if (input.Length == 0)
                 return defaultValue;
 
-            ushort value = 0;
+            ushort value;
 
             if (ushort.TryParse(input, out value))
             {
@@ -91,7 +91,7 @@ namespace Bluedot.HabboServer.Install
             if (input.Length == 0)
                 return defaultValue;
 
-            byte value = 0;
+            byte value;
 
             if (byte.TryParse(input, out value))
             {
@@ -124,7 +124,7 @@ namespace Bluedot.HabboServer.Install
             if (input.Length == 0)
                 return defaultValue;
 
-            int value = 0;
+            int value;
 
             if (int.TryParse(input, out value))
             {

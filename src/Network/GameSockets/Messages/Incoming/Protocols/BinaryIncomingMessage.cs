@@ -5,7 +5,9 @@ namespace Bluedot.HabboServer.Network
     public class BinaryIncomingMessage : IncomingMessage
     {
         #region Header Related
+#pragma warning disable 649
         private int _headerId;
+#pragma warning restore 649
         /// <summary>
         /// Gets the integer representation of the header.
         /// </summary>
@@ -27,7 +29,7 @@ namespace Bluedot.HabboServer.Network
         /// <summary>
         /// Reads a length-prefixed value from the message and returns it as a byte array.
         /// </summary>
-        private byte[] PopPrefixedValue()
+        private static byte[] PopPrefixedValue()
         {
             throw new NotImplementedException();
         }
@@ -48,7 +50,9 @@ namespace Bluedot.HabboServer.Network
         /// <summary>
         /// Reads a length prefixed string from the message content and encodes it with UTF8.
         /// </summary>
+// ReSharper disable MemberCanBeMadeStatic.Global
         internal string PopPrefixedString()
+// ReSharper restore MemberCanBeMadeStatic.Global
         {
             return PopPrefixedValue().ToUtf8String();
         }

@@ -49,7 +49,7 @@ namespace Bluedot.HabboServer.Configuration
         /// <param name = "path">The path to the Xml config file.</param>
         internal XmlConfig(string path)
         {
-            bool wasCreated = false;
+            bool wasCreated;
 
             if (!EnsureFile(new FileInfo(path), out wasCreated))
             {

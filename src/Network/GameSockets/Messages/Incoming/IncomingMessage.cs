@@ -47,7 +47,9 @@
         /// <summary>
         /// The current index in the content array, used when reading the message.
         /// </summary>
+// ReSharper disable InconsistentNaming
         protected int _contentCursor;
+// ReSharper restore InconsistentNaming
         #endregion
 
         /// <summary>

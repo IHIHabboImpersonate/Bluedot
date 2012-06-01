@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace Bluedot.HabboServer.Network
+﻿namespace Bluedot.HabboServer.Network
 {
     public class ClassicIncomingMessage : IncomingMessage
     {
         #region Header Related
-        private int _headerId;
+        private readonly int _headerId;
         /// <summary>
         /// Gets the integer representation of the header.
         /// </summary>
@@ -87,7 +85,7 @@ namespace Bluedot.HabboServer.Network
                 return 0;
 
             byte[] bzData = ReadBytesFreezeCursor(WireEncoding.MaxIntegerByteAmount);
-            int totalBytes = 0;
+            int totalBytes;
             int i = WireEncoding.DecodeInt32(bzData, out totalBytes);
             _contentCursor += totalBytes;
 

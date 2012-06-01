@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Bluedot.HabboServer.Network
+﻿namespace Bluedot.HabboServer.Network
 {
     public abstract class GameSocketReader
     {

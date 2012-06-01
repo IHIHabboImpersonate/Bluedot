@@ -19,12 +19,6 @@
 
 #endregion
 
-#region Usings
-
-using System.Text;
-
-#endregion
-
 namespace Bluedot.HabboServer.Habbos.Figure
 {
     public abstract class FigurePart

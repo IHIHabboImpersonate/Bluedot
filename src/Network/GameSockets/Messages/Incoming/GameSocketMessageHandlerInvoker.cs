@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
+﻿using System.Collections.Generic;
 using Bluedot.HabboServer.Habbos;
 
 namespace Bluedot.HabboServer.Network
 {
     public class GameSocketMessageHandlerInvoker
     {
-        private Dictionary<int, GameSocketMessageHandlers> _handlers;
+        private readonly Dictionary<int, GameSocketMessageHandlers> _handlers;
 
         public GameSocketMessageHandlerInvoker()
         {

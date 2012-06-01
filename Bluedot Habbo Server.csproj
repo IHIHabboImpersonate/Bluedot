@@ -90,7 +90,13 @@
     <Compile Include="src\EntryPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Extensions.cs" />
-    <Compile Include="src\FastSmartWeakEvent.cs" />
+    <Compile Include="src\Habbos\HabboDistributor\HabboIdCache.cs" />
+    <Compile Include="src\Habbos\HabboDistributor\HabboUsernameCache.cs" />
+    <Compile Include="src\Permissions\Permission.cs" />
+    <Compile Include="src\Permissions\PermissionGroup.cs" />
+    <Compile Include="src\Permissions\PermissionState.cs" />
+    <Compile Include="src\Useful Types\Caching\WeakCache.cs" />
+    <Compile Include="src\Useful Types\FastSmartWeakEvent.cs" />
     <Compile Include="src\Habbos\FigureParts\Body.cs" />
     <Compile Include="src\Habbos\FigureParts\EyeAccessory.cs" />
     <Compile Include="src\Habbos\FigureParts\FaceAccessory.cs" />
@@ -107,7 +113,7 @@
     <Compile Include="src\Habbos\FigureParts\Shoes.cs" />
     <Compile Include="src\Habbos\FigureParts\WaistAccessory.cs" />
     <Compile Include="src\Habbos\Habbo.cs" />
-    <Compile Include="src\Habbos\HabboDistributor.cs" />
+    <Compile Include="src\Habbos\HabboDistributor\HabboDistributor.cs" />
     <Compile Include="src\Habbos\HabboEventArgs.cs" />
     <Compile Include="src\Habbos\HabboEventHandler.cs" />
     <Compile Include="src\Habbos\HabboFigure.cs" />
@@ -144,8 +150,11 @@
     <Compile Include="src\Network\GameSockets\Messages\Incoming\GameSocketMessageHandlerPriority.cs" />
     <Compile Include="src\Network\GameSockets\GameSocket.cs" />
     <Compile Include="src\Network\GameSockets\GameSocketManager.cs" />
+    <Compile Include="src\Permissions\PermissionDistributor.cs" />
     <Compile Include="src\ServerCore.cs" />
     <Compile Include="src\StandardOut.cs" />
+    <Compile Include="src\Useful Types\Nito\SafeGCHandle.cs" />
+    <Compile Include="src\Useful Types\Nito\WeakReference.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />

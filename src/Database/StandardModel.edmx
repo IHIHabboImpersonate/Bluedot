@@ -29,7 +29,7 @@
           <AssociationSet Name="messenger_friend_requests_ibfk_2" Association="Bluedot.HabboServer.Database.Store.messenger_friend_requests_ibfk_2">
             <End Role="habbos" EntitySet="habbos" />
             <End Role="messenger_friend_requests" EntitySet="messenger_friend_requests" />
-          </AssociationSet>
+          </AssociationSet> 
           <AssociationSet Name="messenger_friendships_ibfk_1" Association="Bluedot.HabboServer.Database.Store.messenger_friendships_ibfk_1">
             <End Role="habbos" EntitySet="habbos" />
             <End Role="messenger_friendships" EntitySet="messenger_friendships" />

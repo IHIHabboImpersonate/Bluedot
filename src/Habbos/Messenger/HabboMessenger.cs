@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Bluedot.HabboServer.Database;
 
 namespace Bluedot.HabboServer.Habbos.Messenger
@@ -31,7 +29,7 @@ namespace Bluedot.HabboServer.Habbos.Messenger
                 {
                     foreach (DBMessengerFriendRequest request in dbSession.MessengerFriendRequests.Where(request => request.ToId == Owner.Id))
                     {
-                        yield return habboDistributor.GetHabbo(request.FromId);
+                        yield return habboDistributor[request.FromId];
                     }
                 }
             }
@@ -46,7 +44,7 @@ namespace Bluedot.HabboServer.Habbos.Messenger
                 {
                     foreach (DBMessengerFriendRequest request in dbSession.MessengerFriendRequests.Where(request => request.FromId == Owner.Id))
                     {
-                        yield return habboDistributor.GetHabbo(request.ToId);
+                        yield return habboDistributor[request.ToId];
                     }
                 }
             }
@@ -61,11 +59,11 @@ namespace Bluedot.HabboServer.Habbos.Messenger
                 {
                     foreach (DBMessengerFriendship friendship in dbSession.MessengerFriendships.Where(friendship => friendship.HabboAId == Owner.Id))
                     {
-                        yield return habboDistributor.GetHabbo(friendship.HabboBId);
+                        yield return habboDistributor[friendship.HabboBId];
                     }
                     foreach (DBMessengerFriendship friendship in dbSession.MessengerFriendships.Where(friendship => friendship.HabboBId == Owner.Id))
                     {
-                        yield return habboDistributor.GetHabbo(friendship.HabboAId);
+                        yield return habboDistributor[friendship.HabboAId];
                     }
                 }
             }
