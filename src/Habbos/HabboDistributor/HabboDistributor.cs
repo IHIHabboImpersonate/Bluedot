@@ -24,6 +24,7 @@
 
 using System.Linq;
 using System.Net;
+using Bluedot.HabboServer.Cache;
 using Bluedot.HabboServer.Database;
 using Bluedot.HabboServer.Network;
 
@@ -35,10 +36,10 @@ namespace Bluedot.HabboServer.Habbos
     {
         #region Fields
         #region Field: _idCache
-        private readonly HabboIdCache _idCache;
+        private readonly WeakCache<int, Habbo> _idCache;
         #endregion
         #region Field: _usernameCache
-        private readonly HabboUsernameCache _usernameCache;
+        private readonly WeakCache<string, Habbo> _usernameCache;
         #endregion
         #endregion
 
@@ -71,8 +72,8 @@ namespace Bluedot.HabboServer.Habbos
         #region Method: HabboDistributor (Constructor)
         public HabboDistributor()
         {
-            _idCache = new HabboIdCache();
-            _usernameCache = new HabboUsernameCache();
+            _idCache = new WeakCache<int, Habbo>(CacheInstanceGenerator);
+            _usernameCache = new WeakCache<string, Habbo>(CacheInstanceGenerator);
         }
         #endregion
 
@@ -115,7 +116,6 @@ namespace Bluedot.HabboServer.Habbos
             return new Habbo(socket);
         }
         #endregion
-
         #region Method: CleanUp
         /// <summary>
         ///   Remove any collected Habbos from the cache.
@@ -125,6 +125,17 @@ namespace Bluedot.HabboServer.Habbos
             // TODO: Look into calling this with http://msdn.microsoft.com/en-us/library/system.gc.registerforfullgcnotification.aspx
             _idCache.CleanUp();
             _usernameCache.CleanUp();
+        }
+        #endregion
+
+        #region Method: CacheInstanceGenerator
+        public Habbo CacheInstanceGenerator(int id)
+        {
+            return new Habbo(id);
+        }
+        public Habbo CacheInstanceGenerator(string username)
+        {
+            return new Habbo(username);
         }
         #endregion
         #endregion

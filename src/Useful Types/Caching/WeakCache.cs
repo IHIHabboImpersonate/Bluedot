@@ -21,19 +21,29 @@
 
 #region Usings
 using System.Collections.Generic;
-using Nito.Utility;
 #endregion
 
-namespace Bluedot.HabboServer
+namespace Bluedot.HabboServer.Cache
 {
-    public abstract class WeakCache<TKey, TValue> where TValue : class
+    public delegate TValue InstanceGenerator<in TKey, out TValue>(TKey index);
+
+    public class WeakCache<TKey, TValue> where TValue : class
     {
         #region Fields
+        #region Field: _instanceGenerator
+        private readonly InstanceGenerator<TKey, TValue> _instanceGenerator;
+        #endregion
         #region Field: _cache
         /// <summary>
         ///   Stores the cached instances.
         /// </summary>
-        private readonly Dictionary<TKey, WeakReference<TValue>> _cache = new Dictionary<TKey, WeakReference<TValue>>();
+        private readonly Dictionary<TKey, Nito.Utility.WeakReference<TValue>> _cache = new Dictionary<TKey, Nito.Utility.WeakReference<TValue>>();
+
+        public WeakCache(InstanceGenerator<TKey, TValue> instanceGenerator)
+        {
+            _instanceGenerator = instanceGenerator;
+        }
+
         #endregion
         #endregion
 
@@ -59,22 +69,22 @@ namespace Bluedot.HabboServer
                     }
 
                     // Create a new instance using the implemented ConstructInstance method.
-                    instance = ConstructInstance(index);
+                    instance = _instanceGenerator.Invoke(index);
 
                     // And cache it.
-                    _cache.Add(index, new WeakReference<TValue>(instance));
+                    _cache.Add(index, new Nito.Utility.WeakReference<TValue>(instance));
                 }
 
                     // Return the newly cached instance.
                     return instance;
             }
-            protected set
+            set
             {
                 lock(this)
                 {
                     if (_cache.ContainsKey(index))
                         return;
-                    _cache.Add(index, new WeakReference<TValue>(value));
+                    _cache.Add(index, new Nito.Utility.WeakReference<TValue>(value));
                 }
             }
         }
@@ -82,9 +92,6 @@ namespace Bluedot.HabboServer
         #endregion
 
         #region Methods
-        #region Method: ConstructInstance (abstract)
-        protected abstract TValue ConstructInstance(TKey index);
-        #endregion
         #region Method: CleanUp
         /// <summary>
         ///   Remove any collected Habbos from the cache.
@@ -100,7 +107,7 @@ namespace Bluedot.HabboServer
                 // Initilise a List<TKey> to hold the keys of the cache entries to remove.
                 // An initial size of _cache.Count will remove all need for resizing at the expence of some short lived RAM usage.
                 List<TKey> keysToRemove = new List<TKey>(_cache.Count);
-                foreach (KeyValuePair<TKey, WeakReference<TValue>> cacheEntry in _cache)
+                foreach (KeyValuePair<TKey, Nito.Utility.WeakReference<TValue>> cacheEntry in _cache)
                 {
                     TValue targetValue;
                     if(!cacheEntry.Value.TryGetTarget(out targetValue))
