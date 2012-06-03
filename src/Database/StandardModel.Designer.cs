@@ -28,6 +28,14 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("Bluedot.HabboServer.Database", "subscriptions_ibfk_1", "DBHabbo", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Bluedot.HabboServer.Database.DBHabbo), "DBSubscription", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Bluedot.HabboServer.Database.DBSubscription), true)]
 [assembly: EdmRelationshipAttribute("Bluedot.HabboServer.Database", "messenger_friendships_ibfk_2", "DBMessengerCategory", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Bluedot.HabboServer.Database.DBMessengerCategory), "DBMessengerFriendship", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Bluedot.HabboServer.Database.DBMessengerFriendship), true)]
 [assembly: EdmRelationshipAttribute("Bluedot.HabboServer.Database", "messenger_friendships_ibfk_4", "DBMessengerCategory", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Bluedot.HabboServer.Database.DBMessengerCategory), "DBMessengerFriendship", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Bluedot.HabboServer.Database.DBMessengerFriendship), true)]
+[assembly: EdmRelationshipAttribute("Bluedot.HabboServer.Database", "permission_group_groups_ibfk_1", "permission_groups", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Bluedot.HabboServer.Database.DBPermissionGroup), "permission_group_groups", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Bluedot.HabboServer.Database.DBPermissionGroupGroup), true)]
+[assembly: EdmRelationshipAttribute("Bluedot.HabboServer.Database", "permission_group_groups_ibfk_2", "permission_groups", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Bluedot.HabboServer.Database.DBPermissionGroup), "permission_group_groups", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Bluedot.HabboServer.Database.DBPermissionGroupGroup), true)]
+[assembly: EdmRelationshipAttribute("Bluedot.HabboServer.Database", "permission_group_permissions_ibfk_1", "permission_groups", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Bluedot.HabboServer.Database.DBPermissionGroup), "permission_group_permissions", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Bluedot.HabboServer.Database.DBPermissionGroupPermission), true)]
+[assembly: EdmRelationshipAttribute("Bluedot.HabboServer.Database", "permission_group_permissions_ibfk_2", "permission_permissions", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Bluedot.HabboServer.Database.DBPermission), "permission_group_permissions", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Bluedot.HabboServer.Database.DBPermissionGroupPermission), true)]
+[assembly: EdmRelationshipAttribute("Bluedot.HabboServer.Database", "permission_habbo_groups_ibfk_1", "DBHabbo", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Bluedot.HabboServer.Database.DBHabbo), "permission_habbo_groups", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Bluedot.HabboServer.Database.DBHabboPermissionGroup), true)]
+[assembly: EdmRelationshipAttribute("Bluedot.HabboServer.Database", "permission_habbo_permissions_ibfk_1", "DBHabbo", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Bluedot.HabboServer.Database.DBHabbo), "permission_habbo_permissions", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Bluedot.HabboServer.Database.DBHabboPermission), true)]
+[assembly: EdmRelationshipAttribute("Bluedot.HabboServer.Database", "permission_habbo_groups_ibfk_2", "DBPermissionGroup", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Bluedot.HabboServer.Database.DBPermissionGroup), "permission_habbo_groups", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Bluedot.HabboServer.Database.DBHabboPermissionGroup), true)]
+[assembly: EdmRelationshipAttribute("Bluedot.HabboServer.Database", "permission_habbo_permissions_ibfk_2", "DBPermission", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Bluedot.HabboServer.Database.DBPermission), "permission_habbo_permissions", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Bluedot.HabboServer.Database.DBHabboPermission), true)]
 
 #endregion
 
@@ -194,18 +202,114 @@ namespace Bluedot.HabboServer.Database
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<DBPersistentStorage> DBPersistentStorages
+        public ObjectSet<DBPersistentStorage> PersistentStorage
         {
             get
             {
-                if ((_DBPersistentStorages == null))
+                if ((_PersistentStorage == null))
                 {
-                    _DBPersistentStorages = base.CreateObjectSet<DBPersistentStorage>("DBPersistentStorages");
+                    _PersistentStorage = base.CreateObjectSet<DBPersistentStorage>("PersistentStorage");
                 }
-                return _DBPersistentStorages;
+                return _PersistentStorage;
             }
         }
-        private ObjectSet<DBPersistentStorage> _DBPersistentStorages;
+        private ObjectSet<DBPersistentStorage> _PersistentStorage;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<DBPermissionGroupGroup> PermissionGroupGroups
+        {
+            get
+            {
+                if ((_PermissionGroupGroups == null))
+                {
+                    _PermissionGroupGroups = base.CreateObjectSet<DBPermissionGroupGroup>("PermissionGroupGroups");
+                }
+                return _PermissionGroupGroups;
+            }
+        }
+        private ObjectSet<DBPermissionGroupGroup> _PermissionGroupGroups;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<DBPermissionGroupPermission> PermissionGroupPermissions
+        {
+            get
+            {
+                if ((_PermissionGroupPermissions == null))
+                {
+                    _PermissionGroupPermissions = base.CreateObjectSet<DBPermissionGroupPermission>("PermissionGroupPermissions");
+                }
+                return _PermissionGroupPermissions;
+            }
+        }
+        private ObjectSet<DBPermissionGroupPermission> _PermissionGroupPermissions;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<DBPermissionGroup> PermissionGroups
+        {
+            get
+            {
+                if ((_PermissionGroups == null))
+                {
+                    _PermissionGroups = base.CreateObjectSet<DBPermissionGroup>("PermissionGroups");
+                }
+                return _PermissionGroups;
+            }
+        }
+        private ObjectSet<DBPermissionGroup> _PermissionGroups;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<DBPermission> Permissions
+        {
+            get
+            {
+                if ((_Permissions == null))
+                {
+                    _Permissions = base.CreateObjectSet<DBPermission>("Permissions");
+                }
+                return _Permissions;
+            }
+        }
+        private ObjectSet<DBPermission> _Permissions;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<DBHabboPermissionGroup> HabboPermissionGroups
+        {
+            get
+            {
+                if ((_HabboPermissionGroups == null))
+                {
+                    _HabboPermissionGroups = base.CreateObjectSet<DBHabboPermissionGroup>("HabboPermissionGroups");
+                }
+                return _HabboPermissionGroups;
+            }
+        }
+        private ObjectSet<DBHabboPermissionGroup> _HabboPermissionGroups;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<DBHabboPermission> HabboPermissions
+        {
+            get
+            {
+                if ((_HabboPermissions == null))
+                {
+                    _HabboPermissions = base.CreateObjectSet<DBHabboPermission>("HabboPermissions");
+                }
+                return _HabboPermissions;
+            }
+        }
+        private ObjectSet<DBHabboPermission> _HabboPermissions;
 
         #endregion
         #region AddTo Methods
@@ -267,11 +371,59 @@ namespace Bluedot.HabboServer.Database
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the DBPersistentStorages EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the PersistentStorage EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddToDBPersistentStorages(DBPersistentStorage dBPersistentStorage)
+        public void AddToPersistentStorage(DBPersistentStorage dBPersistentStorage)
         {
-            base.AddObject("DBPersistentStorages", dBPersistentStorage);
+            base.AddObject("PersistentStorage", dBPersistentStorage);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the PermissionGroupGroups EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToPermissionGroupGroups(DBPermissionGroupGroup dBPermissionGroupGroup)
+        {
+            base.AddObject("PermissionGroupGroups", dBPermissionGroupGroup);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the PermissionGroupPermissions EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToPermissionGroupPermissions(DBPermissionGroupPermission dBPermissionGroupPermission)
+        {
+            base.AddObject("PermissionGroupPermissions", dBPermissionGroupPermission);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the PermissionGroups EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToPermissionGroups(DBPermissionGroup dBPermissionGroup)
+        {
+            base.AddObject("PermissionGroups", dBPermissionGroup);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Permissions EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToPermissions(DBPermission dBPermission)
+        {
+            base.AddObject("Permissions", dBPermission);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the HabboPermissionGroups EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToHabboPermissionGroups(DBHabboPermissionGroup dBHabboPermissionGroup)
+        {
+            base.AddObject("HabboPermissionGroups", dBHabboPermissionGroup);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the HabboPermissions EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToHabboPermissions(DBHabboPermission dBHabboPermission)
+        {
+            base.AddObject("HabboPermissions", dBHabboPermission);
         }
 
         #endregion
@@ -305,7 +457,7 @@ namespace Bluedot.HabboServer.Database
         /// <param name="motto">Initial value of the Motto property.</param>
         /// <param name="credits">Initial value of the Credits property.</param>
         /// <param name="pixels">Initial value of the Pixels property.</param>
-        public static DBHabbo CreateDBHabbo(global::System.Int32 id, global::System.Int32 loginId, global::System.String username, global::System.DateTime dateCreated, global::System.String figureString, global::System.Int32 rawSwimColour, global::System.Boolean figureGender, global::System.String motto, global::System.Int32 credits, global::System.Int32 pixels)
+        public static DBHabbo CreateDBHabbo(global::System.Int32 id, global::System.Int32 loginId, global::System.String username, global::System.DateTime dateCreated, global::System.String figureString, global::System.Byte[] rawSwimColour, global::System.Boolean figureGender, global::System.String motto, global::System.Int32 credits, global::System.Int32 pixels)
         {
             DBHabbo dBHabbo = new DBHabbo();
             dBHabbo.Id = id;
@@ -452,23 +604,23 @@ namespace Bluedot.HabboServer.Database
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 RawSwimColour
+        public global::System.Byte[] RawSwimColour
         {
             get
             {
-                return _RawSwimColour;
+                return StructuralObject.GetValidValue(_RawSwimColour);
             }
             set
             {
                 OnRawSwimColourChanging(value);
                 ReportPropertyChanging("RawSwimColour");
-                _RawSwimColour = StructuralObject.SetValidValue(value);
+                _RawSwimColour = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("RawSwimColour");
                 OnRawSwimColourChanged();
             }
         }
-        private global::System.Int32 _RawSwimColour;
-        partial void OnRawSwimColourChanging(global::System.Int32 value);
+        private global::System.Byte[] _RawSwimColour;
+        partial void OnRawSwimColourChanging(global::System.Byte[] value);
         partial void OnRawSwimColourChanged();
     
         /// <summary>
@@ -638,6 +790,242 @@ namespace Bluedot.HabboServer.Database
         private global::System.Byte[] _RawOriginIP;
         partial void OnRawOriginIPChanging(global::System.Byte[] value);
         partial void OnRawOriginIPChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="Bluedot.HabboServer.Database", Name="DBHabboPermission")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class DBHabboPermission : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new DBHabboPermission object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="permissionId">Initial value of the PermissionId property.</param>
+        /// <param name="permissionState">Initial value of the PermissionState property.</param>
+        public static DBHabboPermission CreateDBHabboPermission(global::System.Int32 id, global::System.Int32 permissionId, global::System.String permissionState)
+        {
+            DBHabboPermission dBHabboPermission = new DBHabboPermission();
+            dBHabboPermission.Id = id;
+            dBHabboPermission.PermissionId = permissionId;
+            dBHabboPermission.PermissionState = permissionState;
+            return dBHabboPermission;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> HabboId
+        {
+            get
+            {
+                return _HabboId;
+            }
+            set
+            {
+                OnHabboIdChanging(value);
+                ReportPropertyChanging("HabboId");
+                _HabboId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HabboId");
+                OnHabboIdChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _HabboId;
+        partial void OnHabboIdChanging(Nullable<global::System.Int32> value);
+        partial void OnHabboIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 PermissionId
+        {
+            get
+            {
+                return _PermissionId;
+            }
+            set
+            {
+                OnPermissionIdChanging(value);
+                ReportPropertyChanging("PermissionId");
+                _PermissionId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PermissionId");
+                OnPermissionIdChanged();
+            }
+        }
+        private global::System.Int32 _PermissionId;
+        partial void OnPermissionIdChanging(global::System.Int32 value);
+        partial void OnPermissionIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String PermissionState
+        {
+            get
+            {
+                return _PermissionState;
+            }
+            set
+            {
+                OnPermissionStateChanging(value);
+                ReportPropertyChanging("PermissionState");
+                _PermissionState = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("PermissionState");
+                OnPermissionStateChanged();
+            }
+        }
+        private global::System.String _PermissionState;
+        partial void OnPermissionStateChanging(global::System.String value);
+        partial void OnPermissionStateChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="Bluedot.HabboServer.Database", Name="DBHabboPermissionGroup")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class DBHabboPermissionGroup : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new DBHabboPermissionGroup object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="groupId">Initial value of the GroupId property.</param>
+        public static DBHabboPermissionGroup CreateDBHabboPermissionGroup(global::System.Int32 id, global::System.Int32 groupId)
+        {
+            DBHabboPermissionGroup dBHabboPermissionGroup = new DBHabboPermissionGroup();
+            dBHabboPermissionGroup.Id = id;
+            dBHabboPermissionGroup.GroupId = groupId;
+            return dBHabboPermissionGroup;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> HabboId
+        {
+            get
+            {
+                return _HabboId;
+            }
+            set
+            {
+                OnHabboIdChanging(value);
+                ReportPropertyChanging("HabboId");
+                _HabboId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HabboId");
+                OnHabboIdChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _HabboId;
+        partial void OnHabboIdChanging(Nullable<global::System.Int32> value);
+        partial void OnHabboIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 GroupId
+        {
+            get
+            {
+                return _GroupId;
+            }
+            set
+            {
+                OnGroupIdChanging(value);
+                ReportPropertyChanging("GroupId");
+                _GroupId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("GroupId");
+                OnGroupIdChanged();
+            }
+        }
+        private global::System.Int32 _GroupId;
+        partial void OnGroupIdChanging(global::System.Int32 value);
+        partial void OnGroupIdChanged();
 
         #endregion
     
@@ -907,91 +1295,6 @@ namespace Bluedot.HabboServer.Database
 
         #endregion
     
-        #region Navigation Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("Bluedot.HabboServer.Database", "messenger_categories_ibfk_1", "DBHabbo")]
-        public DBHabbo habbo
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<DBHabbo>("Bluedot.HabboServer.Database.messenger_categories_ibfk_1", "DBHabbo").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<DBHabbo>("Bluedot.HabboServer.Database.messenger_categories_ibfk_1", "DBHabbo").Value = value;
-            }
-        }
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<DBHabbo> habboReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<DBHabbo>("Bluedot.HabboServer.Database.messenger_categories_ibfk_1", "DBHabbo");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<DBHabbo>("Bluedot.HabboServer.Database.messenger_categories_ibfk_1", "DBHabbo", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("Bluedot.HabboServer.Database", "messenger_friendships_ibfk_2", "DBMessengerFriendship")]
-        public EntityCollection<DBMessengerFriendship> messenger_friendships
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<DBMessengerFriendship>("Bluedot.HabboServer.Database.messenger_friendships_ibfk_2", "DBMessengerFriendship");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<DBMessengerFriendship>("Bluedot.HabboServer.Database.messenger_friendships_ibfk_2", "DBMessengerFriendship", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("Bluedot.HabboServer.Database", "messenger_friendships_ibfk_4", "DBMessengerFriendship")]
-        public EntityCollection<DBMessengerFriendship> messenger_friendships1
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<DBMessengerFriendship>("Bluedot.HabboServer.Database.messenger_friendships_ibfk_4", "DBMessengerFriendship");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<DBMessengerFriendship>("Bluedot.HabboServer.Database.messenger_friendships_ibfk_4", "DBMessengerFriendship", value);
-                }
-            }
-        }
-
-        #endregion
     }
     
     /// <summary>
@@ -1251,6 +1554,408 @@ namespace Bluedot.HabboServer.Database
         private Nullable<global::System.Int32> _CategoryBId;
         partial void OnCategoryBIdChanging(Nullable<global::System.Int32> value);
         partial void OnCategoryBIdChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="Bluedot.HabboServer.Database", Name="DBPermission")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class DBPermission : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new DBPermission object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="name">Initial value of the Name property.</param>
+        public static DBPermission CreateDBPermission(global::System.Int32 id, global::System.String name)
+        {
+            DBPermission dBPermission = new DBPermission();
+            dBPermission.Id = id;
+            dBPermission.Name = name;
+            return dBPermission;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="Bluedot.HabboServer.Database", Name="DBPermissionGroup")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class DBPermissionGroup : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new DBPermissionGroup object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="name">Initial value of the Name property.</param>
+        public static DBPermissionGroup CreateDBPermissionGroup(global::System.Int32 id, global::System.String name)
+        {
+            DBPermissionGroup dBPermissionGroup = new DBPermissionGroup();
+            dBPermissionGroup.Id = id;
+            dBPermissionGroup.Name = name;
+            return dBPermissionGroup;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="Bluedot.HabboServer.Database", Name="DBPermissionGroupGroup")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class DBPermissionGroupGroup : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new DBPermissionGroupGroup object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="groupId">Initial value of the GroupId property.</param>
+        /// <param name="childGroupId">Initial value of the ChildGroupId property.</param>
+        public static DBPermissionGroupGroup CreateDBPermissionGroupGroup(global::System.Int32 id, global::System.Int32 groupId, global::System.Int32 childGroupId)
+        {
+            DBPermissionGroupGroup dBPermissionGroupGroup = new DBPermissionGroupGroup();
+            dBPermissionGroupGroup.Id = id;
+            dBPermissionGroupGroup.GroupId = groupId;
+            dBPermissionGroupGroup.ChildGroupId = childGroupId;
+            return dBPermissionGroupGroup;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 GroupId
+        {
+            get
+            {
+                return _GroupId;
+            }
+            set
+            {
+                OnGroupIdChanging(value);
+                ReportPropertyChanging("GroupId");
+                _GroupId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("GroupId");
+                OnGroupIdChanged();
+            }
+        }
+        private global::System.Int32 _GroupId;
+        partial void OnGroupIdChanging(global::System.Int32 value);
+        partial void OnGroupIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ChildGroupId
+        {
+            get
+            {
+                return _ChildGroupId;
+            }
+            set
+            {
+                OnChildGroupIdChanging(value);
+                ReportPropertyChanging("ChildGroupId");
+                _ChildGroupId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ChildGroupId");
+                OnChildGroupIdChanged();
+            }
+        }
+        private global::System.Int32 _ChildGroupId;
+        partial void OnChildGroupIdChanging(global::System.Int32 value);
+        partial void OnChildGroupIdChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="Bluedot.HabboServer.Database", Name="DBPermissionGroupPermission")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class DBPermissionGroupPermission : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new DBPermissionGroupPermission object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="groupId">Initial value of the GroupId property.</param>
+        /// <param name="permissionId">Initial value of the PermissionId property.</param>
+        /// <param name="permissionState">Initial value of the PermissionState property.</param>
+        public static DBPermissionGroupPermission CreateDBPermissionGroupPermission(global::System.Int32 id, global::System.Int32 groupId, global::System.Int32 permissionId, global::System.String permissionState)
+        {
+            DBPermissionGroupPermission dBPermissionGroupPermission = new DBPermissionGroupPermission();
+            dBPermissionGroupPermission.Id = id;
+            dBPermissionGroupPermission.GroupId = groupId;
+            dBPermissionGroupPermission.PermissionId = permissionId;
+            dBPermissionGroupPermission.PermissionState = permissionState;
+            return dBPermissionGroupPermission;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 GroupId
+        {
+            get
+            {
+                return _GroupId;
+            }
+            set
+            {
+                OnGroupIdChanging(value);
+                ReportPropertyChanging("GroupId");
+                _GroupId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("GroupId");
+                OnGroupIdChanged();
+            }
+        }
+        private global::System.Int32 _GroupId;
+        partial void OnGroupIdChanging(global::System.Int32 value);
+        partial void OnGroupIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 PermissionId
+        {
+            get
+            {
+                return _PermissionId;
+            }
+            set
+            {
+                OnPermissionIdChanging(value);
+                ReportPropertyChanging("PermissionId");
+                _PermissionId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PermissionId");
+                OnPermissionIdChanged();
+            }
+        }
+        private global::System.Int32 _PermissionId;
+        partial void OnPermissionIdChanging(global::System.Int32 value);
+        partial void OnPermissionIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String PermissionState
+        {
+            get
+            {
+                return _PermissionState;
+            }
+            set
+            {
+                OnPermissionStateChanging(value);
+                ReportPropertyChanging("PermissionState");
+                _PermissionState = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("PermissionState");
+                OnPermissionStateChanged();
+            }
+        }
+        private global::System.String _PermissionState;
+        partial void OnPermissionStateChanging(global::System.String value);
+        partial void OnPermissionStateChanged();
 
         #endregion
     

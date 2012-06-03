@@ -21,17 +21,151 @@
 
 #region Usings
 
-
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using Bluedot.HabboServer.Cache;
+using Bluedot.HabboServer.Database;
 
 #endregion
 
+
 namespace Bluedot.HabboServer.Permissions
 {
-    public class PermissionDistributor : WeakCache<string, Permission>
+    public class PermissionDistributor
     {
-        protected override Permission ConstructInstance(string index)
+        #region Fields
+        #region Field: _permissionCache
+        private readonly WeakCache<string, Permission> _permissionCache;
+        #endregion
+        #region Field: _permissionGroupCache
+        private readonly WeakCache<int, PermissionGroup> _permissionGroupCache;
+        #endregion
+        #region Field: _permissionIdNameLookup
+        private readonly Dictionary<int, string> _permissionIdNameLookup;
+        #endregion
+        #endregion
+
+        #region Property: DefaultPermissions
+        private readonly IDictionary<Permission, PermissionState> _defaultPermissions;
+        /// <summary>
+        /// 
+        /// </summary>
+        public IDictionary<Permission, PermissionState> DefaultPermissions
         {
-            return new Permission(index);
+            get
+            {
+                return _defaultPermissions;
+            }
         }
+        #endregion
+        #region Property: DefaultPermissionGroups
+        private readonly ICollection<PermissionGroup> _defaultPermissionGroups;
+        /// <summary>
+        /// 
+        /// </summary>
+        public ICollection<PermissionGroup> DefaultPermissionGroups
+        {
+            get
+            {
+                return _defaultPermissionGroups;
+            }
+        }
+        #endregion
+
+        #region Method: PermissionDistributor (Constructor)
+        public PermissionDistributor()
+        {
+            _permissionCache = new WeakCache<string, Permission>(ConstructPermission);
+            _permissionGroupCache = new WeakCache<int, PermissionGroup>(ConstructPermissionGroup);
+            
+            List<DBPermission> permissions;
+            List<DBHabboPermission> defaultPermissions;
+            List<DBHabboPermissionGroup> defaultGroups;
+            using(Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
+            {
+                permissions = dbSession.Permissions.ToList();
+                defaultPermissions = dbSession.HabboPermissions.Where(permission => permission.HabboId == null).ToList();
+                defaultGroups = dbSession.HabboPermissionGroups.Where(group => group.HabboId == null).ToList();
+            }
+            #region ID to Name Lookup
+            _permissionIdNameLookup = new Dictionary<int, string>(permissions.Count);
+            foreach (DBPermission permission in permissions)
+                _permissionIdNameLookup.Add(permission.Id, permission.Name);
+            #endregion
+            #region Default Permissions
+
+            _defaultPermissions = new Dictionary<Permission, PermissionState>();
+            foreach (DBHabboPermission defaultPermission in defaultPermissions)
+            {
+                // HACK: Native Enum support coming to a future Entity Framework version.
+                PermissionState permissionState;
+                if (!Enum.TryParse(defaultPermission.PermissionState, true, out permissionState))
+                    continue;
+                _defaultPermissions.Add(GetPermission(defaultPermission.Id), permissionState);
+            }
+            #endregion
+            #region Default Groups
+            _defaultPermissionGroups = new HashSet<PermissionGroup>();
+            foreach (DBHabboPermissionGroup defaultGroup in defaultGroups)
+            {
+                _defaultPermissionGroups.Add(GetGroup(defaultGroup.Id));
+            }
+            #endregion
+        }
+        #endregion
+
+        #region Method: ConstructPermission
+        internal Permission ConstructPermission(string name)
+        {
+            return new Permission(name);
+        }
+        #endregion
+        #region Method: ConstructPermissionGroup
+        internal PermissionGroup ConstructPermissionGroup(int id)
+        {
+            return new PermissionGroup(id);
+        }
+        #endregion
+
+        #region Method: RegisterPermission
+        /// <summary>
+        /// TODO: Document
+        /// </summary>
+        public PermissionDistributor RegisterPermission()
+        {
+            // TODO: Save to database.
+            return this;
+        }
+        #endregion
+        #region Method: DeregisterPermission
+        /// <summary>
+        /// TODO: Document
+        /// </summary>
+        public PermissionDistributor DeregisterPermission()
+        {
+            // TODO: Remove from database.
+            return this;
+        }
+        #endregion
+
+        #region Method: GetGroup
+        public PermissionGroup GetGroup(int id)
+        {
+            return _permissionGroupCache[id];
+        }
+        #endregion
+        #region Method: GetPermission
+        public Permission GetPermission(int id)
+        {
+            if (!_permissionIdNameLookup.ContainsKey(id))
+                return null;
+            return _permissionCache[_permissionIdNameLookup[id]];
+        }
+        public Permission GetPermission(string name)
+        {
+            return _permissionCache[name];
+        }
+        #endregion
     }
 }

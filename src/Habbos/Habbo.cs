@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Bluedot.HabboServer.Database;
 using Bluedot.HabboServer.Habbos.Figure;
 using Bluedot.HabboServer.Habbos.Messenger;
 using Bluedot.HabboServer.Network;
+using Bluedot.HabboServer.Permissions;
 using SmartWeakEvent;
 
 namespace Bluedot.HabboServer.Habbos
@@ -87,7 +89,7 @@ namespace Bluedot.HabboServer.Habbos
         }
         #endregion
         #endregion
-
+        
         #region Properties
         #region Property: Id
         /// <summary>
@@ -106,6 +108,7 @@ namespace Bluedot.HabboServer.Habbos
         /// The login this Habbo is assigned to.
         /// Changing this will automatically change it in the database too.
         /// </summary>
+        /// <remarks>Uses lazy loading.</remarks>
         public int LoginId
         {
             get
@@ -143,6 +146,7 @@ namespace Bluedot.HabboServer.Habbos
         /// The username of this Habbo.
         /// Changing this will automatically change it in the database too.
         /// </summary>
+        /// <remarks>Uses lazy loading.</remarks>
         public string Username
         {
             get
@@ -160,8 +164,11 @@ namespace Bluedot.HabboServer.Habbos
             }
             set
             {
+                if (value == null)
+                    throw new ArgumentNullException("value", "Setting the username of a Habbo to null is not allowed!");
                 if (_username == value)
                     return;
+
                 _username = value;
 
                 // Update the database
@@ -195,15 +202,26 @@ namespace Bluedot.HabboServer.Habbos
         #endregion
         
         #region Property: DateCreated
+        private DateTime? _dateCreated;
         /// <summary>
         /// The time and date this Habbo was created.
         /// This value is read only.
         /// </summary>
+        /// <remarks>Uses lazy loading.</remarks>
         public DateTime DateCreated
         {
-            // TODO: Add lazy loading
-            get;
-            private set;
+            get
+            {
+                if (!_dateCreated.HasValue)
+                {
+                    using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
+                    {
+                        DBHabbo habboData = dbSession.Habbos.Single(habbo => habbo.Id == Id);
+                        _dateCreated = habboData.DateCreated;
+                    }
+                }
+                return _dateCreated.Value;
+            }
         }
         #endregion
         #region Property: LastAccess
@@ -211,6 +229,7 @@ namespace Bluedot.HabboServer.Habbos
         /// The time and date this Habbo last connected.
         /// Changing this will automatically change it in the database too.
         /// </summary>
+        /// <remarks>Uses lazy loading.</remarks>
         private DateTime? _lastAccess;
         public DateTime LastAccess
         {
@@ -338,6 +357,10 @@ namespace Bluedot.HabboServer.Habbos
 
         #region Property: Figure
         private HabboFigure _figure;
+        /// <summary>
+        /// TODO: Document
+        /// </summary>
+        /// <remarks>Uses lazy loading.</remarks>
         public HabboFigure Figure
         {
             get
@@ -347,29 +370,12 @@ namespace Bluedot.HabboServer.Habbos
                     using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
                     {
                         DBHabbo habboData = dbSession.Habbos.Single(habbo => habbo.Id == Id);
-                        _motto = habboData.Motto;
+                        _figure = CoreManager.ServerCore.HabboFigureFactory.Parse(habboData.FigureString, habboData.FigureGender);
                     }
                 }
                 return _figure;
             }
-            set
-            {
-                if (_figure == value)
-                    return;
-                _figure = value;
-
-                // Update the database
-                using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
-                {
-                    DBHabbo habboData = dbSession.Habbos.Single(habbo => habbo.Id == Id);
-                    habboData.FigureGender = _figure.Gender;
-                    dbSession.SaveChanges();
-                }
-            }
         }
-        #endregion
-        #region Property: SwimFigure
-        // TODO: SwimFigure stuff
         #endregion
         #region Property: Motto
         private string _motto;
@@ -377,6 +383,7 @@ namespace Bluedot.HabboServer.Habbos
         /// The motto of this Habbo.
         /// Changing this will automatically change it in the database too.
         /// </summary>
+        /// <remarks>Uses lazy loading.</remarks>
         public string Motto
         {
             get
@@ -393,6 +400,8 @@ namespace Bluedot.HabboServer.Habbos
             }
             set
             {
+                if (value == null)
+                    throw new ArgumentNullException("value", "Setting the motto of a Habbo to null is not allowed!");
                 if (_motto == value)
                     return;
                 _motto = value;
@@ -413,6 +422,7 @@ namespace Bluedot.HabboServer.Habbos
         /// The amount of credits this Habbo has.
         /// Changing this will automatically change it in the database too.
         /// </summary>
+        /// <remarks>Uses lazy loading.</remarks>
         public int Credits
         {
             get
@@ -449,6 +459,7 @@ namespace Bluedot.HabboServer.Habbos
         /// The amount of pixels this Habbo has.
         /// Changing this will automatically change it in the database too.
         /// </summary>
+        /// <remarks>Uses lazy loading.</remarks>
         public int Pixels
         {
             get
@@ -492,6 +503,10 @@ namespace Bluedot.HabboServer.Habbos
         #endregion
         #region Property: Messenger
         private HabboMessenger _messenger;
+        /// <summary>
+        /// TODO: Document
+        /// </summary>
+        /// <remarks>Uses lazy loading.</remarks>
         internal HabboMessenger Messenger
         {
             get
@@ -504,16 +519,120 @@ namespace Bluedot.HabboServer.Habbos
         #endregion
 
         #region Property: PersistentValues
+        #region Property: PersistentValues
+        private PersistentStorage _persistentValues;
+        /// <summary>
+        /// Document
+        /// </summary>
+        /// <remarks>Uses lazy loading.</remarks>
         public PersistentStorage PersistentValues
         {
-            get;
-            private set;
+            get
+            {
+                if (_persistentValues == null)
+                    _persistentValues = new PersistentStorage(this);
+                return _persistentValues;
+            }
         }
+        #endregion
         #endregion
         #region Property: PersistInstance
         public long PersistInstanceProperty()
         {
             return Id;
+        }
+        #endregion
+
+        #region Property: Permissions
+        private IDictionary<Permission, PermissionState> _permissions;
+        /// <summary>
+        /// TODO: Document
+        /// </summary>
+        /// <remarks>Uses lazy loading.</remarks>
+        public IDictionary<Permission, PermissionState> Permissions
+        {
+            get
+            {
+                if (_permissions == null || _permissionGroups == null)
+                {
+
+                    List<DBHabboPermission> permissions;
+                    List<DBHabboPermissionGroup> groups;
+                    using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
+                    {
+                        permissions = dbSession.HabboPermissions.Where(habbo => habbo.Id == Id).ToList();
+                        groups = dbSession.HabboPermissionGroups.Where(habbo => habbo.Id == Id).ToList();
+                    }
+
+                    PermissionDistributor distributor = CoreManager.ServerCore.PermissionDistributor;
+
+                    #region Permissions
+                    _permissions = new Dictionary<Permission, PermissionState>();
+                    foreach (DBHabboPermission permission in permissions)
+                    {
+                        // HACK: Native Enum support coming to a future Entity Framework version.
+                        PermissionState permissionState;
+                        if (!Enum.TryParse(permission.PermissionState, true, out permissionState))
+                            continue;
+                        _permissions.Add(distributor.GetPermission(permission.Id), permissionState);
+                    }
+                    #endregion
+                    #region Groups
+                    _permissionGroups = new HashSet<PermissionGroup>();
+                    foreach (DBHabboPermissionGroup permissionGroup in groups)
+                    {
+                        _permissionGroups.Add(distributor.GetGroup(permissionGroup.Id));
+                    }
+                    #endregion
+                }
+                return _permissions;
+            }
+        }
+        #endregion
+        #region Property: PermissionGroups
+        private ICollection<PermissionGroup> _permissionGroups;
+        /// <summary>
+        /// TODO: Document
+        /// </summary>
+        /// <remarks>Uses lazy loading.</remarks>
+        public ICollection<PermissionGroup> PermissionGroups
+        {
+            get
+            {
+                if (_permissions == null || _permissionGroups == null)
+                {
+
+                    List<DBHabboPermission> permissions;
+                    List<DBHabboPermissionGroup> groups;
+                    using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
+                    {
+                        permissions = dbSession.HabboPermissions.Where(habbo => habbo.Id == Id).ToList();
+                        groups = dbSession.HabboPermissionGroups.Where(habbo => habbo.Id == Id).ToList();
+                    }
+
+                    PermissionDistributor distributor = CoreManager.ServerCore.PermissionDistributor;
+
+                    #region Permissions
+                    _permissions = new Dictionary<Permission, PermissionState>();
+                    foreach (DBHabboPermission permission in permissions)
+                    {
+                        // HACK: Native Enum support coming to a future Entity Framework version.
+                        PermissionState permissionState;
+                        if (!Enum.TryParse(permission.PermissionState, true, out permissionState))
+                            continue;
+                        _permissions.Add(distributor.GetPermission(permission.Id), permissionState);
+                    }
+                    #endregion
+                    #region Groups
+                    _permissionGroups = new HashSet<PermissionGroup>();
+                    foreach (DBHabboPermissionGroup permissionGroup in groups)
+                    {
+                        _permissionGroups.Add(distributor.GetGroup(permissionGroup.Id));
+                    }
+                    #endregion
+                }
+                return _permissionGroups;
+            }
         }
         #endregion
         #endregion
@@ -524,26 +643,22 @@ namespace Bluedot.HabboServer.Habbos
         {
             using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
             {
-                if(dbSession.Habbos.Any(habbo => habbo.Id == id))
+                if (dbSession.Habbos.Any(habbo => habbo.Id == id))
                     Id = id;
             }
-            PersistentValues = new PersistentStorage(this);
         }
         internal Habbo(string username)
         {
             using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
             {
                 DBHabbo habboData = dbSession.Habbos.Single(habbo => habbo.Username == username);
-
                 Id = habboData.Id;
                 _username = habboData.Username;
             }
-            PersistentValues = new PersistentStorage(this);
         }
         internal Habbo(GameSocket socket)
         {
             Socket = socket;
-            PersistentValues = new PersistentStorage(this);
         }
         #endregion
         #region Method: Login Merge
@@ -551,33 +666,6 @@ namespace Bluedot.HabboServer.Habbos
         {
             Socket = loggedInHabbo.Socket;
             Socket.Habbo = this;
-        }
-        #endregion
-        #region Method: RefreshFromDatabase
-        /// <summary>
-        /// Sets all property values to the value stored in the database.
-        /// </summary>
-        public void RefreshFromDatabase(bool privateData = true, bool friendData = true, bool internalData = true)
-        {
-            // TODO: Lazy loading
-            using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
-            {
-                DBHabbo habboData = dbSession.Habbos.Single(habbo => habbo.Id == Id);
-
-                if (privateData)
-                {
-                    _loginId = habboData.LoginId;
-                    _pixels = habboData.Pixels;
-                    _credits = habboData.Credits;
-                    DateCreated = habboData.DateCreated;
-                }
-                if (privateData || friendData || internalData)
-                {
-                    _username = habboData.Username;
-                    _motto = habboData.Motto;
-                    _lastAccess = habboData.LastAccess;
-                }
-            }
         }
         #endregion
         #region Method: SendMessage
@@ -588,6 +676,31 @@ namespace Bluedot.HabboServer.Habbos
             _eventOnMessageSent.Raise(this, new GameSocketMessageEventArgs(message));
             _eventOnAnyMessageSent.Raise(this, new GameSocketMessageEventArgs(message));
             return this;
+        }
+        #endregion
+        #region Method: GetPermissionState
+        /// <summary>
+        /// TODO: Document
+        /// </summary>
+        public PermissionState GetPermissionState(Permission permission)
+        {
+            #region Habbo
+            if (_permissions.ContainsKey(permission))
+                return _permissions[permission];
+            #endregion
+            #region Groups
+            foreach (PermissionGroup permissionGroup in _permissionGroups)
+            {
+                PermissionState result = permissionGroup.GetPermissionState(permission);
+                if (result != PermissionState.Undefined)
+                    return result;
+            }
+            #endregion
+            #region Defaults
+            if (CoreManager.ServerCore.PermissionDistributor.DefaultPermissions.ContainsKey(permission))
+                return CoreManager.ServerCore.PermissionDistributor.DefaultPermissions[permission];
+            return PermissionState.Undefined;
+            #endregion
         }
         #endregion
         #endregion

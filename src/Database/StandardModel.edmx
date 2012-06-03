@@ -11,6 +11,12 @@
           <EntitySet Name="messenger_categories" EntityType="Bluedot.HabboServer.Database.Store.messenger_categories" store:Type="Tables" Schema="ihi_iii" />
           <EntitySet Name="messenger_friend_requests" EntityType="Bluedot.HabboServer.Database.Store.messenger_friend_requests" store:Type="Tables" Schema="ihi_iii" />
           <EntitySet Name="messenger_friendships" EntityType="Bluedot.HabboServer.Database.Store.messenger_friendships" store:Type="Tables" Schema="ihi_iii" />
+          <EntitySet Name="permission_group_groups" EntityType="Bluedot.HabboServer.Database.Store.permission_group_groups" store:Type="Tables" Schema="ihi_iii" />
+          <EntitySet Name="permission_group_permissions" EntityType="Bluedot.HabboServer.Database.Store.permission_group_permissions" store:Type="Tables" Schema="ihi_iii" />
+          <EntitySet Name="permission_groups" EntityType="Bluedot.HabboServer.Database.Store.permission_groups" store:Type="Tables" Schema="ihi_iii" />
+          <EntitySet Name="permission_habbo_groups" EntityType="Bluedot.HabboServer.Database.Store.permission_habbo_groups" store:Type="Tables" Schema="ihi_iii" />
+          <EntitySet Name="permission_habbo_permissions" EntityType="Bluedot.HabboServer.Database.Store.permission_habbo_permissions" store:Type="Tables" Schema="ihi_iii" />
+          <EntitySet Name="permission_permissions" EntityType="Bluedot.HabboServer.Database.Store.permission_permissions" store:Type="Tables" Schema="ihi_iii" />
           <EntitySet Name="persistent_storage" EntityType="Bluedot.HabboServer.Database.Store.persistent_storage" store:Type="Tables" Schema="ihi_iii" />
           <EntitySet Name="rooms" EntityType="Bluedot.HabboServer.Database.Store.rooms" store:Type="Tables" Schema="ihi_iii" />
           <EntitySet Name="subscriptions" EntityType="Bluedot.HabboServer.Database.Store.subscriptions" store:Type="Tables" Schema="ihi_iii" />
@@ -29,7 +35,7 @@
           <AssociationSet Name="messenger_friend_requests_ibfk_2" Association="Bluedot.HabboServer.Database.Store.messenger_friend_requests_ibfk_2">
             <End Role="habbos" EntitySet="habbos" />
             <End Role="messenger_friend_requests" EntitySet="messenger_friend_requests" />
-          </AssociationSet> 
+          </AssociationSet>
           <AssociationSet Name="messenger_friendships_ibfk_1" Association="Bluedot.HabboServer.Database.Store.messenger_friendships_ibfk_1">
             <End Role="habbos" EntitySet="habbos" />
             <End Role="messenger_friendships" EntitySet="messenger_friendships" />
@@ -45,6 +51,38 @@
           <AssociationSet Name="messenger_friendships_ibfk_4" Association="Bluedot.HabboServer.Database.Store.messenger_friendships_ibfk_4">
             <End Role="messenger_categories" EntitySet="messenger_categories" />
             <End Role="messenger_friendships" EntitySet="messenger_friendships" />
+          </AssociationSet>
+          <AssociationSet Name="permission_group_groups_ibfk_1" Association="Bluedot.HabboServer.Database.Store.permission_group_groups_ibfk_1">
+            <End Role="permission_groups" EntitySet="permission_groups" />
+            <End Role="permission_group_groups" EntitySet="permission_group_groups" />
+          </AssociationSet>
+          <AssociationSet Name="permission_group_groups_ibfk_2" Association="Bluedot.HabboServer.Database.Store.permission_group_groups_ibfk_2">
+            <End Role="permission_groups" EntitySet="permission_groups" />
+            <End Role="permission_group_groups" EntitySet="permission_group_groups" />
+          </AssociationSet>
+          <AssociationSet Name="permission_group_permissions_ibfk_1" Association="Bluedot.HabboServer.Database.Store.permission_group_permissions_ibfk_1">
+            <End Role="permission_groups" EntitySet="permission_groups" />
+            <End Role="permission_group_permissions" EntitySet="permission_group_permissions" />
+          </AssociationSet>
+          <AssociationSet Name="permission_group_permissions_ibfk_2" Association="Bluedot.HabboServer.Database.Store.permission_group_permissions_ibfk_2">
+            <End Role="permission_permissions" EntitySet="permission_permissions" />
+            <End Role="permission_group_permissions" EntitySet="permission_group_permissions" />
+          </AssociationSet>
+          <AssociationSet Name="permission_habbo_groups_ibfk_1" Association="Bluedot.HabboServer.Database.Store.permission_habbo_groups_ibfk_1">
+            <End Role="habbos" EntitySet="habbos" />
+            <End Role="permission_habbo_groups" EntitySet="permission_habbo_groups" />
+          </AssociationSet>
+          <AssociationSet Name="permission_habbo_groups_ibfk_2" Association="Bluedot.HabboServer.Database.Store.permission_habbo_groups_ibfk_2">
+            <End Role="permission_groups" EntitySet="permission_groups" />
+            <End Role="permission_habbo_groups" EntitySet="permission_habbo_groups" />
+          </AssociationSet>
+          <AssociationSet Name="permission_habbo_permissions_ibfk_1" Association="Bluedot.HabboServer.Database.Store.permission_habbo_permissions_ibfk_1">
+            <End Role="habbos" EntitySet="habbos" />
+            <End Role="permission_habbo_permissions" EntitySet="permission_habbo_permissions" />
+          </AssociationSet>
+          <AssociationSet Name="permission_habbo_permissions_ibfk_2" Association="Bluedot.HabboServer.Database.Store.permission_habbo_permissions_ibfk_2">
+            <End Role="permission_permissions" EntitySet="permission_permissions" />
+            <End Role="permission_habbo_permissions" EntitySet="permission_habbo_permissions" />
           </AssociationSet>
           <AssociationSet Name="rooms_ibfk_1" Association="Bluedot.HabboServer.Database.Store.rooms_ibfk_1">
             <End Role="habbos" EntitySet="habbos" />
@@ -64,7 +102,7 @@
           <Property Name="username" Type="char" Nullable="false" MaxLength="16" />
           <Property Name="creation_date" Type="date" Nullable="false" />
           <Property Name="figure" Type="char" Nullable="false" />
-          <Property Name="swim_figure" Type="umediumint" Nullable="false" />
+          <Property Name="swim_figure" Type="binary" Nullable="false" MaxLength="3" />
           <Property Name="gender" Type="bool" Nullable="false" />
           <Property Name="motto" Type="char" Nullable="false" MaxLength="64" />
           <Property Name="credits" Type="int" Nullable="false" />
@@ -108,6 +146,54 @@
           <Property Name="category_a_id" Type="int" />
           <Property Name="habbo_b_id" Type="int" Nullable="false" />
           <Property Name="category_b_id" Type="int" />
+        </EntityType>
+        <EntityType Name="permission_group_groups">
+          <Key>
+            <PropertyRef Name="assignment_id" />
+          </Key>
+          <Property Name="assignment_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="group_id" Type="int" Nullable="false" />
+          <Property Name="child_group_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="permission_group_permissions">
+          <Key>
+            <PropertyRef Name="assignment_id" />
+          </Key>
+          <Property Name="assignment_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="group_id" Type="int" Nullable="false" />
+          <Property Name="permissions_id" Type="int" Nullable="false" />
+          <Property Name="permission_state" Type="enum" Nullable="false" />
+        </EntityType>
+        <EntityType Name="permission_groups">
+          <Key>
+            <PropertyRef Name="group_id" />
+          </Key>
+          <Property Name="group_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="group_name" Type="char" Nullable="false" MaxLength="48" />
+        </EntityType>
+        <EntityType Name="permission_habbo_groups">
+          <Key>
+            <PropertyRef Name="assignment_id" />
+          </Key>
+          <Property Name="assignment_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="habbo_id" Type="int" />
+          <Property Name="group_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="permission_habbo_permissions">
+          <Key>
+            <PropertyRef Name="assignment_id" />
+          </Key>
+          <Property Name="assignment_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="habbo_id" Type="int" />
+          <Property Name="permissions_id" Type="int" Nullable="false" />
+          <Property Name="permission_state" Type="enum" Nullable="false" />
+        </EntityType>
+        <EntityType Name="permission_permissions">
+          <Key>
+            <PropertyRef Name="permission_id" />
+          </Key>
+          <Property Name="permission_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="permission_name" Type="char" Nullable="false" MaxLength="48" />
         </EntityType>
         <EntityType Name="persistent_storage">
           <Key>
@@ -254,6 +340,106 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="permission_group_groups_ibfk_1">
+          <End Role="permission_groups" Type="Bluedot.HabboServer.Database.Store.permission_groups" Multiplicity="1" />
+          <End Role="permission_group_groups" Type="Bluedot.HabboServer.Database.Store.permission_group_groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="permission_groups">
+              <PropertyRef Name="group_id" />
+            </Principal>
+            <Dependent Role="permission_group_groups">
+              <PropertyRef Name="group_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="permission_group_groups_ibfk_2">
+          <End Role="permission_groups" Type="Bluedot.HabboServer.Database.Store.permission_groups" Multiplicity="1" />
+          <End Role="permission_group_groups" Type="Bluedot.HabboServer.Database.Store.permission_group_groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="permission_groups">
+              <PropertyRef Name="group_id" />
+            </Principal>
+            <Dependent Role="permission_group_groups">
+              <PropertyRef Name="child_group_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="permission_group_permissions_ibfk_1">
+          <End Role="permission_groups" Type="Bluedot.HabboServer.Database.Store.permission_groups" Multiplicity="1" />
+          <End Role="permission_group_permissions" Type="Bluedot.HabboServer.Database.Store.permission_group_permissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="permission_groups">
+              <PropertyRef Name="group_id" />
+            </Principal>
+            <Dependent Role="permission_group_permissions">
+              <PropertyRef Name="group_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="permission_group_permissions_ibfk_2">
+          <End Role="permission_permissions" Type="Bluedot.HabboServer.Database.Store.permission_permissions" Multiplicity="1" />
+          <End Role="permission_group_permissions" Type="Bluedot.HabboServer.Database.Store.permission_group_permissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="permission_permissions">
+              <PropertyRef Name="permission_id" />
+            </Principal>
+            <Dependent Role="permission_group_permissions">
+              <PropertyRef Name="permissions_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="permission_habbo_groups_ibfk_1">
+          <End Role="habbos" Type="Bluedot.HabboServer.Database.Store.habbos" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="permission_habbo_groups" Type="Bluedot.HabboServer.Database.Store.permission_habbo_groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="habbos">
+              <PropertyRef Name="habbo_id" />
+            </Principal>
+            <Dependent Role="permission_habbo_groups">
+              <PropertyRef Name="habbo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="permission_habbo_groups_ibfk_2">
+          <End Role="permission_groups" Type="Bluedot.HabboServer.Database.Store.permission_groups" Multiplicity="1" />
+          <End Role="permission_habbo_groups" Type="Bluedot.HabboServer.Database.Store.permission_habbo_groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="permission_groups">
+              <PropertyRef Name="group_id" />
+            </Principal>
+            <Dependent Role="permission_habbo_groups">
+              <PropertyRef Name="group_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="permission_habbo_permissions_ibfk_1">
+          <End Role="habbos" Type="Bluedot.HabboServer.Database.Store.habbos" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="permission_habbo_permissions" Type="Bluedot.HabboServer.Database.Store.permission_habbo_permissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="habbos">
+              <PropertyRef Name="habbo_id" />
+            </Principal>
+            <Dependent Role="permission_habbo_permissions">
+              <PropertyRef Name="habbo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="permission_habbo_permissions_ibfk_2">
+          <End Role="permission_permissions" Type="Bluedot.HabboServer.Database.Store.permission_permissions" Multiplicity="1" />
+          <End Role="permission_habbo_permissions" Type="Bluedot.HabboServer.Database.Store.permission_habbo_permissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="permission_permissions">
+              <PropertyRef Name="permission_id" />
+            </Principal>
+            <Dependent Role="permission_habbo_permissions">
+              <PropertyRef Name="permissions_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="rooms_ibfk_1">
           <End Role="habbos" Type="Bluedot.HabboServer.Database.Store.habbos" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -334,7 +520,45 @@
             <End Role="DBMessengerCategory" EntitySet="MessengerCategories" />
             <End Role="DBMessengerFriendship" EntitySet="MessengerFriendships" />
           </AssociationSet>
-          <EntitySet Name="DBPersistentStorages" EntityType="Bluedot.HabboServer.Database.DBPersistentStorage" />
+          <EntitySet Name="PersistentStorage" EntityType="Bluedot.HabboServer.Database.DBPersistentStorage" />
+          <EntitySet Name="PermissionGroupGroups" EntityType="Bluedot.HabboServer.Database.DBPermissionGroupGroup" />
+          <EntitySet Name="PermissionGroupPermissions" EntityType="Bluedot.HabboServer.Database.DBPermissionGroupPermission" />
+          <EntitySet Name="PermissionGroups" EntityType="Bluedot.HabboServer.Database.DBPermissionGroup" />
+          <EntitySet Name="Permissions" EntityType="Bluedot.HabboServer.Database.DBPermission" />
+          <AssociationSet Name="permission_group_groups_ibfk_1" Association="Bluedot.HabboServer.Database.permission_group_groups_ibfk_1">
+            <End Role="permission_groups" EntitySet="PermissionGroups" />
+            <End Role="permission_group_groups" EntitySet="PermissionGroupGroups" />
+          </AssociationSet>
+          <AssociationSet Name="permission_group_groups_ibfk_2" Association="Bluedot.HabboServer.Database.permission_group_groups_ibfk_2">
+            <End Role="permission_groups" EntitySet="PermissionGroups" />
+            <End Role="permission_group_groups" EntitySet="PermissionGroupGroups" />
+          </AssociationSet>
+          <AssociationSet Name="permission_group_permissions_ibfk_1" Association="Bluedot.HabboServer.Database.permission_group_permissions_ibfk_1">
+            <End Role="permission_groups" EntitySet="PermissionGroups" />
+            <End Role="permission_group_permissions" EntitySet="PermissionGroupPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="permission_group_permissions_ibfk_2" Association="Bluedot.HabboServer.Database.permission_group_permissions_ibfk_2">
+            <End Role="permission_permissions" EntitySet="Permissions" />
+            <End Role="permission_group_permissions" EntitySet="PermissionGroupPermissions" />
+          </AssociationSet>
+          <EntitySet Name="HabboPermissionGroups" EntityType="Bluedot.HabboServer.Database.DBHabboPermissionGroup" />
+          <EntitySet Name="HabboPermissions" EntityType="Bluedot.HabboServer.Database.DBHabboPermission" />
+          <AssociationSet Name="permission_habbo_groups_ibfk_1" Association="Bluedot.HabboServer.Database.permission_habbo_groups_ibfk_1">
+            <End Role="DBHabbo" EntitySet="Habbos" />
+            <End Role="permission_habbo_groups" EntitySet="HabboPermissionGroups" />
+          </AssociationSet>
+          <AssociationSet Name="permission_habbo_permissions_ibfk_1" Association="Bluedot.HabboServer.Database.permission_habbo_permissions_ibfk_1">
+            <End Role="DBHabbo" EntitySet="Habbos" />
+            <End Role="permission_habbo_permissions" EntitySet="HabboPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="permission_habbo_groups_ibfk_2" Association="Bluedot.HabboServer.Database.permission_habbo_groups_ibfk_2">
+            <End Role="DBPermissionGroup" EntitySet="PermissionGroups" />
+            <End Role="permission_habbo_groups" EntitySet="HabboPermissionGroups" />
+          </AssociationSet>
+          <AssociationSet Name="permission_habbo_permissions_ibfk_2" Association="Bluedot.HabboServer.Database.permission_habbo_permissions_ibfk_2">
+            <End Role="DBPermission" EntitySet="Permissions" />
+            <End Role="permission_habbo_permissions" EntitySet="HabboPermissions" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="DBHabbo">
           <Key>
@@ -345,7 +569,7 @@
           <Property Type="String" Name="Username" Nullable="false" />
           <Property Type="DateTime" Name="DateCreated" Nullable="false" />
           <Property Type="String" Name="FigureString" Nullable="false" />
-          <Property Type="Int32" Name="RawSwimColour" Nullable="false" />
+          <Property Type="Binary" Name="RawSwimColour" Nullable="false" />
           <Property Type="Boolean" Name="FigureGender" Nullable="false" />
           <Property Type="String" Name="Motto" Nullable="false" />
           <Property Type="Int32" Name="Credits" Nullable="false" />
@@ -371,9 +595,6 @@
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="Int32" Name="OwnerId" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="false" />
-          <NavigationProperty Name="habbo" Relationship="Bluedot.HabboServer.Database.messenger_categories_ibfk_1" FromRole="DBMessengerCategory" ToRole="DBHabbo" />
-          <NavigationProperty Name="messenger_friendships" Relationship="Bluedot.HabboServer.Database.messenger_friendships_ibfk_2" FromRole="DBMessengerCategory" ToRole="DBMessengerFriendship" />
-          <NavigationProperty Name="messenger_friendships1" Relationship="Bluedot.HabboServer.Database.messenger_friendships_ibfk_4" FromRole="DBMessengerCategory" ToRole="DBMessengerFriendship" />
           </EntityType>
         <EntityType Name="DBMessengerFriendRequest">
           <Key>
@@ -546,6 +767,150 @@
           <Property Type="String" Name="VariableName" Nullable="false" />
           <Property Type="Binary" Name="Value" Nullable="false" />
         </EntityType>
+        <EntityType Name="DBPermissionGroupGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="GroupId" Nullable="false" />
+          <Property Type="Int32" Name="ChildGroupId" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DBPermissionGroupPermission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="GroupId" Nullable="false" />
+          <Property Type="Int32" Name="PermissionId" Nullable="false" />
+          <Property Type="String" Name="PermissionState" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DBPermissionGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DBPermission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" />
+        </EntityType>
+        <Association Name="permission_group_groups_ibfk_1">
+          <End Type="Bluedot.HabboServer.Database.DBPermissionGroup" Role="permission_groups" Multiplicity="1" />
+          <End Type="Bluedot.HabboServer.Database.DBPermissionGroupGroup" Role="permission_group_groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="permission_groups">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="permission_group_groups">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="permission_group_groups_ibfk_2">
+          <End Type="Bluedot.HabboServer.Database.DBPermissionGroup" Role="permission_groups" Multiplicity="1" />
+          <End Type="Bluedot.HabboServer.Database.DBPermissionGroupGroup" Role="permission_group_groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="permission_groups">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="permission_group_groups">
+              <PropertyRef Name="ChildGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="permission_group_permissions_ibfk_1">
+          <End Type="Bluedot.HabboServer.Database.DBPermissionGroup" Role="permission_groups" Multiplicity="1" />
+          <End Type="Bluedot.HabboServer.Database.DBPermissionGroupPermission" Role="permission_group_permissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="permission_groups">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="permission_group_permissions">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="permission_group_permissions_ibfk_2">
+          <End Type="Bluedot.HabboServer.Database.DBPermission" Role="permission_permissions" Multiplicity="1" />
+          <End Type="Bluedot.HabboServer.Database.DBPermissionGroupPermission" Role="permission_group_permissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="permission_permissions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="permission_group_permissions">
+              <PropertyRef Name="PermissionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="DBHabboPermissionGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="HabboId" />
+          <Property Type="Int32" Name="GroupId" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DBHabboPermission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="HabboId" />
+          <Property Type="Int32" Name="PermissionId" Nullable="false" />
+          <Property Type="String" Name="PermissionState" Nullable="false" />
+        </EntityType>
+        <Association Name="permission_habbo_groups_ibfk_1">
+          <End Type="Bluedot.HabboServer.Database.DBHabbo" Role="DBHabbo" Multiplicity="0..1" />
+          <End Type="Bluedot.HabboServer.Database.DBHabboPermissionGroup" Role="permission_habbo_groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DBHabbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="permission_habbo_groups">
+              <PropertyRef Name="HabboId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="permission_habbo_permissions_ibfk_1">
+          <End Type="Bluedot.HabboServer.Database.DBHabbo" Role="DBHabbo" Multiplicity="0..1" />
+          <End Type="Bluedot.HabboServer.Database.DBHabboPermission" Role="permission_habbo_permissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DBHabbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="permission_habbo_permissions">
+              <PropertyRef Name="HabboId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="permission_habbo_groups_ibfk_2">
+          <End Type="Bluedot.HabboServer.Database.DBPermissionGroup" Role="DBPermissionGroup" Multiplicity="1" />
+          <End Type="Bluedot.HabboServer.Database.DBHabboPermissionGroup" Role="permission_habbo_groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DBPermissionGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="permission_habbo_groups">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="permission_habbo_permissions_ibfk_2">
+          <End Type="Bluedot.HabboServer.Database.DBPermission" Role="DBPermission" Multiplicity="1" />
+          <End Type="Bluedot.HabboServer.Database.DBHabboPermission" Role="permission_habbo_permissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DBPermission">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="permission_habbo_permissions">
+              <PropertyRef Name="PermissionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -635,13 +1000,67 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="DBPersistentStorages">
+          <EntitySetMapping Name="PersistentStorage">
             <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBPersistentStorage">
               <MappingFragment StoreEntitySet="persistent_storage">
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="VariableName" ColumnName="variable_name" />
                 <ScalarProperty Name="InstanceId" ColumnName="instance_id" />
                 <ScalarProperty Name="TypeName" ColumnName="type_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PermissionGroupGroups">
+            <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBPermissionGroupGroup">
+              <MappingFragment StoreEntitySet="permission_group_groups">
+                <ScalarProperty Name="ChildGroupId" ColumnName="child_group_id" />
+                <ScalarProperty Name="GroupId" ColumnName="group_id" />
+                <ScalarProperty Name="Id" ColumnName="assignment_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PermissionGroupPermissions">
+            <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBPermissionGroupPermission">
+              <MappingFragment StoreEntitySet="permission_group_permissions">
+                <ScalarProperty Name="PermissionState" ColumnName="permission_state" />
+                <ScalarProperty Name="PermissionId" ColumnName="permissions_id" />
+                <ScalarProperty Name="GroupId" ColumnName="group_id" />
+                <ScalarProperty Name="Id" ColumnName="assignment_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PermissionGroups">
+            <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBPermissionGroup">
+              <MappingFragment StoreEntitySet="permission_groups">
+                <ScalarProperty Name="Name" ColumnName="group_name" />
+                <ScalarProperty Name="Id" ColumnName="group_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Permissions">
+            <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBPermission">
+              <MappingFragment StoreEntitySet="permission_permissions">
+                <ScalarProperty Name="Name" ColumnName="permission_name" />
+                <ScalarProperty Name="Id" ColumnName="permission_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HabboPermissionGroups">
+            <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBHabboPermissionGroup">
+              <MappingFragment StoreEntitySet="permission_habbo_groups">
+                <ScalarProperty Name="GroupId" ColumnName="group_id" />
+                <ScalarProperty Name="HabboId" ColumnName="habbo_id" />
+                <ScalarProperty Name="Id" ColumnName="assignment_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HabboPermissions">
+            <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBHabboPermission">
+              <MappingFragment StoreEntitySet="permission_habbo_permissions">
+                <ScalarProperty Name="PermissionState" ColumnName="permission_state" />
+                <ScalarProperty Name="PermissionId" ColumnName="permissions_id" />
+                <ScalarProperty Name="HabboId" ColumnName="habbo_id" />
+                <ScalarProperty Name="Id" ColumnName="assignment_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -667,72 +1086,126 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="StandardModel" ZoomLevel="97">
-        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBHabbo" Width="3.25" PointX="0.75" PointY="0.75" Height="3.0714322916666665" />
-        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBLogin" Width="3.25" PointX="4.75" PointY="0.75" Height="1.7566536458333331" />
-        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBMessengerCategory" Width="3.25" PointX="0.75" PointY="4.75" Height="1.4279589843749996" />
-        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBMessengerFriendRequest" Width="3.25" PointX="4.75" PointY="3.75" Height="1.4279589843749996" />
-        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBMessengerFriendship" Width="3.25" PointX="4.75" PointY="6.75" Height="1.7566536458333335" />
-        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBRoom" Width="3.25" PointX="8.75" PointY="0.75" Height="1.9210009765625" />
-        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBSubscription" Width="3.25" PointX="8.75" PointY="3.75" Height="1.9210009765624996" />
+      <Diagram Name="StandardModel" ZoomLevel="73" ShowGrid="false">
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBHabbo" Width="3.25" PointX="4.75" PointY="7" Height="3.0714322916666674" IsExpanded="true" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBLogin" Width="3.25" PointX="0.75" PointY="7.625" Height="1.7566536458333317" IsExpanded="true" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBMessengerCategory" Width="3.25" PointX="8.75" PointY="16.125" Height="1.4279589843750031" IsExpanded="true" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBMessengerFriendRequest" Width="3.25" PointX="8.75" PointY="11.25" Height="1.4279589843749996" IsExpanded="true" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBMessengerFriendship" Width="3.25" PointX="12.75" PointY="11.375" Height="1.7566536458333317" IsExpanded="true" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBRoom" Width="3.25" PointX="8.75" PointY="8.625" Height="1.9210009765624996" IsExpanded="true" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBSubscription" Width="3.25" PointX="8.75" PointY="13.5" Height="1.9210009765624996" IsExpanded="true" />
         <AssociationConnector Association="Bluedot.HabboServer.Database.habbos_ibfk_1" >
-          <ConnectorPoint PointX="4.75" PointY="1.6283268229166665" />
-          <ConnectorPoint PointX="4" PointY="1.6283268229166665" />
+          <ConnectorPoint PointX="4" PointY="8.5033268229166659" />
+          <ConnectorPoint PointX="4.75" PointY="8.5033268229166659" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_categories_ibfk_1" >
-          <ConnectorPoint PointX="2.3049975" PointY="3.8214322916666665" />
-          <ConnectorPoint PointX="2.3049975" PointY="4.75" />
+          <ConnectorPoint PointX="6.375" PointY="10.071432291666667" />
+          <ConnectorPoint PointX="6.375" PointY="16.8389794921875" />
+          <ConnectorPoint PointX="8.75" PointY="16.8389794921875" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friend_requests_ibfk_1" >
-          <ConnectorPoint PointX="4" PointY="3.774178487179487" />
-          <ConnectorPoint PointX="4.6875" PointY="4.461678487179487" />
-          <ConnectorPoint PointX="4.6875" PointY="3.6633355402644234" />
-          <ConnectorPoint PointX="4.7741644597355766" PointY="3.75" />
+          <ConnectorPoint PointX="7.2187525" PointY="10.071432291666667" />
+          <ConnectorPoint PointX="7.2187525" PointY="11.9639794921875" />
+          <ConnectorPoint PointX="7.5572954166666664" PointY="11.9639794921875" />
+          <ConnectorPoint PointX="7.7239620833333325" PointY="11.9639794921875" />
+          <ConnectorPoint PointX="8.75" PointY="11.9639794921875" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friend_requests_ibfk_2" >
-          <ConnectorPoint PointX="3.9976373597756409" PointY="3.8214322916666665" />
-          <ConnectorPoint PointX="4.5625" PointY="4.386294931891026" />
-          <ConnectorPoint PointX="4.5625" PointY="3.5855670297475961" />
-          <ConnectorPoint PointX="4.75" PointY="3.7730670297475961" />
+          <ConnectorPoint PointX="5.5312475" PointY="10.071432291666667" />
+          <ConnectorPoint PointX="5.5312475" PointY="11.57573724609375" />
+          <ConnectorPoint PointX="5.8697904166666666" PointY="11.57573724609375" />
+          <ConnectorPoint PointX="6.0364570833333326" PointY="11.57573724609375" />
+          <ConnectorPoint PointX="6.291666666666667" PointY="11.57573724609375" />
+          <ConnectorPoint PointX="6.458333333333333" PointY="11.57573724609375" />
+          <ConnectorPoint PointX="6.7135429166666674" PointY="11.57573724609375" />
+          <ConnectorPoint PointX="6.8802095833333334" PointY="11.57573724609375" />
+          <ConnectorPoint PointX="7.1354191666666669" PointY="11.57573724609375" />
+          <ConnectorPoint PointX="7.3020858333333329" PointY="11.57573724609375" />
+          <ConnectorPoint PointX="7.5572954166666664" PointY="11.57573724609375" />
+          <ConnectorPoint PointX="7.7239620833333325" PointY="11.57573724609375" />
+          <ConnectorPoint PointX="8.75" PointY="11.57573724609375" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_1" >
-          <ConnectorPoint PointX="3.9291207932692309" PointY="3.8214322916666665" />
-          <ConnectorPoint PointX="4.40625" PointY="4.2985614983974356" />
-          <ConnectorPoint PointX="4.40625" PointY="7.2669334387743074" />
-          <ConnectorPoint PointX="4.75" PointY="7.2669334387743074" />
+          <ConnectorPoint PointX="7.6406287499999994" PointY="10.071432291666667" />
+          <ConnectorPoint PointX="7.6406287499999994" PointY="12.936056315104166" />
+          <ConnectorPoint PointX="12.75" PointY="12.936056315104166" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_3" >
-          <ConnectorPoint PointX="3.9480219150641025" PointY="3.8214322916666665" />
-          <ConnectorPoint PointX="4.46875" PointY="4.342160376602564" />
-          <ConnectorPoint PointX="4.46875" PointY="7.2669334387743074" />
-          <ConnectorPoint PointX="4.75" PointY="7.2669334387743074" />
+          <ConnectorPoint PointX="6.79687625" PointY="10.071432291666667" />
+          <ConnectorPoint PointX="6.79687625" PointY="12.807005149739581" />
+          <ConnectorPoint PointX="7.5572954166666664" PointY="12.807005149739581" />
+          <ConnectorPoint PointX="7.7239620833333325" PointY="12.807005149739581" />
+          <ConnectorPoint PointX="12.75" PointY="12.807005149739581" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.rooms_ibfk_1" >
-          <ConnectorPoint PointX="4" PointY="2.6200773111979165" />
-          <ConnectorPoint PointX="8.75" PointY="2.6200773111979165" />
+          <ConnectorPoint PointX="8" PointY="9.3482161458333337" />
+          <ConnectorPoint PointX="8.75" PointY="9.3482161458333337" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.subscriptions_ibfk_1" >
-          <ConnectorPoint PointX="4" PointY="3.7245630424679486" />
-          <ConnectorPoint PointX="4.3125" PointY="4.037063042467949" />
-          <ConnectorPoint PointX="4.3125" PointY="3.375" />
-          <ConnectorPoint PointX="8.3764766930588959" PointY="3.375" />
-          <ConnectorPoint PointX="8.7514766930588959" PointY="3.75" />
+          <ConnectorPoint PointX="5.95312375" PointY="10.071432291666667" />
+          <ConnectorPoint PointX="5.95312375" PointY="14.46050048828125" />
+          <ConnectorPoint PointX="6.291666666666667" PointY="14.46050048828125" />
+          <ConnectorPoint PointX="6.458333333333333" PointY="14.46050048828125" />
+          <ConnectorPoint PointX="8.75" PointY="14.46050048828125" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_2" >
-          <ConnectorPoint PointX="3.15625" PointY="6.6710009765625" />
-          <ConnectorPoint PointX="3.15625" PointY="6.9772142193871529" />
-          <ConnectorPoint PointX="3.5260441666666664" PointY="6.977214219387152" />
-          <ConnectorPoint PointX="3.6927108333333334" PointY="6.9772142193871529" />
-          <ConnectorPoint PointX="4.322916666666667" PointY="6.977214219387152" />
-          <ConnectorPoint PointX="4.552083333333333" PointY="6.9772142193871529" />
-          <ConnectorPoint PointX="4.75" PointY="6.9772142193871529" />
+          <ConnectorPoint PointX="12" PointY="16.8389794921875" />
+          <ConnectorPoint PointX="14.375" PointY="16.8389794921875" />
+          <ConnectorPoint PointX="14.375" PointY="13.131653645833332" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_4" >
-          <ConnectorPoint PointX="3.6093775" PointY="6.6710009765625" />
-          <ConnectorPoint PointX="3.6093775" PointY="7.5084692193871545" />
-          <ConnectorPoint PointX="4.75" PointY="7.5084692193871545" />
+          <ConnectorPoint PointX="12" PointY="16.450737246093752" />
+          <ConnectorPoint PointX="13.5312475" PointY="16.450737246093752" />
+          <ConnectorPoint PointX="13.5312475" PointY="13.131653645833332" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBPersistentStorage" Width="2.25" PointX="8.875" PointY="6.375" Height="1.5923063151041674" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBPersistentStorage" Width="2.25" PointX="0.75" PointY="0.875" Height="1.5923063151041677" IsExpanded="true" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBPermissionGroupGroup" Width="3" PointX="11.75" PointY="3.125" Height="1.4279589843749996" IsExpanded="true" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBPermissionGroupPermission" Width="2.375" PointX="11.75" PointY="0.75" Height="1.5923063151041674" IsExpanded="true" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBPermissionGroup" Width="2" PointX="9" PointY="2.875" Height="1.2636116536458335" IsExpanded="true" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBPermission" Width="1.75" PointX="6.25" PointY="4.875" Height="1.2636116536458317" IsExpanded="true" />
+        <AssociationConnector Association="Bluedot.HabboServer.Database.permission_group_groups_ibfk_1" >
+          <ConnectorPoint PointX="11" PointY="3.6318058268229167" />
+          <ConnectorPoint PointX="11.75" PointY="3.6318058268229167" />
+        </AssociationConnector>
+        <AssociationConnector Association="Bluedot.HabboServer.Database.permission_group_groups_ibfk_2" >
+          <ConnectorPoint PointX="11" PointY="3.3159029134114584" />
+          <ConnectorPoint PointX="11.75" PointY="3.3159029134114584" />
+        </AssociationConnector>
+        <AssociationConnector Association="Bluedot.HabboServer.Database.permission_group_permissions_ibfk_1" >
+          <ConnectorPoint PointX="10" PointY="2.875" />
+          <ConnectorPoint PointX="10" PointY="1.5461531575520837" />
+          <ConnectorPoint PointX="11.75" PointY="1.5461531575520837" />
+        </AssociationConnector>
+        <AssociationConnector Association="Bluedot.HabboServer.Database.permission_group_permissions_ibfk_2" >
+          <ConnectorPoint PointX="7.125" PointY="4.875" />
+          <ConnectorPoint PointX="7.125" PointY="1.9754822363281264" />
+          <ConnectorPoint PointX="9.9166666666666661" PointY="1.9754822363281257" />
+          <ConnectorPoint PointX="10.083333333333334" PointY="1.9754822363281264" />
+          <ConnectorPoint PointX="11.75" PointY="1.9754822363281264" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBHabboPermissionGroup" Width="2.625" PointX="11.75" PointY="5.875" Height="1.4279589843749996" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBHabboPermission" Width="2.5" PointX="8.75" PointY="5.75" Height="1.5923063151041657" />
+        <AssociationConnector Association="Bluedot.HabboServer.Database.permission_habbo_groups_ibfk_1" >
+          <ConnectorPoint PointX="8" PointY="7.9836531575520828" />
+          <ConnectorPoint PointX="13.21875" PointY="7.9836531575520828" />
+          <ConnectorPoint PointX="13.21875" PointY="7.302958984375" />
+        </AssociationConnector>
+        <AssociationConnector Association="Bluedot.HabboServer.Database.permission_habbo_permissions_ibfk_1" >
+          <ConnectorPoint PointX="5.46875" PointY="7" />
+          <ConnectorPoint PointX="5.46875" PointY="6.6005553268229153" />
+          <ConnectorPoint PointX="8.75" PointY="6.6005553268229153" />
+        </AssociationConnector>
+        <AssociationConnector Association="Bluedot.HabboServer.Database.permission_habbo_groups_ibfk_2" >
+          <ConnectorPoint PointX="10" PointY="4.1386116536458335" />
+          <ConnectorPoint PointX="10" PointY="5.5" />
+          <ConnectorPoint PointX="11.5" PointY="5.5" />
+          <ConnectorPoint PointX="11.5" PointY="6.5889794921875" />
+          <ConnectorPoint PointX="11.75" PointY="6.5889794921875" />
+        </AssociationConnector>
+        <AssociationConnector Association="Bluedot.HabboServer.Database.permission_habbo_permissions_ibfk_2" >
+          <ConnectorPoint PointX="8" PointY="5.9443058268229159" />
+          <ConnectorPoint PointX="8.75" PointY="5.9443058268229159" />
+        </AssociationConnector>
       </Diagram>
     </Diagrams>
   </Designer>

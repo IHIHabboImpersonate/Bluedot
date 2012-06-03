@@ -24,7 +24,7 @@ namespace Bluedot.HabboServer.Database
                     using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
                     {
                         return dbSession.
-                            DBPersistentStorages.
+                            PersistentStorage.
                             Where(
                                 variable => variable.TypeName == typeName &&
                                             variable.InstanceId == instanceId &&
@@ -51,7 +51,7 @@ namespace Bluedot.HabboServer.Database
                         try
                         {
                             DBPersistentStorage persistentVariable = dbSession.
-                                DBPersistentStorages.Where(
+                                PersistentStorage.Where(
                                     variable => variable.TypeName == typeName &&
                                                 variable.InstanceId == instanceId &&
                                                 variable.VariableName == name).
@@ -60,11 +60,11 @@ namespace Bluedot.HabboServer.Database
                             if (value != null)
                                 persistentVariable.Value = value;
                             else
-                                dbSession.DBPersistentStorages.DeleteObject(persistentVariable);
+                                dbSession.PersistentStorage.DeleteObject(persistentVariable);
                         }
                         catch (InvalidOperationException) // Doesn't already exist.
                         {
-                            dbSession.DBPersistentStorages.AddObject(new DBPersistentStorage
+                            dbSession.PersistentStorage.AddObject(new DBPersistentStorage
                                                                          {
                                                                              TypeName = typeName,
                                                                              InstanceId = instanceId,
