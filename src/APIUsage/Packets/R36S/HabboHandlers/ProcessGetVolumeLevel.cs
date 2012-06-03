@@ -10,7 +10,7 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
         {
             new MVolumeLevel
             {
-                // TODO: Should Volune really be an extension?
+                // TODO: Should Volume really be an extension?
                 Volume = sender.VolumeProperty()
             }.Send(sender);
         }
