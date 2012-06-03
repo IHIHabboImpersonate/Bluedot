@@ -152,7 +152,6 @@ namespace Bluedot.HabboServer.Install
 
             Stack<Point> cursorHistory = new Stack<Point>();
 
-            // TODO: Mono Test;
             ConsoleKeyInfo key;
             while ((key = Console.ReadKey(true)).Key != ConsoleKey.Enter)
             {

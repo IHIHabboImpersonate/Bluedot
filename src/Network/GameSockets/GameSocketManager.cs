@@ -99,7 +99,6 @@ namespace Bluedot.HabboServer.Network
 
         public GameSocketManager Stop()
         {
-            // TODO: Close all open connections.
             CoreManager.ServerCore.StandardOut.PrintImportant("Game Socket Manager => Stopping...");
             _listeningSocket.Close();
             _actionThread.Join();
