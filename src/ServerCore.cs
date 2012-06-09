@@ -37,6 +37,10 @@ namespace Bluedot.HabboServer
         #region Field: _databaseConnection
         private EntityConnection _databaseConnection;
         #endregion
+        #region Field: _bootInProgressLocker
+        private object _bootInProgressLocker = new object();
+        #endregion
+        
         #endregion
 
         #region Properties
@@ -88,111 +92,154 @@ namespace Bluedot.HabboServer
         #region Method: Boot
         internal void Boot(string configPath)
         {
-            #region Ensure Directory Structure
-            XmlConfig.EnsureDirectory(new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, "dumps")));
-            #endregion
-
-            #region Standard Out
-            StandardOut = new StandardOut();
-            StandardOut.PrintNotice("Standard Out => Ready");
-            #endregion
-
-            #region Config & Installation
-            Config = new XmlConfig(configPath);
-
-            bool mainInstallRequired = PreInstall(); // Register the main installation if required.
-            CoreManager.InstallerCore.Run();
-            if (mainInstallRequired)
-                SaveConfigInstallation();
-
-            StandardOut.PrintNotice("Config File => Loaded");
-            StandardOut.SetImportance(
-                (StandardOutImportance)
-                Config.ValueAsByte("/config/standardout/importance", (byte) StandardOutImportance.Debug));
-            #endregion
-
-            #region Database
-            #region Connection Setup
-            StandardOut.PrintNotice("Database Manager => Preparing Connection...");
-            MySqlConnectionStringBuilder mysqlConnectionString = new MySqlConnectionStringBuilder
-                                                                     {
-                                                                         Server = Config.ValueAsString("/config/mysql/host"),
-                                                                         UserID = Config.ValueAsString("/config/mysql/user"),
-                                                                         Password = Config.ValueAsString("/config/mysql/password"),
-                                                                         Database = Config.ValueAsString("/config/mysql/database"),
-                                                                         Port = Config.ValueAsUint("/config/mysql/port", 3306),
-                                                                         MinimumPoolSize = Config.ValueAsUint("/config/mysql/minpoolsize", 1),
-                                                                         MaximumPoolSize = Config.ValueAsUint("/config/mysql/maxpoolsize", 25),
-                                                                         Pooling = true,
-                                                                         PersistSecurityInfo = false
-                                                                     };
-
-            EntityConnectionStringBuilder entityConnectionString = new EntityConnectionStringBuilder
-                                                                       {
-                                                                           Metadata =
-                                                                               "res://*/src.Database.StandardModel.csdl|res://*/src.Database.StandardModel.ssdl|res://*/src.Database.StandardModel.msl",
-                                                                           Provider = "MySql.Data.MySqlClient",
-                                                                           ProviderConnectionString =
-                                                                               mysqlConnectionString.ToString()
-                                                                       };
-            _databaseConnection = new EntityConnection(entityConnectionString.ToString());
-            #endregion
-            #region Connection Start Up
-            StandardOut.PrintNotice("Database Manager => Connecting...");
-            try
+            lock (_bootInProgressLocker)
             {
-                _databaseConnection.Open();
+                #region Ensure Directory Structure
+
+                XmlConfig.EnsureDirectory(new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, "dumps")));
+
+                #endregion
+
+                #region Standard Out
+
+                StandardOut = new StandardOut();
+                StandardOut.PrintNotice("Standard Out => Ready");
+
+                #endregion
+
+                #region Config & Installation
+
+                Config = new XmlConfig(configPath);
+
+                bool mainInstallRequired = PreInstall(); // Register the main installation if required.
+                CoreManager.InstallerCore.Run();
+                if (mainInstallRequired)
+                    SaveConfigInstallation();
+
+                StandardOut.PrintNotice("Config File => Loaded");
+                StandardOut.SetImportance(
+                    (StandardOutImportance)
+                    Config.ValueAsByte("/config/standardout/importance", (byte) StandardOutImportance.Debug));
+
+                #endregion
+
+                #region Database
+
+                #region Connection Setup
+
+                StandardOut.PrintNotice("Database Manager => Preparing Connection...");
+                MySqlConnectionStringBuilder mysqlConnectionString = new MySqlConnectionStringBuilder
+                                                                         {
+                                                                             Server =
+                                                                                 Config.ValueAsString(
+                                                                                     "/config/mysql/host"),
+                                                                             UserID =
+                                                                                 Config.ValueAsString(
+                                                                                     "/config/mysql/user"),
+                                                                             Password =
+                                                                                 Config.ValueAsString(
+                                                                                     "/config/mysql/password"),
+                                                                             Database =
+                                                                                 Config.ValueAsString(
+                                                                                     "/config/mysql/database"),
+                                                                             Port =
+                                                                                 Config.ValueAsUint(
+                                                                                     "/config/mysql/port", 3306),
+                                                                             MinimumPoolSize =
+                                                                                 Config.ValueAsUint(
+                                                                                     "/config/mysql/minpoolsize", 1),
+                                                                             MaximumPoolSize =
+                                                                                 Config.ValueAsUint(
+                                                                                     "/config/mysql/maxpoolsize", 25),
+                                                                             Pooling = true,
+                                                                             PersistSecurityInfo = false
+                                                                         };
+
+                EntityConnectionStringBuilder entityConnectionString = new EntityConnectionStringBuilder
+                                                                           {
+                                                                               Metadata =
+                                                                                   "res://*/src.Database.StandardModel.csdl|res://*/src.Database.StandardModel.ssdl|res://*/src.Database.StandardModel.msl",
+                                                                               Provider = "MySql.Data.MySqlClient",
+                                                                               ProviderConnectionString =
+                                                                                   mysqlConnectionString.ToString()
+                                                                           };
+                _databaseConnection = new EntityConnection(entityConnectionString.ToString());
+
+                #endregion
+
+                #region Connection Start Up
+
+                StandardOut.PrintNotice("Database Manager => Connecting...");
+                try
+                {
+                    _databaseConnection.Open();
+                }
+                catch (EntityException e)
+                {
+                    StandardOut.PrintError("Database Manager => Connection Failed!");
+                    if (e.InnerException != null)
+                        StandardOut.PrintException(e.InnerException, false);
+                    StandardOut.PrintException(e, false);
+                    StandardOut.PrintError("Database Manager => Connection Failed!");
+                    StandardOut.PrintImportant("Press any key to exit");
+                    Console.ReadKey(true);
+                    return;
+                }
+                StandardOut.PrintNotice("Database Manager => Connected");
+
+                #endregion
+
+                #endregion
+
+                #region Figure Factory
+
+                StandardOut.PrintNotice("Habbo Figure Factory => Constructing...");
+                HabboFigureFactory = new HabbosUsing.Figure.HabboFigureFactory();
+                StandardOut.PrintNotice("Habbo Figure Factory => Ready");
+
+                #endregion
+
+                #region Distributors
+
+                #region PermissionDistributor
+
+                StandardOut.PrintNotice("Permission Distributor => Constructing...");
+                PermissionDistributor = new PermissionDistributor();
+                StandardOut.PrintNotice("Permission Distributor => Ready");
+
+                #endregion
+
+                #region HabboDistributor
+
+                StandardOut.PrintNotice("Habbo Distributor => Constructing...");
+                HabboDistributor = new HabbosUsing.HabboDistributor();
+                StandardOut.PrintNotice("Habbo Distributor => Ready");
+
+                #endregion
+
+                #endregion
+
+                #region Network
+
+                #region Game Socket
+
+                GameSocketManager = new GameSocketManager
+                                        {
+                                            Address = IPAddress.Any,
+                                            Port = 14478,
+                                            Reader = new ClassicGameSocketReader()
+                                        };
+                GameSocketManager.Start();
+
+                #endregion
+
+                #endregion
+
+                StandardOut.PrintImportant("Starting Pseudo Plugin System...");
+                ApiCallerRoot.Start();
+                Console.Beep(500, 250);
+                StandardOut.PrintImportant("Bluedot Habbo Server is now functional!");
             }
-            catch (EntityException e)
-            {
-                StandardOut.PrintError("Database Manager => Connection Failed!");
-                if(e.InnerException != null)
-                    StandardOut.PrintException(e.InnerException, false);
-                StandardOut.PrintException(e, false);
-                StandardOut.PrintError("Database Manager => Connection Failed!");
-                StandardOut.PrintImportant("Press any key to exit");
-                Console.ReadKey(true);
-                return;
-            }
-            StandardOut.PrintNotice("Database Manager => Connected");
-            #endregion
-            #endregion
-
-            #region Figure Factory
-            StandardOut.PrintNotice("Habbo Figure Factory => Constructing...");
-            HabboFigureFactory = new HabbosUsing.Figure.HabboFigureFactory();
-            StandardOut.PrintNotice("Habbo Figure Factory => Ready");
-            #endregion
-
-            #region Distributors
-            #region PermissionDistributor
-            StandardOut.PrintNotice("Permission Distributor => Constructing...");
-            PermissionDistributor = new PermissionDistributor();
-            StandardOut.PrintNotice("Permission Distributor => Ready");
-            #endregion
-            #region HabboDistributor
-            StandardOut.PrintNotice("Habbo Distributor => Constructing...");
-            HabboDistributor = new HabbosUsing.HabboDistributor();
-            StandardOut.PrintNotice("Habbo Distributor => Ready");
-            #endregion
-            #endregion
-
-            #region Network
-            #region Game Socket
-            GameSocketManager = new GameSocketManager
-                                    {
-                                        Address = IPAddress.Any,
-                                        Port = 14478,
-                                        Reader = new ClassicGameSocketReader()
-                                    };
-            GameSocketManager.Start();
-            #endregion
-            #endregion
-
-            StandardOut.PrintImportant("Starting Pseudo Plugin System...");
-            ApiCallerRoot.Start();
-            Console.Beep(500, 250);
-            StandardOut.PrintImportant("Bluedot Habbo Server is now functional!");
         }
         #endregion
         #region Method: GetDatabaseSession
@@ -470,43 +517,55 @@ namespace Bluedot.HabboServer
         public void Shutdown(bool confirm = false)
         {
             Console.TreatControlCAsInput = true;
-            if (confirm)
+
+            // If StandardOut is not started then nothing is and we are already done.
+            if (StandardOut == null)
+                return;
+
+            lock (_bootInProgressLocker)
             {
-                Console.Beep(1000, 100);
-                Console.Beep(1000, 100);
-                StandardOut.Hidden = true;
-
-                Console.Clear();
-                while (Console.KeyAvailable)
+                if (confirm)
                 {
-                    Console.ReadKey(true);
+                    Console.Beep(1000, 100);
+                    Console.Beep(1000, 100);
+
+                    StandardOut.Hidden = true;
+
+                    Console.Clear();
+                    while (Console.KeyAvailable)
+                    {
+                        Console.ReadKey(true);
+                    }
+
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Are you sure you want to shutdown Bluedot?");
+                    Console.Write("Press Y to confirm! ");
+
+                    if (Console.ReadKey(true).Key != ConsoleKey.Y)
+                    {
+                        StandardOut.Hidden = false;
+                        Console.TreatControlCAsInput = false;
+                        return;
+                    }
                 }
 
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("Are you sure you want to shutdown Bluedot?");
-                Console.Write("Press Y to confirm! ");
+                _eventOnShutdown.Raise(this, EventArgs.Empty);
 
-                if (Console.ReadKey(true).Key != ConsoleKey.Y)
-                {
-                    StandardOut.Hidden = false;
-                    Console.TreatControlCAsInput = false;
-                    return;
-                }
+                _databaseConnection.Dispose();
+
+                GameSocketManager.Stop();
+
+                Console.Beep(4000, 100);
+                Console.Beep(3500, 100);
+                Console.Beep(3000, 100);
+                Console.Beep(2500, 100);
+                Console.Beep(2000, 100);
+                Console.Beep(1500, 100);
+                Console.Beep(1000, 100);
+                return;
             }
-
-            _eventOnShutdown.Raise(this, EventArgs.Empty);
-            _databaseConnection.Dispose();
-            GameSocketManager.Stop();
-
-            Console.Beep(4000, 100);
-            Console.Beep(3500, 100);
-            Console.Beep(3000, 100);
-            Console.Beep(2500, 100);
-            Console.Beep(2000, 100);
-            Console.Beep(1500, 100);
-            Console.Beep(1000, 100);
-            return;
         }
+
         #endregion
         #endregion
     }

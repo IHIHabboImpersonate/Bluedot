@@ -24,6 +24,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -33,11 +34,32 @@ namespace Bluedot.HabboServer
 {
     internal static class EntryPoint
     {
+        [DllImport("user32.dll")]
+        static extern bool EnableMenuItem(IntPtr hMenu, uint uIDEnableItem, uint uEnable);
+        [DllImport("user32.dll")]
+        static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+        internal const UInt32 SC_CLOSE = 0xF060;
+        internal const UInt32 MF_GRAYED = 0x00000001;
+
         internal static void Main(string[] arguments)
         {
-            Thread.CurrentThread.Name = "BLUEDOT-EntryThread";
+            #region Exit management
+            // Disable close button to prevent unsafe closing.
+            IntPtr current = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
+            EnableMenuItem(GetSystemMenu(current, false), SC_CLOSE, MF_GRAYED);
 
+            // Reassign CTRL+C and CTRL+BREAK to safely shutdown.
+            Console.TreatControlCAsInput = false;
+            Console.CancelKeyPress += ShutdownKey;
+            #endregion
+
+
+            Thread.CurrentThread.Name = "BLUEDOT-EntryThread";
+            
+            // Allows embedded resources to be loaded.
             AppDomain.CurrentDomain.AssemblyResolve += LoadPackagedReferences;
+
+            // Bluescreen in the event of a fatal unhandled exception.
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
 
 
@@ -70,11 +92,6 @@ namespace Bluedot.HabboServer
             CoreManager.InitialiseInstallerCore();
             CoreManager.InitialiseServerCore();
 
-            // Reassign CTRL + C to safely shutdown.
-            // CTRL + Break is still unsafe.
-            Console.TreatControlCAsInput = false;
-            Console.CancelKeyPress += ShutdownKey;
-
             CoreManager.ServerCore.Boot(Path.Combine(Environment.CurrentDirectory, configFile));
         }
 
@@ -103,7 +120,7 @@ namespace Bluedot.HabboServer
                 if (CoreManager.ServerCore.StandardOut != null)
                     CoreManager.ServerCore.StandardOut.Hidden = true;
 
-
+            #region Bluescreen Output
             Console.WindowWidth = Console.BufferWidth = Console.WindowWidth * 2;
 
             Exception exception = e.ExceptionObject as Exception;
@@ -161,6 +178,7 @@ namespace Bluedot.HabboServer
                 i++;
                 exception = exception.InnerException;
             }
+            #endregion
 
             string path = Path.Combine(Environment.CurrentDirectory, "dumps",
                                        "stoperror-" + DateTime.UtcNow.Ticks + ".ihidump");
@@ -172,13 +190,14 @@ namespace Bluedot.HabboServer
             Console.WriteLine("Press any key to exit (may take up to 5 seconds)");
             Console.ReadKey(true);
             
+            // If the server is at least partially started then give it a chance to shut down safely.
             if(CoreManager.ServerCore != null)
             {
                 // Wait 5 seconds for everything to exit then force it.
                 new Thread(() =>
                 {
                     Thread.Sleep(5000);
-                    Environment.Exit(100);
+                    Environment.Exit(1);
                 })
                 {
                     IsBackground = true,
@@ -191,12 +210,22 @@ namespace Bluedot.HabboServer
 
         private static void ShutdownKey(object sender, ConsoleCancelEventArgs e)
         {
-            if (e.SpecialKey == ConsoleSpecialKey.ControlBreak)
+            // If the server hasn't started, just exit.
+            if (CoreManager.ServerCore == null)
+            {
+                Environment.Exit(0);
                 return;
+            }
 
-            e.Cancel = true;
-
-            CoreManager.ServerCore.Shutdown(true);
+            // We can't stop CTRL+BREAK closing so we should just force a shutdown.
+            if (e.SpecialKey == ConsoleSpecialKey.ControlBreak)
+                CoreManager.ServerCore.Shutdown();
+            else
+            {
+                // We CAN stop CTRL+C closing so we should confirm the shutdown first.
+                e.Cancel = true;
+                CoreManager.ServerCore.Shutdown(true);
+            }
         }
     }
 
