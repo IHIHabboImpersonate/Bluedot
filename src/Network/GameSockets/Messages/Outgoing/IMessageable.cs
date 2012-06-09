@@ -19,8 +19,6 @@ namespace Bluedot.HabboServer.Network
 
     public interface IMessageable
     {
-        event GameSocketMessageEvent OnMessageSent;
-
         IMessageable SendMessage(IInternalOutgoingMessage message);
     }
 }

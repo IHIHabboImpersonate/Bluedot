@@ -65,29 +65,6 @@ namespace Bluedot.HabboServer.Habbos
             remove { _eventOnAnyLogin.Remove(value); }
         }
         #endregion
-
-        #region Event: OnMessageSent
-        private readonly FastSmartWeakEvent<GameSocketMessageEvent> _eventOnMessageSent = new FastSmartWeakEvent<GameSocketMessageEvent>();
-        /// <summary>
-        /// Invoked when a ever a message is sent to this IMessageable.
-        /// </summary>
-        public event GameSocketMessageEvent OnMessageSent
-        {
-            add { _eventOnMessageSent.Add(value); }
-            remove { _eventOnMessageSent.Remove(value); }
-        }
-        #endregion
-        #region Event: OnAnyMessageSent
-        private static readonly FastSmartWeakEvent<GameSocketMessageEvent> _eventOnAnyMessageSent = new FastSmartWeakEvent<GameSocketMessageEvent>();
-        /// <summary>
-        /// Invoked when a ever a message is sent to any Habbo instance.
-        /// </summary>
-        public static event GameSocketMessageEvent OnAnyMessageSent
-        {
-            add { _eventOnAnyMessageSent.Add(value); }
-            remove { _eventOnAnyMessageSent.Remove(value); }
-        }
-        #endregion
         #endregion
         
         #region Properties
@@ -671,10 +648,10 @@ namespace Bluedot.HabboServer.Habbos
         #region Method: SendMessage
         public IMessageable SendMessage(IInternalOutgoingMessage message)
         {
+#if DEBUG
+            CoreManager.ServerCore.StandardOut.PrintDebugModeMessage("OUTGOING => " + message.Header + message.ContentString);
+#endif
             Socket.Send(message.GetBytes());
-
-            _eventOnMessageSent.Raise(this, new GameSocketMessageEventArgs(message));
-            _eventOnAnyMessageSent.Raise(this, new GameSocketMessageEventArgs(message));
             return this;
         }
         #endregion

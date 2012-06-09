@@ -14,7 +14,7 @@ namespace Bluedot.HabboServer.Network
         /// <summary>
         /// Indicates the completion of a packet read from the socket.
         /// </summary>
-        public event Action<AsyncResultEventArgs<byte[]>> PacketArrived;
+        private event Action<AsyncResultEventArgs<byte[]>> PacketArrived;
         #endregion
         #endregion
 
@@ -194,6 +194,9 @@ namespace Bluedot.HabboServer.Network
         public GameSocket ParseByteData(byte[] data)
         {
             IncomingMessage message = _protocolReader.ParseMessage(data);
+#if DEBUG
+            CoreManager.ServerCore.StandardOut.PrintDebugModeMessage("INCOMING => " + data.ToUtf8String());
+#endif
             PacketHandlers.Invoke(Habbo, message);
 
             return this;

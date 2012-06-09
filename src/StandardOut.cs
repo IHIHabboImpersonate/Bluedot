@@ -171,6 +171,16 @@ namespace Bluedot.HabboServer
             return this;
         }
 
+        #region Method: PrintDebugModeMessage
+#if DEBUG
+        public StandardOut PrintDebugModeMessage(string message)
+        {
+            Raw("DEBUG-MODE", message, ConsoleColor.Cyan);
+            return this;
+        }
+#endif
+        #endregion
+
         /// <summary>
         ///   Clear the output.
         /// </summary>

@@ -14,12 +14,17 @@ namespace Bluedot.HabboServer.Network
 
         public GameSocketMessageHandlerInvoker Invoke(Habbo sender, IncomingMessage message)
         {
-            lock(_handlers)
+            lock (_handlers)
             {
                 // Are there any handlers registered for this packet?
                 if (!_handlers.ContainsKey(message.HeaderId))
+                {
+#if DEBUG
+                    CoreManager.ServerCore.StandardOut.PrintDebugModeMessage("Unhandled HeaderID " + message.HeaderId + " (\"" + message.HeaderString + "\")");
+#endif
                     // No, do nothing.
                     return this;
+                }
 
                 // Yes, let's invoke them.
                 _handlers[message.HeaderId].Invoke(sender, message);

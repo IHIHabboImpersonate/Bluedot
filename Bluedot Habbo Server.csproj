@@ -61,7 +61,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\APIUsage\ApiCallerRoot.cs" />
-    <Compile Include="src\APIUsage\Debug\PrintPackets.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\Extensions.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessBalanceRequest.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessHabboInfoRequest.cs" />
@@ -176,7 +175,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Reference Packaging\MySql.Data.Entity.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="src\APIUsage\Debug\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

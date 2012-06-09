@@ -7,7 +7,6 @@ namespace Bluedot.HabboServer.ApiUsage
         public static void Start()
         {
             PacketHandlers.Start();
-            PrintPackets.Start();
         }
     }
 }
