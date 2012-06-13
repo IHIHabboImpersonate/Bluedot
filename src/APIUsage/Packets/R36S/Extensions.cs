@@ -1,6 +1,6 @@
 ﻿using Bluedot.HabboServer.Habbos;
 
-namespace Bluedot.HabboServer.APIUsage
+namespace Bluedot.HabboServer.ApiUsage
 {
     public static class Extensions
     {

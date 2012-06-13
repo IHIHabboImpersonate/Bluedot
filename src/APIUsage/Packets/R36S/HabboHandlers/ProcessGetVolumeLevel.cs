@@ -1,4 +1,4 @@
-﻿using Bluedot.HabboServer.APIUsage;
+﻿using Bluedot.HabboServer.ApiUsage;
 using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
 

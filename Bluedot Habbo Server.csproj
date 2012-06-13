@@ -89,6 +89,10 @@
     <Compile Include="src\EntryPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Extensions.cs" />
+    <Compile Include="src\Network\WebAdmin\HttpPathHandler.cs" />
+    <Compile Include="src\Network\WebAdmin\HttpRequestEventArgs.cs" />
+    <Compile Include="src\Network\WebAdmin\WebAdminManager.cs" />
+    <Compile Include="src\Network\WebAdmin\WebAdminServer.cs" />
     <Compile Include="src\Permissions\Permission.cs" />
     <Compile Include="src\Permissions\PermissionGroup.cs" />
     <Compile Include="src\Permissions\PermissionState.cs" />

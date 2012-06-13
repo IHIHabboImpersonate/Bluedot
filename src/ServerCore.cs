@@ -6,12 +6,14 @@ using System.Net;
 using System.Xml;
 using Bluedot.HabboServer.ApiUsage;
 using Bluedot.HabboServer.Configuration;
+using Bluedot.HabboServer.Habbos.Figure;
 using Bluedot.HabboServer.Install;
 using Bluedot.HabboServer.Database;
+using Bluedot.HabboServer.Network.WebAdmin;
 using Bluedot.HabboServer.Permissions;
 using MySql.Data.MySqlClient;
 using SmartWeakEvent;
-using HabbosUsing = Bluedot.HabboServer.Habbos;
+using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
 
 namespace Bluedot.HabboServer
@@ -59,14 +61,14 @@ namespace Bluedot.HabboServer
         }
         #endregion
         #region Property: HabboDistributor
-        public HabbosUsing.HabboDistributor HabboDistributor
+        public HabboDistributor HabboDistributor
         {
             get;
             private set;
         }
         #endregion
         #region Property: HabboFigureFactory
-        public HabbosUsing.Figure.HabboFigureFactory HabboFigureFactory
+        public HabboFigureFactory HabboFigureFactory
         {
             get;
             private set;
@@ -81,6 +83,11 @@ namespace Bluedot.HabboServer
         #endregion
         #region Property: StandardOut
         public StandardOut StandardOut
+        {
+            get;
+            private set;
+        }
+        public WebAdminManager WebAdminManager
         {
             get;
             private set;
@@ -194,7 +201,7 @@ namespace Bluedot.HabboServer
                 #region Figure Factory
 
                 StandardOut.PrintNotice("Habbo Figure Factory => Constructing...");
-                HabboFigureFactory = new HabbosUsing.Figure.HabboFigureFactory();
+                HabboFigureFactory = new HabboFigureFactory();
                 StandardOut.PrintNotice("Habbo Figure Factory => Ready");
 
                 #endregion
@@ -212,7 +219,7 @@ namespace Bluedot.HabboServer
                 #region HabboDistributor
 
                 StandardOut.PrintNotice("Habbo Distributor => Constructing...");
-                HabboDistributor = new HabbosUsing.HabboDistributor();
+                HabboDistributor = new HabboDistributor();
                 StandardOut.PrintNotice("Habbo Distributor => Ready");
 
                 #endregion
@@ -223,6 +230,7 @@ namespace Bluedot.HabboServer
 
                 #region Game Socket
 
+                StandardOut.PrintNotice("Game Socket => Starting...");
                 GameSocketManager = new GameSocketManager
                                         {
                                             Address = IPAddress.Any,
@@ -230,11 +238,20 @@ namespace Bluedot.HabboServer
                                             Reader = new ClassicGameSocketReader()
                                         };
                 GameSocketManager.Start();
+                StandardOut.PrintNotice("Game Socket  => Ready!");
+
+                #endregion
+
+                #region WebAdmin
+
+                StandardOut.PrintNotice("WebAdmin => Starting...");
+                WebAdminManager = new WebAdminManager(Config.ValueAsUshort("/config/webadmin/port", 14480));
+                StandardOut.PrintNotice("WebAdmin => Ready!");
 
                 #endregion
 
                 #endregion
-
+                
                 StandardOut.PrintImportant("Starting Pseudo Plugin System...");
                 ApiCallerRoot.Start();
                 Console.Beep(500, 250);
@@ -547,6 +564,7 @@ namespace Bluedot.HabboServer
                         Console.TreatControlCAsInput = false;
                         return;
                     }
+                    StandardOut.Hidden = false;
                 }
 
                 _eventOnShutdown.Raise(this, EventArgs.Empty);
@@ -554,6 +572,7 @@ namespace Bluedot.HabboServer
                 _databaseConnection.Dispose();
 
                 GameSocketManager.Stop();
+                WebAdminManager.Stop();
 
                 Console.Beep(4000, 100);
                 Console.Beep(3500, 100);
