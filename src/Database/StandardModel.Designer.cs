@@ -310,6 +310,22 @@ namespace Bluedot.HabboServer.Database
             }
         }
         private ObjectSet<DBHabboPermission> _HabboPermissions;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<DBBadgeType> BadgeTypes
+        {
+            get
+            {
+                if ((_BadgeTypes == null))
+                {
+                    _BadgeTypes = base.CreateObjectSet<DBBadgeType>("BadgeTypes");
+                }
+                return _BadgeTypes;
+            }
+        }
+        private ObjectSet<DBBadgeType> _BadgeTypes;
 
         #endregion
         #region AddTo Methods
@@ -425,6 +441,14 @@ namespace Bluedot.HabboServer.Database
         {
             base.AddObject("HabboPermissions", dBHabboPermission);
         }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the BadgeTypes EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToBadgeTypes(DBBadgeType dBBadgeType)
+        {
+            base.AddObject("BadgeTypes", dBBadgeType);
+        }
 
         #endregion
     }
@@ -433,6 +457,87 @@ namespace Bluedot.HabboServer.Database
     #endregion
     
     #region Entities
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="Bluedot.HabboServer.Database", Name="DBBadgeType")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class DBBadgeType : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new DBBadgeType object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="code">Initial value of the Code property.</param>
+        public static DBBadgeType CreateDBBadgeType(global::System.Int32 id, global::System.String code)
+        {
+            DBBadgeType dBBadgeType = new DBBadgeType();
+            dBBadgeType.Id = id;
+            dBBadgeType.Code = code;
+            return dBBadgeType;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                OnCodeChanging(value);
+                ReportPropertyChanging("Code");
+                _Code = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Code");
+                OnCodeChanged();
+            }
+        }
+        private global::System.String _Code;
+        partial void OnCodeChanging(global::System.String value);
+        partial void OnCodeChanged();
+
+        #endregion
+    
+    }
     
     /// <summary>
     /// No Metadata Documentation available.

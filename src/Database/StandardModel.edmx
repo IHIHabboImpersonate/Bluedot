@@ -6,20 +6,21 @@
     <edmx:StorageModels>
     <Schema Namespace="Bluedot.HabboServer.Database.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="BluedotHabboServerDatabaseStoreContainer">
-          <EntitySet Name="habbos" EntityType="Bluedot.HabboServer.Database.Store.habbos" store:Type="Tables" Schema="ihi_iii" />
-          <EntitySet Name="logins" EntityType="Bluedot.HabboServer.Database.Store.logins" store:Type="Tables" Schema="ihi_iii" />
-          <EntitySet Name="messenger_categories" EntityType="Bluedot.HabboServer.Database.Store.messenger_categories" store:Type="Tables" Schema="ihi_iii" />
-          <EntitySet Name="messenger_friend_requests" EntityType="Bluedot.HabboServer.Database.Store.messenger_friend_requests" store:Type="Tables" Schema="ihi_iii" />
-          <EntitySet Name="messenger_friendships" EntityType="Bluedot.HabboServer.Database.Store.messenger_friendships" store:Type="Tables" Schema="ihi_iii" />
-          <EntitySet Name="permission_group_groups" EntityType="Bluedot.HabboServer.Database.Store.permission_group_groups" store:Type="Tables" Schema="ihi_iii" />
-          <EntitySet Name="permission_group_permissions" EntityType="Bluedot.HabboServer.Database.Store.permission_group_permissions" store:Type="Tables" Schema="ihi_iii" />
-          <EntitySet Name="permission_groups" EntityType="Bluedot.HabboServer.Database.Store.permission_groups" store:Type="Tables" Schema="ihi_iii" />
-          <EntitySet Name="permission_habbo_groups" EntityType="Bluedot.HabboServer.Database.Store.permission_habbo_groups" store:Type="Tables" Schema="ihi_iii" />
-          <EntitySet Name="permission_habbo_permissions" EntityType="Bluedot.HabboServer.Database.Store.permission_habbo_permissions" store:Type="Tables" Schema="ihi_iii" />
-          <EntitySet Name="permission_permissions" EntityType="Bluedot.HabboServer.Database.Store.permission_permissions" store:Type="Tables" Schema="ihi_iii" />
-          <EntitySet Name="persistent_storage" EntityType="Bluedot.HabboServer.Database.Store.persistent_storage" store:Type="Tables" Schema="ihi_iii" />
-          <EntitySet Name="rooms" EntityType="Bluedot.HabboServer.Database.Store.rooms" store:Type="Tables" Schema="ihi_iii" />
-          <EntitySet Name="subscriptions" EntityType="Bluedot.HabboServer.Database.Store.subscriptions" store:Type="Tables" Schema="ihi_iii" />
+          <EntitySet Name="badge_types" EntityType="Bluedot.HabboServer.Database.Store.badge_types" store:Type="Tables" Schema="bluedot" />
+          <EntitySet Name="habbos" EntityType="Bluedot.HabboServer.Database.Store.habbos" store:Type="Tables" Schema="bluedot" />
+          <EntitySet Name="logins" EntityType="Bluedot.HabboServer.Database.Store.logins" store:Type="Tables" Schema="bluedot" />
+          <EntitySet Name="messenger_categories" EntityType="Bluedot.HabboServer.Database.Store.messenger_categories" store:Type="Tables" Schema="bluedot" />
+          <EntitySet Name="messenger_friend_requests" EntityType="Bluedot.HabboServer.Database.Store.messenger_friend_requests" store:Type="Tables" Schema="bluedot" />
+          <EntitySet Name="messenger_friendships" EntityType="Bluedot.HabboServer.Database.Store.messenger_friendships" store:Type="Tables" Schema="bluedot" />
+          <EntitySet Name="permission_group_groups" EntityType="Bluedot.HabboServer.Database.Store.permission_group_groups" store:Type="Tables" Schema="bluedot" />
+          <EntitySet Name="permission_group_permissions" EntityType="Bluedot.HabboServer.Database.Store.permission_group_permissions" store:Type="Tables" Schema="bluedot" />
+          <EntitySet Name="permission_groups" EntityType="Bluedot.HabboServer.Database.Store.permission_groups" store:Type="Tables" Schema="bluedot" />
+          <EntitySet Name="permission_habbo_groups" EntityType="Bluedot.HabboServer.Database.Store.permission_habbo_groups" store:Type="Tables" Schema="bluedot" />
+          <EntitySet Name="permission_habbo_permissions" EntityType="Bluedot.HabboServer.Database.Store.permission_habbo_permissions" store:Type="Tables" Schema="bluedot" />
+          <EntitySet Name="permission_permissions" EntityType="Bluedot.HabboServer.Database.Store.permission_permissions" store:Type="Tables" Schema="bluedot" />
+          <EntitySet Name="persistent_storage" EntityType="Bluedot.HabboServer.Database.Store.persistent_storage" store:Type="Tables" Schema="bluedot" />
+          <EntitySet Name="rooms" EntityType="Bluedot.HabboServer.Database.Store.rooms" store:Type="Tables" Schema="bluedot" />
+          <EntitySet Name="subscriptions" EntityType="Bluedot.HabboServer.Database.Store.subscriptions" store:Type="Tables" Schema="bluedot" />
           <AssociationSet Name="habbos_ibfk_1" Association="Bluedot.HabboServer.Database.Store.habbos_ibfk_1">
             <End Role="logins" EntitySet="logins" />
             <End Role="habbos" EntitySet="habbos" />
@@ -93,6 +94,13 @@
             <End Role="subscriptions" EntitySet="subscriptions" />
           </AssociationSet>
         </EntityContainer>
+        <EntityType Name="badge_types">
+          <Key>
+            <PropertyRef Name="type_id" />
+          </Key>
+          <Property Name="type_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="type_code" Type="char" Nullable="false" MaxLength="32" />
+        </EntityType>
         <EntityType Name="habbos">
           <Key>
             <PropertyRef Name="habbo_id" />
@@ -559,6 +567,7 @@
             <End Role="DBPermission" EntitySet="Permissions" />
             <End Role="permission_habbo_permissions" EntitySet="HabboPermissions" />
           </AssociationSet>
+          <EntitySet Name="BadgeTypes" EntityType="Bluedot.HabboServer.Database.DBBadgeType" />
         </EntityContainer>
         <EntityType Name="DBHabbo">
           <Key>
@@ -577,7 +586,7 @@
           <Property Type="DateTime" Name="LastAccess" />
           <Property Type="String" Name="SSOTicket" />
           <Property Type="Binary" Name="RawOriginIP" />
-          </EntityType>
+        </EntityType>
         <EntityType Name="DBLogin">
           <Key>
             <PropertyRef Name="Id" />
@@ -595,7 +604,7 @@
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="Int32" Name="OwnerId" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="false" />
-          </EntityType>
+        </EntityType>
         <EntityType Name="DBMessengerFriendRequest">
           <Key>
             <PropertyRef Name="Id" />
@@ -603,7 +612,7 @@
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="Int32" Name="FromId" Nullable="false" />
           <Property Type="Int32" Name="ToId" Nullable="false" />
-          </EntityType>
+        </EntityType>
         <EntityType Name="DBMessengerFriendship">
           <Key>
             <PropertyRef Name="Id" />
@@ -613,7 +622,7 @@
           <Property Type="Int32" Name="CategoryAId" />
           <Property Type="Int32" Name="HabboBId" Nullable="false" />
           <Property Type="Int32" Name="CategoryBId" />
-          </EntityType>
+        </EntityType>
         <EntityType Name="DBRoom">
           <Key>
             <PropertyRef Name="Id" />
@@ -911,7 +920,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        </Schema>
+        <EntityType Name="DBBadgeType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Code" Nullable="false" />
+        </EntityType>
+      </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -1064,6 +1080,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="BadgeTypes">
+            <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBBadgeType">
+              <MappingFragment StoreEntitySet="badge_types">
+                <ScalarProperty Name="Code" ColumnName="type_code" />
+                <ScalarProperty Name="Id" ColumnName="type_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1206,6 +1230,7 @@
           <ConnectorPoint PointX="8" PointY="5.9443058268229159" />
           <ConnectorPoint PointX="8.75" PointY="5.9443058268229159" />
         </AssociationConnector>
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBBadgeType" Width="1.5" PointX="3.25" PointY="4.625" Height="1.4033821614583388" />
       </Diagram>
     </Diagrams>
   </Designer>
