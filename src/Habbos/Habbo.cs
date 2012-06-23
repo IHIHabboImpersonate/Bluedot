@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Bluedot.HabboServer.Collections;
 using Bluedot.HabboServer.Database;
 using Bluedot.HabboServer.Habbos.Figure;
 using Bluedot.HabboServer.Habbos.Messenger;
@@ -609,6 +610,70 @@ namespace Bluedot.HabboServer.Habbos
                     #endregion
                 }
                 return _permissionGroups;
+            }
+        }
+        #endregion
+
+        #region Property: Badges
+        private BadgeCollection _badges;
+        /// <summary>
+        /// TODO: Add summary.
+        /// </summary>
+        /// <remarks>Uses lazy loading.</remarks>
+        public BadgeCollection Badges
+        {
+            get
+            {
+                if (_badges == null)
+                {
+                    List<DBBadgeAssignment> badges;
+                    using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
+                    {
+                        badges = dbSession.BadgeAssignments.Where(habbo => habbo.HabboId == Id).ToList();
+                    }
+                    List<BadgeType> badgeAssignments = new List<BadgeType>();
+                    BadgeTypeDistributor badgeTypeDistributor = CoreManager.ServerCore.BadgeTypeDistributor;
+                    BadgeType[] slots = new BadgeType[5];
+                    foreach (DBBadgeAssignment badge in badges)
+                    {
+                        badgeAssignments.Add(badgeTypeDistributor[badge.TypeId]);
+                        switch (badge.Slot)
+                        {
+                            case "slot1":
+                                slots[0] = badgeTypeDistributor[badge.TypeId];
+                                break;
+                            case "slot2":
+                                slots[1] = badgeTypeDistributor[badge.TypeId];
+                                break;
+                            case "slot3":
+                                slots[2] = badgeTypeDistributor[badge.TypeId];
+                                break;
+                            case "slot4":
+                                slots[3] = badgeTypeDistributor[badge.TypeId];
+                                break;
+                            case "slot5":
+                                slots[4] = badgeTypeDistributor[badge.TypeId];
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    _badges = new BadgeCollection(badgeAssignments);
+                    int i = 1;
+                    foreach (BadgeType badge in slots)
+                    {
+                        if (badge != null)
+                            _badges[(BadgeSlot)i] = badge;
+                        i++;
+                    }
+                }
+                return _badges;
+            }
+            set
+            {
+                // Setting to null causes the lazy loading to be reset.
+                if (value == null)
+                    _badges = null;
             }
         }
         #endregion

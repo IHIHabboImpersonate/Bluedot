@@ -93,6 +93,16 @@ namespace Bluedot.HabboServer
             private set;
         }
         #endregion
+        #region Property: BadgeTypeDistributor
+        /// <summary>
+        /// TODO: Add summary for property
+        /// </summary>
+        public BadgeTypeDistributor BadgeTypeDistributor
+        {
+            get;
+            private set;
+        }
+        #endregion
         #endregion
 
         #region Methods
@@ -221,6 +231,14 @@ namespace Bluedot.HabboServer
                 StandardOut.PrintNotice("Habbo Distributor => Constructing...");
                 HabboDistributor = new HabboDistributor();
                 StandardOut.PrintNotice("Habbo Distributor => Ready");
+
+                #endregion
+
+                #region BadgeTypeDistributor
+
+                StandardOut.PrintNotice("Badge Type Cache => Constructing...");
+                BadgeTypeDistributor = new BadgeTypeDistributor();
+                StandardOut.PrintNotice("Badge Type Cache => Ready");
 
                 #endregion
 
