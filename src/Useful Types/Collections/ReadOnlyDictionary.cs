@@ -9,7 +9,7 @@ namespace Bluedot.HabboServer.Collections
     {
         public ReadOnlyDictionary(IDictionary<TKey, TValue> items)
             : base(items.ToList()) { }
-
+        
         public TValue this[TKey key]
         {
             get

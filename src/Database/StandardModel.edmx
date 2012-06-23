@@ -6,6 +6,7 @@
     <edmx:StorageModels>
     <Schema Namespace="Bluedot.HabboServer.Database.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="BluedotHabboServerDatabaseStoreContainer">
+          <EntitySet Name="badge_assignments" EntityType="Bluedot.HabboServer.Database.Store.badge_assignments" store:Type="Tables" Schema="bluedot" />
           <EntitySet Name="badge_types" EntityType="Bluedot.HabboServer.Database.Store.badge_types" store:Type="Tables" Schema="bluedot" />
           <EntitySet Name="habbos" EntityType="Bluedot.HabboServer.Database.Store.habbos" store:Type="Tables" Schema="bluedot" />
           <EntitySet Name="logins" EntityType="Bluedot.HabboServer.Database.Store.logins" store:Type="Tables" Schema="bluedot" />
@@ -21,6 +22,14 @@
           <EntitySet Name="persistent_storage" EntityType="Bluedot.HabboServer.Database.Store.persistent_storage" store:Type="Tables" Schema="bluedot" />
           <EntitySet Name="rooms" EntityType="Bluedot.HabboServer.Database.Store.rooms" store:Type="Tables" Schema="bluedot" />
           <EntitySet Name="subscriptions" EntityType="Bluedot.HabboServer.Database.Store.subscriptions" store:Type="Tables" Schema="bluedot" />
+          <AssociationSet Name="badge_assignments_ibfk_1" Association="Bluedot.HabboServer.Database.Store.badge_assignments_ibfk_1">
+            <End Role="badge_types" EntitySet="badge_types" />
+            <End Role="badge_assignments" EntitySet="badge_assignments" />
+          </AssociationSet>
+          <AssociationSet Name="badge_assignments_ibfk_2" Association="Bluedot.HabboServer.Database.Store.badge_assignments_ibfk_2">
+            <End Role="habbos" EntitySet="habbos" />
+            <End Role="badge_assignments" EntitySet="badge_assignments" />
+          </AssociationSet>
           <AssociationSet Name="habbos_ibfk_1" Association="Bluedot.HabboServer.Database.Store.habbos_ibfk_1">
             <End Role="logins" EntitySet="logins" />
             <End Role="habbos" EntitySet="habbos" />
@@ -94,6 +103,15 @@
             <End Role="subscriptions" EntitySet="subscriptions" />
           </AssociationSet>
         </EntityContainer>
+        <EntityType Name="badge_assignments">
+          <Key>
+            <PropertyRef Name="assignment_id" />
+          </Key>
+          <Property Name="assignment_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="type_id" Type="int" Nullable="false" />
+          <Property Name="habbo_id" Type="int" Nullable="false" />
+          <Property Name="slot" Type="enum" Nullable="false" />
+        </EntityType>
         <EntityType Name="badge_types">
           <Key>
             <PropertyRef Name="type_id" />
@@ -236,6 +254,32 @@
           <Property Name="skipped_length" Type="int" Nullable="false" />
           <Property Name="paused_start" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="badge_assignments_ibfk_1">
+          <End Role="badge_types" Type="Bluedot.HabboServer.Database.Store.badge_types" Multiplicity="1" />
+          <End Role="badge_assignments" Type="Bluedot.HabboServer.Database.Store.badge_assignments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="badge_types">
+              <PropertyRef Name="type_id" />
+            </Principal>
+            <Dependent Role="badge_assignments">
+              <PropertyRef Name="type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="badge_assignments_ibfk_2">
+          <End Role="habbos" Type="Bluedot.HabboServer.Database.Store.habbos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="badge_assignments" Type="Bluedot.HabboServer.Database.Store.badge_assignments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="habbos">
+              <PropertyRef Name="habbo_id" />
+            </Principal>
+            <Dependent Role="badge_assignments">
+              <PropertyRef Name="habbo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="habbos_ibfk_1">
           <End Role="logins" Type="Bluedot.HabboServer.Database.Store.logins" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -568,6 +612,15 @@
             <End Role="permission_habbo_permissions" EntitySet="HabboPermissions" />
           </AssociationSet>
           <EntitySet Name="BadgeTypes" EntityType="Bluedot.HabboServer.Database.DBBadgeType" />
+          <EntitySet Name="BadgeAssignments" EntityType="Bluedot.HabboServer.Database.DBBadgeAssignment" />
+          <AssociationSet Name="badge_assignments_ibfk_1" Association="Bluedot.HabboServer.Database.badge_assignments_ibfk_1">
+            <End Role="DBBadgeType" EntitySet="BadgeTypes" />
+            <End Role="badge_assignments" EntitySet="BadgeAssignments" />
+          </AssociationSet>
+          <AssociationSet Name="badge_assignments_ibfk_2" Association="Bluedot.HabboServer.Database.badge_assignments_ibfk_2">
+            <End Role="DBHabbo" EntitySet="Habbos" />
+            <End Role="badge_assignments" EntitySet="BadgeAssignments" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="DBHabbo">
           <Key>
@@ -586,6 +639,7 @@
           <Property Type="DateTime" Name="LastAccess" />
           <Property Type="String" Name="SSOTicket" />
           <Property Type="Binary" Name="RawOriginIP" />
+          <NavigationProperty Name="badge_assignments" Relationship="Bluedot.HabboServer.Database.badge_assignments_ibfk_2" FromRole="DBHabbo" ToRole="badge_assignments" />
         </EntityType>
         <EntityType Name="DBLogin">
           <Key>
@@ -927,6 +981,39 @@
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Code" Nullable="false" />
         </EntityType>
+        <EntityType Name="DBBadgeAssignment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="TypeId" Nullable="false" />
+          <Property Type="Int32" Name="HabboId" Nullable="false" />
+          <Property Type="String" Name="Slot" Nullable="false" />
+        </EntityType>
+        <Association Name="badge_assignments_ibfk_1">
+          <End Type="Bluedot.HabboServer.Database.DBBadgeType" Role="DBBadgeType" Multiplicity="1" />
+          <End Type="Bluedot.HabboServer.Database.DBBadgeAssignment" Role="badge_assignments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DBBadgeType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="badge_assignments">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="badge_assignments_ibfk_2">
+          <End Type="Bluedot.HabboServer.Database.DBHabbo" Role="DBHabbo" Multiplicity="1" />
+          <End Type="Bluedot.HabboServer.Database.DBBadgeAssignment" Role="badge_assignments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DBHabbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="badge_assignments">
+              <PropertyRef Name="HabboId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1088,6 +1175,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="BadgeAssignments">
+            <EntityTypeMapping TypeName="Bluedot.HabboServer.Database.DBBadgeAssignment">
+              <MappingFragment StoreEntitySet="badge_assignments">
+                <ScalarProperty Name="Slot" ColumnName="slot" />
+                <ScalarProperty Name="HabboId" ColumnName="habbo_id" />
+                <ScalarProperty Name="TypeId" ColumnName="type_id" />
+                <ScalarProperty Name="Id" ColumnName="assignment_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1119,58 +1216,58 @@
         <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBRoom" Width="3.25" PointX="8.75" PointY="8.625" Height="1.9210009765624996" IsExpanded="true" />
         <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBSubscription" Width="3.25" PointX="8.75" PointY="13.5" Height="1.9210009765624996" IsExpanded="true" />
         <AssociationConnector Association="Bluedot.HabboServer.Database.habbos_ibfk_1" >
-          <ConnectorPoint PointX="4" PointY="8.5033268229166659" />
-          <ConnectorPoint PointX="4.75" PointY="8.5033268229166659" />
+          <ConnectorPoint PointX="4" PointY="8.6151432291666659" />
+          <ConnectorPoint PointX="4.75" PointY="8.6151432291666659" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_categories_ibfk_1" >
-          <ConnectorPoint PointX="6.375" PointY="10.071432291666667" />
-          <ConnectorPoint PointX="6.375" PointY="16.8389794921875" />
-          <ConnectorPoint PointX="8.75" PointY="16.8389794921875" />
+          <ConnectorPoint PointX="6.3300785937500006" PointY="10.710999348958332" />
+          <ConnectorPoint PointX="6.3300785937500006" PointY="16.922841796875" />
+          <ConnectorPoint PointX="8.75" PointY="16.922841796875" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friend_requests_ibfk_1" >
-          <ConnectorPoint PointX="7.2187525" PointY="10.071432291666667" />
-          <ConnectorPoint PointX="7.2187525" PointY="11.9639794921875" />
-          <ConnectorPoint PointX="7.5572954166666664" PointY="11.9639794921875" />
-          <ConnectorPoint PointX="7.7239620833333325" PointY="11.9639794921875" />
-          <ConnectorPoint PointX="8.75" PointY="11.9639794921875" />
+          <ConnectorPoint PointX="7.2187525" PointY="10.710999348958332" />
+          <ConnectorPoint PointX="7.2187525" PointY="12.298810846354167" />
+          <ConnectorPoint PointX="7.5572954166666664" PointY="12.298810846354167" />
+          <ConnectorPoint PointX="7.7239620833333325" PointY="12.298810846354167" />
+          <ConnectorPoint PointX="8.75" PointY="12.298810846354167" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friend_requests_ibfk_2" >
-          <ConnectorPoint PointX="5.5312475" PointY="10.071432291666667" />
-          <ConnectorPoint PointX="5.5312475" PointY="11.57573724609375" />
-          <ConnectorPoint PointX="5.8697904166666666" PointY="11.57573724609375" />
-          <ConnectorPoint PointX="6.0364570833333326" PointY="11.57573724609375" />
-          <ConnectorPoint PointX="6.291666666666667" PointY="11.57573724609375" />
-          <ConnectorPoint PointX="6.458333333333333" PointY="11.57573724609375" />
-          <ConnectorPoint PointX="6.7135429166666674" PointY="11.57573724609375" />
-          <ConnectorPoint PointX="6.8802095833333334" PointY="11.57573724609375" />
-          <ConnectorPoint PointX="7.1354191666666669" PointY="11.57573724609375" />
-          <ConnectorPoint PointX="7.3020858333333329" PointY="11.57573724609375" />
-          <ConnectorPoint PointX="7.5572954166666664" PointY="11.57573724609375" />
-          <ConnectorPoint PointX="7.7239620833333325" PointY="11.57573724609375" />
-          <ConnectorPoint PointX="8.75" PointY="11.57573724609375" />
+          <ConnectorPoint PointX="5.30664046875" PointY="10.710999348958332" />
+          <ConnectorPoint PointX="5.30664046875" PointY="11.743152923177082" />
+          <ConnectorPoint PointX="5.7350261979166675" PointY="11.743152923177082" />
+          <ConnectorPoint PointX="5.9016928645833335" PointY="11.743152923177082" />
+          <ConnectorPoint PointX="6.2467452604166676" PointY="11.743152923177082" />
+          <ConnectorPoint PointX="6.4134119270833336" PointY="11.743152923177082" />
+          <ConnectorPoint PointX="6.6910822135416668" PointY="11.743152923177082" />
+          <ConnectorPoint PointX="6.8577488802083328" PointY="11.743152923177082" />
+          <ConnectorPoint PointX="7.1354191666666669" PointY="11.743152923177082" />
+          <ConnectorPoint PointX="7.3020858333333329" PointY="11.743152923177082" />
+          <ConnectorPoint PointX="7.5572954166666664" PointY="11.743152923177082" />
+          <ConnectorPoint PointX="7.7239620833333325" PointY="11.743152923177082" />
+          <ConnectorPoint PointX="8.75" PointY="11.743152923177082" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_1" >
-          <ConnectorPoint PointX="7.6406287499999994" PointY="10.071432291666667" />
-          <ConnectorPoint PointX="7.6406287499999994" PointY="12.936056315104166" />
-          <ConnectorPoint PointX="12.75" PointY="12.936056315104166" />
+          <ConnectorPoint PointX="7.6406287499999994" PointY="10.710999348958332" />
+          <ConnectorPoint PointX="7.6406287499999994" PointY="13.203249134114582" />
+          <ConnectorPoint PointX="12.75" PointY="13.203249134114582" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_3" >
-          <ConnectorPoint PointX="6.79687625" PointY="10.071432291666667" />
-          <ConnectorPoint PointX="6.79687625" PointY="12.807005149739581" />
-          <ConnectorPoint PointX="7.5572954166666664" PointY="12.807005149739581" />
-          <ConnectorPoint PointX="7.7239620833333325" PointY="12.807005149739581" />
-          <ConnectorPoint PointX="12.75" PointY="12.807005149739581" />
+          <ConnectorPoint PointX="6.774415546875" PointY="10.710999348958332" />
+          <ConnectorPoint PointX="6.774415546875" PointY="13.02446386393229" />
+          <ConnectorPoint PointX="7.5572954166666664" PointY="13.02446386393229" />
+          <ConnectorPoint PointX="7.7239620833333325" PointY="13.02446386393229" />
+          <ConnectorPoint PointX="12.75" PointY="13.02446386393229" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.rooms_ibfk_1" >
-          <ConnectorPoint PointX="8" PointY="9.3482161458333337" />
-          <ConnectorPoint PointX="8.75" PointY="9.3482161458333337" />
+          <ConnectorPoint PointX="8" PointY="9.6679996744791659" />
+          <ConnectorPoint PointX="8.75" PointY="9.6679996744791659" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.subscriptions_ibfk_1" >
-          <ConnectorPoint PointX="5.95312375" PointY="10.071432291666667" />
-          <ConnectorPoint PointX="5.95312375" PointY="14.46050048828125" />
-          <ConnectorPoint PointX="6.291666666666667" PointY="14.46050048828125" />
-          <ConnectorPoint PointX="6.458333333333333" PointY="14.46050048828125" />
-          <ConnectorPoint PointX="8.75" PointY="14.46050048828125" />
+          <ConnectorPoint PointX="5.8183595312500005" PointY="10.710999348958332" />
+          <ConnectorPoint PointX="5.8183595312500005" PointY="14.5862939453125" />
+          <ConnectorPoint PointX="6.2467452604166676" PointY="14.5862939453125" />
+          <ConnectorPoint PointX="6.4134119270833336" PointY="14.5862939453125" />
+          <ConnectorPoint PointX="8.75" PointY="14.5862939453125" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.messenger_friendships_ibfk_2" >
           <ConnectorPoint PointX="12" PointY="16.8389794921875" />
@@ -1188,49 +1285,66 @@
         <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBPermissionGroup" Width="2" PointX="9" PointY="2.875" Height="1.2636116536458335" IsExpanded="true" />
         <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBPermission" Width="1.75" PointX="6.25" PointY="4.875" Height="1.2636116536458317" IsExpanded="true" />
         <AssociationConnector Association="Bluedot.HabboServer.Database.permission_group_groups_ibfk_1" >
-          <ConnectorPoint PointX="11" PointY="3.6318058268229167" />
-          <ConnectorPoint PointX="11.75" PointY="3.6318058268229167" />
+          <ConnectorPoint PointX="11" PointY="3.8596425374348957" />
+          <ConnectorPoint PointX="11.416666666666666" PointY="3.8596425374348953" />
+          <ConnectorPoint PointX="11.583333333333334" PointY="3.8596425374348957" />
+          <ConnectorPoint PointX="11.75" PointY="3.8596425374348957" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.permission_group_groups_ibfk_2" >
-          <ConnectorPoint PointX="11" PointY="3.3159029134114584" />
-          <ConnectorPoint PointX="11.75" PointY="3.3159029134114584" />
+          <ConnectorPoint PointX="11" PointY="3.4298212687174479" />
+          <ConnectorPoint PointX="11.416666666666666" PointY="3.4298212687174474" />
+          <ConnectorPoint PointX="11.583333333333334" PointY="3.4298212687174479" />
+          <ConnectorPoint PointX="11.75" PointY="3.4298212687174479" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.permission_group_permissions_ibfk_1" >
-          <ConnectorPoint PointX="10" PointY="2.875" />
-          <ConnectorPoint PointX="10" PointY="1.5461531575520837" />
-          <ConnectorPoint PointX="11.75" PointY="1.5461531575520837" />
+          <ConnectorPoint PointX="11" PointY="2.875" />
+          <ConnectorPoint PointX="11.375" PointY="2.5" />
+          <ConnectorPoint PointX="11.375" PointY="2.9129850260416674" />
+          <ConnectorPoint PointX="11.75" PointY="2.537985026041667" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.permission_group_permissions_ibfk_2" >
-          <ConnectorPoint PointX="7.125" PointY="4.875" />
-          <ConnectorPoint PointX="7.125" PointY="1.9754822363281264" />
-          <ConnectorPoint PointX="9.9166666666666661" PointY="1.9754822363281257" />
-          <ConnectorPoint PointX="10.083333333333334" PointY="1.9754822363281264" />
-          <ConnectorPoint PointX="11.75" PointY="1.9754822363281264" />
+          <ConnectorPoint PointX="8" PointY="5.1875005000000005" />
+          <ConnectorPoint PointX="9.9166666666666661" PointY="5.1875005" />
+          <ConnectorPoint PointX="10.083333333333334" PointY="5.1875005000000005" />
+          <ConnectorPoint PointX="11.5" PointY="5.1875005000000005" />
+          <ConnectorPoint PointX="11.5" PointY="2.912985026041667" />
+          <ConnectorPoint PointX="12.968752" PointY="2.912985026041667" />
+          <ConnectorPoint PointX="12.968752" PointY="2.537985026041667" />
         </AssociationConnector>
         <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBHabboPermissionGroup" Width="2.625" PointX="11.75" PointY="5.875" Height="1.4279589843749996" />
         <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBHabboPermission" Width="2.5" PointX="8.75" PointY="5.75" Height="1.5923063151041657" />
         <AssociationConnector Association="Bluedot.HabboServer.Database.permission_habbo_groups_ibfk_1" >
-          <ConnectorPoint PointX="8" PointY="7.9836531575520828" />
-          <ConnectorPoint PointX="13.21875" PointY="7.9836531575520828" />
-          <ConnectorPoint PointX="13.21875" PointY="7.302958984375" />
+          <ConnectorPoint PointX="8" PointY="8.0814925130208337" />
+          <ConnectorPoint PointX="13.21875" PointY="8.0814925130208337" />
+          <ConnectorPoint PointX="13.21875" PointY="7.47068359375" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.permission_habbo_permissions_ibfk_1" >
-          <ConnectorPoint PointX="5.46875" PointY="7" />
-          <ConnectorPoint PointX="5.46875" PointY="6.6005553268229153" />
-          <ConnectorPoint PointX="8.75" PointY="6.6005553268229153" />
+          <ConnectorPoint PointX="8" PointY="7.2689925130208337" />
+          <ConnectorPoint PointX="8.75" PointY="7.2689925130208337" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.permission_habbo_groups_ibfk_2" >
-          <ConnectorPoint PointX="10" PointY="4.1386116536458335" />
+          <ConnectorPoint PointX="10" PointY="4.2783821614583326" />
           <ConnectorPoint PointX="10" PointY="5.5" />
           <ConnectorPoint PointX="11.5" PointY="5.5" />
-          <ConnectorPoint PointX="11.5" PointY="6.5889794921875" />
-          <ConnectorPoint PointX="11.75" PointY="6.5889794921875" />
+          <ConnectorPoint PointX="11.5" PointY="6.672841796875" />
+          <ConnectorPoint PointX="11.75" PointY="6.672841796875" />
         </AssociationConnector>
         <AssociationConnector Association="Bluedot.HabboServer.Database.permission_habbo_permissions_ibfk_2" >
           <ConnectorPoint PointX="8" PointY="5.9443058268229159" />
           <ConnectorPoint PointX="8.75" PointY="5.9443058268229159" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBBadgeType" Width="1.5" PointX="3.25" PointY="4.625" Height="1.4033821614583388" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBBadgeType" Width="1.5" PointX="3.25" PointY="4.625" Height="1.4033821614583326" />
+        <EntityTypeShape EntityType="Bluedot.HabboServer.Database.DBBadgeAssignment" Width="1.5" PointX="6.25" PointY="0.875" Height="1.787985026041667" />
+        <AssociationConnector Association="Bluedot.HabboServer.Database.badge_assignments_ibfk_1" >
+          <ConnectorPoint PointX="4" PointY="4.625" />
+          <ConnectorPoint PointX="4" PointY="1.7689925130208335" />
+          <ConnectorPoint PointX="6.25" PointY="1.7689925130208335" />
+        </AssociationConnector>
+        <AssociationConnector Association="Bluedot.HabboServer.Database.badge_assignments_ibfk_2" >
+          <ConnectorPoint PointX="5.4999975" PointY="7" />
+          <ConnectorPoint PointX="5.4999975" PointY="2.2472412695312509" />
+          <ConnectorPoint PointX="6.25" PointY="2.2472412695312509" />
+        </AssociationConnector>
       </Diagram>
     </Diagrams>
   </Designer>
