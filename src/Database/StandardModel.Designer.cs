@@ -36,6 +36,8 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("Bluedot.HabboServer.Database", "permission_habbo_permissions_ibfk_1", "DBHabbo", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Bluedot.HabboServer.Database.DBHabbo), "permission_habbo_permissions", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Bluedot.HabboServer.Database.DBHabboPermission), true)]
 [assembly: EdmRelationshipAttribute("Bluedot.HabboServer.Database", "permission_habbo_groups_ibfk_2", "DBPermissionGroup", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Bluedot.HabboServer.Database.DBPermissionGroup), "permission_habbo_groups", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Bluedot.HabboServer.Database.DBHabboPermissionGroup), true)]
 [assembly: EdmRelationshipAttribute("Bluedot.HabboServer.Database", "permission_habbo_permissions_ibfk_2", "DBPermission", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Bluedot.HabboServer.Database.DBPermission), "permission_habbo_permissions", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Bluedot.HabboServer.Database.DBHabboPermission), true)]
+[assembly: EdmRelationshipAttribute("Bluedot.HabboServer.Database", "badge_assignments_ibfk_1", "DBBadgeType", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Bluedot.HabboServer.Database.DBBadgeType), "badge_assignments", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Bluedot.HabboServer.Database.DBBadgeAssignment), true)]
+[assembly: EdmRelationshipAttribute("Bluedot.HabboServer.Database", "badge_assignments_ibfk_2", "DBHabbo", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Bluedot.HabboServer.Database.DBHabbo), "badge_assignments", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Bluedot.HabboServer.Database.DBBadgeAssignment), true)]
 
 #endregion
 
@@ -310,6 +312,38 @@ namespace Bluedot.HabboServer.Database
             }
         }
         private ObjectSet<DBHabboPermission> _HabboPermissions;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<DBBadgeType> BadgeTypes
+        {
+            get
+            {
+                if ((_BadgeTypes == null))
+                {
+                    _BadgeTypes = base.CreateObjectSet<DBBadgeType>("BadgeTypes");
+                }
+                return _BadgeTypes;
+            }
+        }
+        private ObjectSet<DBBadgeType> _BadgeTypes;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<DBBadgeAssignment> BadgeAssignments
+        {
+            get
+            {
+                if ((_BadgeAssignments == null))
+                {
+                    _BadgeAssignments = base.CreateObjectSet<DBBadgeAssignment>("BadgeAssignments");
+                }
+                return _BadgeAssignments;
+            }
+        }
+        private ObjectSet<DBBadgeAssignment> _BadgeAssignments;
 
         #endregion
         #region AddTo Methods
@@ -425,6 +459,22 @@ namespace Bluedot.HabboServer.Database
         {
             base.AddObject("HabboPermissions", dBHabboPermission);
         }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the BadgeTypes EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToBadgeTypes(DBBadgeType dBBadgeType)
+        {
+            base.AddObject("BadgeTypes", dBBadgeType);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the BadgeAssignments EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToBadgeAssignments(DBBadgeAssignment dBBadgeAssignment)
+        {
+            base.AddObject("BadgeAssignments", dBBadgeAssignment);
+        }
 
         #endregion
     }
@@ -433,6 +483,220 @@ namespace Bluedot.HabboServer.Database
     #endregion
     
     #region Entities
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="Bluedot.HabboServer.Database", Name="DBBadgeAssignment")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class DBBadgeAssignment : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new DBBadgeAssignment object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="typeId">Initial value of the TypeId property.</param>
+        /// <param name="habboId">Initial value of the HabboId property.</param>
+        /// <param name="slot">Initial value of the Slot property.</param>
+        public static DBBadgeAssignment CreateDBBadgeAssignment(global::System.Int32 id, global::System.Int32 typeId, global::System.Int32 habboId, global::System.String slot)
+        {
+            DBBadgeAssignment dBBadgeAssignment = new DBBadgeAssignment();
+            dBBadgeAssignment.Id = id;
+            dBBadgeAssignment.TypeId = typeId;
+            dBBadgeAssignment.HabboId = habboId;
+            dBBadgeAssignment.Slot = slot;
+            return dBBadgeAssignment;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TypeId
+        {
+            get
+            {
+                return _TypeId;
+            }
+            set
+            {
+                OnTypeIdChanging(value);
+                ReportPropertyChanging("TypeId");
+                _TypeId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TypeId");
+                OnTypeIdChanged();
+            }
+        }
+        private global::System.Int32 _TypeId;
+        partial void OnTypeIdChanging(global::System.Int32 value);
+        partial void OnTypeIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 HabboId
+        {
+            get
+            {
+                return _HabboId;
+            }
+            set
+            {
+                OnHabboIdChanging(value);
+                ReportPropertyChanging("HabboId");
+                _HabboId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HabboId");
+                OnHabboIdChanged();
+            }
+        }
+        private global::System.Int32 _HabboId;
+        partial void OnHabboIdChanging(global::System.Int32 value);
+        partial void OnHabboIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Slot
+        {
+            get
+            {
+                return _Slot;
+            }
+            set
+            {
+                OnSlotChanging(value);
+                ReportPropertyChanging("Slot");
+                _Slot = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Slot");
+                OnSlotChanged();
+            }
+        }
+        private global::System.String _Slot;
+        partial void OnSlotChanging(global::System.String value);
+        partial void OnSlotChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="Bluedot.HabboServer.Database", Name="DBBadgeType")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class DBBadgeType : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new DBBadgeType object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="code">Initial value of the Code property.</param>
+        public static DBBadgeType CreateDBBadgeType(global::System.Int32 id, global::System.String code)
+        {
+            DBBadgeType dBBadgeType = new DBBadgeType();
+            dBBadgeType.Id = id;
+            dBBadgeType.Code = code;
+            return dBBadgeType;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                OnCodeChanging(value);
+                ReportPropertyChanging("Code");
+                _Code = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Code");
+                OnCodeChanged();
+            }
+        }
+        private global::System.String _Code;
+        partial void OnCodeChanging(global::System.String value);
+        partial void OnCodeChanged();
+
+        #endregion
+    
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
@@ -793,6 +1057,31 @@ namespace Bluedot.HabboServer.Database
 
         #endregion
     
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("Bluedot.HabboServer.Database", "badge_assignments_ibfk_2", "badge_assignments")]
+        public EntityCollection<DBBadgeAssignment> badge_assignments
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<DBBadgeAssignment>("Bluedot.HabboServer.Database.badge_assignments_ibfk_2", "badge_assignments");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<DBBadgeAssignment>("Bluedot.HabboServer.Database.badge_assignments_ibfk_2", "badge_assignments", value);
+                }
+            }
+        }
+
+        #endregion
     }
     
     /// <summary>
