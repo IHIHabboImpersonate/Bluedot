@@ -1,4 +1,5 @@
-﻿using Bluedot.HabboServer.Habbos;
+﻿using System;
+using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
 
 namespace Bluedot.HabboServer.ApiUsage.Packets
