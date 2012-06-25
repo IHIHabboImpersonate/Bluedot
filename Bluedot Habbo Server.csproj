@@ -96,6 +96,7 @@
     <Compile Include="src\Permissions\Permission.cs" />
     <Compile Include="src\Permissions\PermissionGroup.cs" />
     <Compile Include="src\Permissions\PermissionState.cs" />
+    <Compile Include="src\Subscriptions\SubscriptionData.cs" />
     <Compile Include="src\Useful Types\Caching\WeakCache.cs" />
     <Compile Include="src\Useful Types\FastSmartWeakEvent.cs" />
     <Compile Include="src\Habbos\FigureParts\Body.cs" />

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace Bluedot.HabboServer
 {
@@ -25,6 +26,12 @@ namespace Bluedot.HabboServer
             }
 
             return sb.ToString();
+        }
+
+        private static readonly DateTime _unixEpoche = new DateTime(1970, 1, 1, 0, 0, 0);
+        public static int GetUnixTimestamp(this DateTime dateTime)
+        {
+            return (int)dateTime.Subtract(_unixEpoche).TotalSeconds;
         }
     }
 }
