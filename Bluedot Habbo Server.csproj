@@ -34,18 +34,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MySql.Data, Version=6.4.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+    <Reference Include="MySql.Data, Version=6.5.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>S:\Programming\Libs\MySQL\Connector Net\6.4.5\MySql.Data.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>Reference Packaging\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Nito.Async">
-      <HintPath>S:\Programming\Libs\Nito Asnc\1.4\Nito.Async.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>Reference Packaging\Nito.Async.dll</HintPath>
     </Reference>
     <Reference Include="Nito.Async.Sockets">
-      <HintPath>S:\Programming\Libs\Nito Asnc\1.4\Nito.Async.Sockets.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>Reference Packaging\Nito.Async.Sockets.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -62,9 +59,11 @@
   <ItemGroup>
     <Compile Include="src\APIUsage\ApiCallerRoot.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\Extensions.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessBadgeListingRequest.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessBalanceRequest.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessHabboInfoRequest.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessGetVolumeLevel.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MBadgeListing.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MVolumeLevel.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MCreditBalance.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MHabboData.cs" />
@@ -89,6 +88,10 @@
     <Compile Include="src\EntryPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Extensions.cs" />
+    <Compile Include="src\Habbos\Badges\BadgeCollection.cs" />
+    <Compile Include="src\Habbos\Badges\BadgeSlot.cs" />
+    <Compile Include="src\Habbos\Badges\BadgeType.cs" />
+    <Compile Include="src\Habbos\Badges\BadgeTypeDistributor.cs" />
     <Compile Include="src\Network\WebAdmin\HttpPathHandler.cs" />
     <Compile Include="src\Network\WebAdmin\HttpRequestEventArgs.cs" />
     <Compile Include="src\Network\WebAdmin\WebAdminManager.cs" />
@@ -97,6 +100,7 @@
     <Compile Include="src\Permissions\PermissionGroup.cs" />
     <Compile Include="src\Permissions\PermissionState.cs" />
     <Compile Include="src\Useful Types\Caching\WeakCache.cs" />
+    <Compile Include="src\Useful Types\Collections\ReadOnlyDictionary.cs" />
     <Compile Include="src\Useful Types\FastSmartWeakEvent.cs" />
     <Compile Include="src\Habbos\FigureParts\Body.cs" />
     <Compile Include="src\Habbos\FigureParts\EyeAccessory.cs" />

@@ -1,0 +1,71 @@
+<TemplatesExport family="Live Templates">
+  <Template uid="5d19c737-04b8-437c-bddc-5301251c02cb" shortcut="constructor" description="" text="#region Method: $METHOD_NAME$ (Constructor)&#xD;&#xA;public $METHOD_NAME$()&#xD;&#xA;{&#xD;&#xA;	// TODO: Code this constructor.&#xD;&#xA;	throw new NotImplementedException();&#xD;&#xA;}&#xD;&#xA;#endregion" reformat="False" shortenQualifiedReferences="True">
+    <Context>
+      <CSharpContext context="TypeMember" minimumLanguageVersion="2.0" />
+    </Context>
+    <Categories />
+    <Variables>
+      <Variable name="METHOD_NAME" expression="typeName()" initialRange="-1" />
+    </Variables>
+    <CustomProperties />
+  </Template>
+  <Template uid="bad7614d-9b62-4e5b-841e-c8a2b8aad868" shortcut="fswe" description="FastSmartWeakEvents" text="#region Event: $EVENT_NAME$&#xD;&#xA;private readonly FastSmartWeakEvent&lt;$EVENT_TYPE$&gt; _event$EVENT_NAME$ = new FastSmartWeakEvent&lt;$EVENT_TYPE$&gt;();&#xD;&#xA;/// &lt;summary&gt;&#xD;&#xA;/// $END$&#xD;&#xA;/// &lt;/summary&gt;&#xD;&#xA;public event $EVENT_TYPE$ $EVENT_NAME$&#xD;&#xA;{&#xD;&#xA;    add { _event$EVENT_NAME$.Add(value); }&#xD;&#xA;    remove { _event$EVENT_NAME$.Remove(value); }&#xD;&#xA;}&#xD;&#xA;#endregion" reformat="False" shortenQualifiedReferences="True">
+    <Context>
+      <CSharpContext context="TypeMember" minimumLanguageVersion="2.0" />
+    </Context>
+    <Categories />
+    <Variables>
+      <Variable name="EVENT_NAME" expression="" initialRange="2" />
+      <Variable name="EVENT_TYPE" expression="" initialRange="0" />
+    </Variables>
+    <CustomProperties />
+  </Template>
+  <Template uid="8a54725f-ae2a-46ae-bc6b-aa78e0d244b8" shortcut="method" description="" text="#region Method: $METHOD_NAME$&#xD;&#xA;public $METHOD_TYPE$ $METHOD_NAME$()&#xD;&#xA;{&#xD;&#xA;	// TODO: Code this method.&#xD;&#xA;	throw new NotImplementedException();&#xD;&#xA;}&#xD;&#xA;#endregion" reformat="False" shortenQualifiedReferences="True">
+    <Context>
+      <CSharpContext context="Everywhere" minimumLanguageVersion="2.0" />
+    </Context>
+    <Categories />
+    <Variables>
+      <Variable name="METHOD_NAME" expression="" initialRange="1" />
+      <Variable name="METHOD_TYPE" expression="" initialRange="0" />
+    </Variables>
+    <CustomProperties />
+  </Template>
+  <Template uid="a09465eb-f656-46c0-9787-bea3fda18b78" shortcut="propauto" description="" text="#region Property: $PROP_NAME$&#xD;&#xA;/// &lt;summary&gt;&#xD;&#xA;/// $END$&#xD;&#xA;/// &lt;/summary&gt;&#xD;&#xA;public $PROP_TYPE$ $PROP_NAME$&#xD;&#xA;{&#xD;&#xA;    get;&#xD;&#xA;    private set;&#xD;&#xA;}&#xD;&#xA;#endregion" reformat="False" shortenQualifiedReferences="True">
+    <Context>
+      <CSharpContext context="TypeMember" minimumLanguageVersion="2.0" />
+    </Context>
+    <Categories />
+    <Variables>
+      <Variable name="PROP_NAME" expression="" initialRange="1" />
+      <Variable name="PROP_TYPE" expression="" initialRange="0" />
+    </Variables>
+    <CustomProperties />
+  </Template>
+  <Template uid="305878d5-fdf8-4de9-860c-79333aabe540" shortcut="propbacking" description="" text="#region Property: $PROP_NAME$&#xD;&#xA;private $PROP_TYPE$ _$PROP_NAME_L$;&#xD;&#xA;/// &lt;summary&gt;&#xD;&#xA;/// $END$&#xD;&#xA;/// &lt;/summary&gt;&#xD;&#xA;public $PROP_TYPE$ $PROP_NAME$&#xD;&#xA;{&#xD;&#xA;    get&#xD;&#xA;	{&#xD;&#xA;		return _$PROP_NAME_L$;&#xD;&#xA;	}&#xD;&#xA;    set&#xD;&#xA;	{&#xD;&#xA;		_$PROP_NAME_L$ = value;&#xD;&#xA;	}&#xD;&#xA;}&#xD;&#xA;#endregion" reformat="False" shortenQualifiedReferences="True">
+    <Context>
+      <CSharpContext context="TypeMember" minimumLanguageVersion="2.0" />
+    </Context>
+    <Categories />
+    <Variables>
+      <Variable name="PROP_NAME" expression="" initialRange="1" />
+      <Variable name="PROP_TYPE" expression="" initialRange="1" />
+      <Variable name="PROP_NAME_L" expression="decapitalize(PROP_NAME)" initialRange="0" />
+    </Variables>
+    <CustomProperties />
+  </Template>
+  <Template uid="f0a00ded-d812-4a2e-b5db-f8eb5e5e102b" shortcut="propextmethod" description="" text="#region Property: $PROP_NAME$&#xD;&#xA;private $PROP_TYPE$ _$PROP_NAME_L$;&#xD;&#xA;public $PROP_TYPE$ $PROP_NAME$Property(this $PROP_OWNER_TYPE$ $PROP_OWNER_TYPE_L$)&#xD;&#xA;{&#xD;&#xA;	return _$PROP_NAME_L$;&#xD;&#xA;}&#xD;&#xA;public $PROP_TYPE$ $PROP_NAME$Property(this $PROP_OWNER_TYPE$ $PROP_OWNER_TYPE_L$, $PROP_TYPE$ value)&#xD;&#xA;{&#xD;&#xA;	_$PROP_NAME_L$ = value;&#xD;&#xA;	return value;&#xD;&#xA;}&#xD;&#xA;#endregion" reformat="False" shortenQualifiedReferences="True">
+    <Context>
+      <CSharpContext context="TypeMember" minimumLanguageVersion="2.0" />
+    </Context>
+    <Categories />
+    <Variables>
+      <Variable name="PROP_NAME" expression="" initialRange="0" />
+      <Variable name="PROP_TYPE" expression="" initialRange="0" />
+      <Variable name="PROP_NAME_L" expression="" initialRange="0" />
+      <Variable name="PROP_OWNER_TYPE" expression="" initialRange="0" />
+      <Variable name="PROP_OWNER_TYPE_L" expression="decapitalize(PROP_OWNER_TYPE)" initialRange="-1" />
+    </Variables>
+    <CustomProperties />
+  </Template>
+</TemplatesExport>
