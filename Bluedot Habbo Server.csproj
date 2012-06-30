@@ -92,6 +92,14 @@
     <Compile Include="src\Habbos\Badges\BadgeSlot.cs" />
     <Compile Include="src\Habbos\Badges\BadgeType.cs" />
     <Compile Include="src\Habbos\Badges\BadgeTypeDistributor.cs" />
+    <Compile Include="src\Habbos\HabboEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Habbos\Messenger\MessengerCategoryEventHandler.cs" />
+    <Compile Include="src\Habbos\Messenger\IBefriendable.cs" />
+    <Compile Include="src\Habbos\Messenger\MessengerCategory.cs" />
+    <Compile Include="src\Habbos\Messenger\MessengerCategoryCollection.cs" />
+    <Compile Include="src\Habbos\Messenger\MessengerCategoryEventArgs.cs" />
     <Compile Include="src\Network\WebAdmin\HttpPathHandler.cs" />
     <Compile Include="src\Network\WebAdmin\HttpRequestEventArgs.cs" />
     <Compile Include="src\Network\WebAdmin\WebAdminManager.cs" />
@@ -119,10 +127,8 @@
     <Compile Include="src\Habbos\FigureParts\WaistAccessory.cs" />
     <Compile Include="src\Habbos\Habbo.cs" />
     <Compile Include="src\Habbos\HabboDistributor\HabboDistributor.cs" />
-    <Compile Include="src\Habbos\HabboEventArgs.cs" />
     <Compile Include="src\Habbos\HabboEventHandler.cs" />
     <Compile Include="src\Habbos\HabboFigure.cs" />
-    <Compile Include="src\Habbos\Messenger\HabboMessenger.cs" />
     <Compile Include="src\Install\Category.cs" />
     <Compile Include="src\Install\InstallerCore.cs" />
     <Compile Include="src\Install\InputException.cs" />
