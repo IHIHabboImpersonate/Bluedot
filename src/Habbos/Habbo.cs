@@ -12,7 +12,7 @@ using SmartWeakEvent;
 
 namespace Bluedot.HabboServer.Habbos
 {
-    public class Habbo : IMessageable, IPersistable
+    public class Habbo : IMessageable, IPersistable, IBefriendable
     {
         #region Events
         #region Event: OnPreLogin
@@ -468,6 +468,56 @@ namespace Bluedot.HabboServer.Habbos
             }
         }
         #endregion
+
+        #region IBefriendable Properties
+        #region Property: MessengerCategories
+        private ICollection<MessengerCategory> _messengerCategories;
+        /// <summary>
+        /// 
+        /// </summary>
+        public ICollection<MessengerCategory> MessengerCategories
+        {
+            get
+            {
+                return _messengerCategories;
+            }
+            set
+            {
+                _messengerCategories = value;
+            }
+        }
+        #endregion
+        #region Property: Stalkable
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Stalkable
+        {
+            get;
+            private set;
+        }
+        #endregion
+        #region Property: Requestable
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Requestable
+        {
+            get;
+            private set;
+        }
+        #endregion
+        #region Property: Inviteable
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Inviteable
+        {
+            get;
+            private set;
+        }
+        #endregion
+        #endregion
         
         #region Property: Socket
         /// <summary>
@@ -477,22 +527,6 @@ namespace Bluedot.HabboServer.Habbos
         {
             get;
             private set;
-        }
-        #endregion
-        #region Property: Messenger
-        private HabboMessenger _messenger;
-        /// <summary>
-        /// TODO: Document
-        /// </summary>
-        /// <remarks>Uses lazy loading.</remarks>
-        internal HabboMessenger Messenger
-        {
-            get
-            {
-                if (_messenger == null)
-                    _messenger = new HabboMessenger(this);
-                return _messenger;
-            }
         }
         #endregion
 
