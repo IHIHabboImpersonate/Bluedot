@@ -65,6 +65,8 @@
     <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessBalanceRequest.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessHabboInfoRequest.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessGetVolumeLevel.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessSubscriptionInfoRequest.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MSubscriptionInfo.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MVolumeLevel.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MCreditBalance.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MHabboData.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="src\EntryPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Extensions.cs" />
+    <Compile Include="src\Subscriptions\SubscriptionCollection.cs" />
     <Compile Include="src\Network\WebAdmin\HttpPathHandler.cs" />
     <Compile Include="src\Network\WebAdmin\HttpRequestEventArgs.cs" />
     <Compile Include="src\Network\WebAdmin\WebAdminManager.cs" />

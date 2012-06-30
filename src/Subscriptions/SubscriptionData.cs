@@ -30,7 +30,7 @@ using Bluedot.HabboServer.Habbos;
 
 #endregion
 
-namespace BLuedot.HabboServer.Subscriptions
+namespace Bluedot.HabboServer.Habbos
 {
     public class SubscriptionData
     {
@@ -46,7 +46,7 @@ namespace BLuedot.HabboServer.Subscriptions
         /// <summary>
         /// 
         /// </summary>
-        public Habbo Subscriber
+        public Bluedot.HabboServer.Habbos.Habbo Subscriber
         {
             get;
             private set;
@@ -155,7 +155,7 @@ namespace BLuedot.HabboServer.Subscriptions
         #region Methods
 
         #region Method: SubscriptionData (Constructor)
-        public SubscriptionData(Habbo habbo, string type)
+        public SubscriptionData(Bluedot.HabboServer.Habbos.Habbo habbo, string type)
         {
             Subscriber = habbo;
             Type = type;

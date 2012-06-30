@@ -7,6 +7,7 @@ using Bluedot.HabboServer.Habbos.Figure;
 using Bluedot.HabboServer.Habbos.Messenger;
 using Bluedot.HabboServer.Network;
 using Bluedot.HabboServer.Permissions;
+using Bluedot.HabboServer.Habbos;
 using SmartWeakEvent;
 
 namespace Bluedot.HabboServer.Habbos
@@ -609,6 +610,33 @@ namespace Bluedot.HabboServer.Habbos
                     #endregion
                 }
                 return _permissionGroups;
+            }
+        }
+        #endregion
+
+        #region Property: Subscriptions
+        private SubscriptionCollection _subscriptions;
+        /// <summary>
+        /// 
+        /// </summary>
+        public SubscriptionCollection Subscriptions
+        {
+            get
+            {
+                lock(_subscriptions)
+                {
+                    if(_subscriptions == null)
+                        _subscriptions = new SubscriptionCollection(this);
+                    return _subscriptions;
+                }
+            }
+            set
+            {
+                lock (_subscriptions)
+                {
+                    if (value == null)
+                        _subscriptions = null;
+                }
             }
         }
         #endregion
