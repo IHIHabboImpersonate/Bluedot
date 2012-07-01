@@ -471,11 +471,11 @@ namespace Bluedot.HabboServer.Habbos
 
         #region IBefriendable Properties
         #region Property: MessengerCategories
-        private ICollection<MessengerCategory> _messengerCategories;
+        private EventingCollection<HashSet<MessengerCategory>, MessengerCategory> _messengerCategories;
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<MessengerCategory> MessengerCategories
+        public EventingCollection<HashSet<MessengerCategory>, MessengerCategory> MessengerCategories
         {
             get
             {

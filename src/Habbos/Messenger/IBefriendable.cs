@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Bluedot.HabboServer.Collections;
 using Bluedot.HabboServer.Habbos.Figure;
 
 namespace Bluedot.HabboServer.Habbos.Messenger
@@ -106,7 +107,7 @@ namespace Bluedot.HabboServer.Habbos.Messenger
         /// <summary>
         /// 
         /// </summary>
-        ICollection<MessengerCategory> MessengerCategories
+        EventingCollection<HashSet<MessengerCategory>, MessengerCategory> MessengerCategories
         {
             get;
         }

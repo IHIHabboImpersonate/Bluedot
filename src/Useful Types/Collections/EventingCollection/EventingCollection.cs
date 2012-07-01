@@ -1,124 +1,118 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using SmartWeakEvent;
 
-namespace Bluedot.HabboServer.Habbos.Messenger
+namespace Bluedot.HabboServer.Collections
 {
-    public class MessengerCategoryCollection : ICollection<MessengerCategory>
+    public class EventingCollection<TCollection, TItem> : ICollection<TItem>
+        where TCollection: ICollection<TItem>, new()
     {
         #region Events
-        #region Events: CategoryAdd
-        #region Event: OnPreCategoryAdd
-        private readonly FastSmartWeakEvent<MessengerCategoryEventHandler> _eventOnPreCategoryAdd = new FastSmartWeakEvent<MessengerCategoryEventHandler>();
+        #region Events: Add
+        #region Event: OnPreAdd
+        private readonly FastSmartWeakEvent<EventingCollectionEventHandler<TItem>> _eventOnPreAdd = new FastSmartWeakEvent<EventingCollectionEventHandler<TItem>>();
         /// <summary>
         /// 
         /// </summary>
-        public event MessengerCategoryEventHandler OnPreCategoryAdd
+        public event EventingCollectionEventHandler<TItem> OnPreAdd
         {
-            add { _eventOnPreCategoryAdd.Add(value); }
-            remove { _eventOnPreCategoryAdd.Remove(value); }
+            add { _eventOnPreAdd.Add(value); }
+            remove { _eventOnPreAdd.Remove(value); }
         }
         #endregion
-        #region Event: OnAnyPreCategoryAdd
-        private static readonly FastSmartWeakEvent<MessengerCategoryEventHandler> _eventOnAnyPreCategoryAdd = new FastSmartWeakEvent<MessengerCategoryEventHandler>();
+        #region Event: OnAnyPreAdd
+        private static readonly FastSmartWeakEvent<EventingCollectionEventHandler<TItem>> _eventOnAnyPreAdd = new FastSmartWeakEvent<EventingCollectionEventHandler<TItem>>();
         /// <summary>
         /// 
         /// </summary>
-        public static event MessengerCategoryEventHandler OnAnyPreCategoryAdd
+        public static event EventingCollectionEventHandler<TItem> OnAnyPreAdd
         {
-            add { _eventOnAnyPreCategoryAdd.Add(value); }
-            remove { _eventOnAnyPreCategoryAdd.Remove(value); }
-        }
-        #endregion
-
-        #region Event: OnCategoryAdd
-        private readonly FastSmartWeakEvent<MessengerCategoryEventHandler> _eventOnCategoryAdd = new FastSmartWeakEvent<MessengerCategoryEventHandler>();
-        /// <summary>
-        /// 
-        /// </summary>
-        public event MessengerCategoryEventHandler OnCategoryAdd
-        {
-            add { _eventOnCategoryAdd.Add(value); }
-            remove { _eventOnCategoryAdd.Remove(value); }
-        }
-        #endregion
-        #region Event: OnAnyCategoryAdd
-        private static readonly FastSmartWeakEvent<MessengerCategoryEventHandler> _eventOnAnyCategoryAdd = new FastSmartWeakEvent<MessengerCategoryEventHandler>();
-        /// <summary>
-        /// 
-        /// </summary>
-        public static event MessengerCategoryEventHandler OnAnyCategoryAdd
-        {
-            add { _eventOnAnyCategoryAdd.Add(value); }
-            remove { _eventOnAnyCategoryAdd.Remove(value); }
-        }
-        #endregion
-        #endregion
-        #region Events: CategoryRemove
-        #region Event: OnPreCategoryRemove
-        private readonly FastSmartWeakEvent<MessengerCategoryEventHandler> _eventOnPreCategoryRemove = new FastSmartWeakEvent<MessengerCategoryEventHandler>();
-        /// <summary>
-        /// 
-        /// </summary>
-        public event MessengerCategoryEventHandler OnPreCategoryRemove
-        {
-            add { _eventOnPreCategoryRemove.Add(value); }
-            remove { _eventOnPreCategoryRemove.Remove(value); }
-        }
-        #endregion
-        #region Event: OnAnyPreCategoryRemove
-        private static readonly FastSmartWeakEvent<MessengerCategoryEventHandler> _eventOnAnyPreCategoryRemove = new FastSmartWeakEvent<MessengerCategoryEventHandler>();
-        /// <summary>
-        /// 
-        /// </summary>
-        public static event MessengerCategoryEventHandler OnAnyPreCategoryRemove
-        {
-            add { _eventOnAnyPreCategoryRemove.Add(value); }
-            remove { _eventOnAnyPreCategoryRemove.Remove(value); }
+            add { _eventOnAnyPreAdd.Add(value); }
+            remove { _eventOnAnyPreAdd.Remove(value); }
         }
         #endregion
 
-        #region Event: OnCategoryRemove
-        private readonly FastSmartWeakEvent<MessengerCategoryEventHandler> _eventOnCategoryRemove = new FastSmartWeakEvent<MessengerCategoryEventHandler>();
+        #region Event: OnAdd
+        private readonly FastSmartWeakEvent<EventingCollectionEventHandler<TItem>> _eventOnAdd = new FastSmartWeakEvent<EventingCollectionEventHandler<TItem>>();
         /// <summary>
         /// 
         /// </summary>
-        public event MessengerCategoryEventHandler OnCategoryRemove
+        public event EventingCollectionEventHandler<TItem> OnAdd
         {
-            add { _eventOnCategoryRemove.Add(value); }
-            remove { _eventOnCategoryRemove.Remove(value); }
+            add { _eventOnAdd.Add(value); }
+            remove { _eventOnAdd.Remove(value); }
         }
         #endregion
-        #region Event: OnAnyCategoryRemove
-        private static readonly FastSmartWeakEvent<MessengerCategoryEventHandler> _eventOnAnyCategoryRemove = new FastSmartWeakEvent<MessengerCategoryEventHandler>();
+        #region Event: OnAnyAdd
+        private static readonly FastSmartWeakEvent<EventingCollectionEventHandler<TItem>> _eventOnAnyAdd = new FastSmartWeakEvent<EventingCollectionEventHandler<TItem>>();
         /// <summary>
         /// 
         /// </summary>
-        public static event MessengerCategoryEventHandler OnAnyCategoryRemove
+        public static event EventingCollectionEventHandler<TItem> OnAnyAdd
         {
-            add { _eventOnAnyCategoryRemove.Add(value); }
-            remove { _eventOnAnyCategoryRemove.Remove(value); }
+            add { _eventOnAnyAdd.Add(value); }
+            remove { _eventOnAnyAdd.Remove(value); }
+        }
+        #endregion
+        #endregion
+        #region Events: Remove
+        #region Event: OnPreRemove
+        private readonly FastSmartWeakEvent<EventingCollectionEventHandler<TItem>> _eventOnPreRemove = new FastSmartWeakEvent<EventingCollectionEventHandler<TItem>>();
+        /// <summary>
+        /// 
+        /// </summary>
+        public event EventingCollectionEventHandler<TItem> OnPreRemove
+        {
+            add { _eventOnPreRemove.Add(value); }
+            remove { _eventOnPreRemove.Remove(value); }
+        }
+        #endregion
+        #region Event: OnAnyPreRemove
+        private static readonly FastSmartWeakEvent<EventingCollectionEventHandler<TItem>> _eventOnAnyPreRemove = new FastSmartWeakEvent<EventingCollectionEventHandler<TItem>>();
+        /// <summary>
+        /// 
+        /// </summary>
+        public static event EventingCollectionEventHandler<TItem> OnAnyPreRemove
+        {
+            add { _eventOnAnyPreRemove.Add(value); }
+            remove { _eventOnAnyPreRemove.Remove(value); }
+        }
+        #endregion
+
+        #region Event: OnRemove
+        private readonly FastSmartWeakEvent<EventingCollectionEventHandler<TItem>> _eventOnRemove = new FastSmartWeakEvent<EventingCollectionEventHandler<TItem>>();
+        /// <summary>
+        /// 
+        /// </summary>
+        public event EventingCollectionEventHandler<TItem> OnRemove
+        {
+            add { _eventOnRemove.Add(value); }
+            remove { _eventOnRemove.Remove(value); }
+        }
+        #endregion
+        #region Event: OnAnyRemove
+        private static readonly FastSmartWeakEvent<EventingCollectionEventHandler<TItem>> _eventOnAnyRemove = new FastSmartWeakEvent<EventingCollectionEventHandler<TItem>>();
+        /// <summary>
+        /// 
+        /// </summary>
+        public static event EventingCollectionEventHandler<TItem> OnAnyRemove
+        {
+            add { _eventOnAnyRemove.Add(value); }
+            remove { _eventOnAnyRemove.Remove(value); }
         }
         #endregion
         #endregion
         #endregion
 
-        #region Field: _categories
-        private ICollection<MessengerCategory> _categories;
-        #endregion
-        #region Indexer: int
-        // TODO: Indexer
-        //public MessengerCategory this[int index]
-        //{
-        //    get
-        //    {
-        //        /* return the specified index here */
-        //    }
-        //    set
-        //    {
-        //        /* set the specified index to value here */
-        //    }
-        //}
+        private TCollection _internalCollection;
+
+        #region Method: EventingCollection (Constructor)
+        public EventingCollection()
+        {
+            _internalCollection = new TCollection();
+        }
         #endregion
 
         /// <summary>
@@ -128,9 +122,9 @@ namespace Bluedot.HabboServer.Habbos.Messenger
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
         /// </returns>
         /// <filterpriority>1</filterpriority>
-        public IEnumerator<MessengerCategory> GetEnumerator()
+        public IEnumerator<TItem> GetEnumerator()
         {
-            return _categories.GetEnumerator();
+            return _internalCollection.GetEnumerator();
         }
 
         /// <summary>
@@ -146,23 +140,23 @@ namespace Bluedot.HabboServer.Habbos.Messenger
         }
 
         /// <summary>
-        /// Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+        /// Removes an item to the <see cref="T:System.Collections.Generic.ICollection`1"/>.
         /// </summary>
         /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
-        public void Add(MessengerCategory item)
+        public void Add(TItem item)
         {
-            MessengerCategoryEventArgs messengerCategoryEventArgs = new MessengerCategoryEventArgs();
-            _eventOnPreCategoryAdd.Raise(this, messengerCategoryEventArgs);
-            _eventOnAnyPreCategoryAdd.Raise(this, messengerCategoryEventArgs);
+            EventingCollectionEventArgs<TItem> eventArgs = new EventingCollectionEventArgs<TItem>(item, EventingCollectionAction.Add);
+            _eventOnPreAdd.Raise(this, eventArgs);
+            _eventOnAnyPreAdd.Raise(this, eventArgs);
 
-            if (messengerCategoryEventArgs.Cancelled)
+            if (eventArgs.Cancelled)
                 return;
 
-            lock (_categories)
-                _categories.Add(item);
+            lock (_internalCollection)
+                _internalCollection.Add(item);
 
-            _eventOnCategoryAdd.Raise(this, messengerCategoryEventArgs);
-            _eventOnAnyCategoryAdd.Raise(this, messengerCategoryEventArgs);
+            _eventOnAdd.Raise(this, eventArgs);
+            _eventOnAnyAdd.Raise(this, eventArgs);
         }
 
         /// <summary>
@@ -171,8 +165,7 @@ namespace Bluedot.HabboServer.Habbos.Messenger
         /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only. </exception>
         public void Clear()
         {
-            lock (_categories)
-                _categories.Clear();
+            _internalCollection.Clear();
         }
 
         /// <summary>
@@ -182,19 +175,18 @@ namespace Bluedot.HabboServer.Habbos.Messenger
         /// true if <paramref name="item"/> is found in the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false.
         /// </returns>
         /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
-        public bool Contains(MessengerCategory item)
+        public bool Contains(TItem item)
         {
-            return _categories.Contains(item);
+            return _internalCollection.Contains(item);
         }
 
         /// <summary>
         /// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
         /// </summary>
         /// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param><param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param><exception cref="T:System.ArgumentNullException"><paramref name="array"/> is null.</exception><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than 0.</exception><exception cref="T:System.ArgumentException"><paramref name="array"/> is multidimensional.-or-The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1"/> is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.-or-Type <paramref name="T"/> cannot be cast automatically to the type of the destination <paramref name="array"/>.</exception>
-        public void CopyTo(MessengerCategory[] array, int arrayIndex)
+        public void CopyTo(TItem[] array, int arrayIndex)
         {
-            lock (_categories)
-                _categories.CopyTo(array, arrayIndex);
+            _internalCollection.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -204,25 +196,25 @@ namespace Bluedot.HabboServer.Habbos.Messenger
         /// true if <paramref name="item"/> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false. This method also returns false if <paramref name="item"/> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1"/>.
         /// </returns>
         /// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
-        public bool Remove(MessengerCategory item)
+        public bool Remove(TItem item)
         {
-            MessengerCategoryEventArgs messengerCategoryEventArgs = new MessengerCategoryEventArgs();
-            _eventOnPreCategoryRemove.Raise(this, messengerCategoryEventArgs);
-            _eventOnAnyPreCategoryRemove.Raise(this, messengerCategoryEventArgs);
+            EventingCollectionEventArgs<TItem> eventArgs = new EventingCollectionEventArgs<TItem>(item, EventingCollectionAction.Remove);
+            _eventOnPreRemove.Raise(this, eventArgs);
+            _eventOnAnyPreRemove.Raise(this, eventArgs);
 
-            if (messengerCategoryEventArgs.Cancelled)
+            if (eventArgs.Cancelled)
                 return false;
 
-            bool success;
-            lock (_categories)
-                success = _categories.Remove(item);
+            bool result;
+            lock (_internalCollection)
+                result = _internalCollection.Remove(item);
 
-            if (success)
+            if (result)
             {
-                _eventOnCategoryRemove.Raise(this, messengerCategoryEventArgs);
-                _eventOnAnyCategoryRemove.Raise(this, messengerCategoryEventArgs);
+                _eventOnRemove.Raise(this, eventArgs);
+                _eventOnAnyRemove.Raise(this, eventArgs);
             }
-            return success;
+            return result;
         }
 
         /// <summary>
@@ -233,7 +225,7 @@ namespace Bluedot.HabboServer.Habbos.Messenger
         /// </returns>
         public int Count
         {
-            get { return _categories.Count; }
+            get { return _internalCollection.Count; }
         }
 
         /// <summary>
@@ -244,7 +236,7 @@ namespace Bluedot.HabboServer.Habbos.Messenger
         /// </returns>
         public bool IsReadOnly
         {
-            get { return _categories.IsReadOnly; }
+            get { return _internalCollection.IsReadOnly; }
         }
     }
 }
