@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Bluedot.HabboServer.Collections;
+using Bluedot.HabboServer.Useful;
 
 namespace Bluedot.HabboServer.Habbos
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bluedot.HabboServer.Collections
+namespace Bluedot.HabboServer.Useful
 {
     public class EventingCollectionEventArgs<T> : EventArgs
     {

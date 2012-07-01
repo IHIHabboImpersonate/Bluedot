@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Bluedot.HabboServer.Useful;
 
 namespace Bluedot.HabboServer.Habbos.Messenger
 {
@@ -25,20 +27,20 @@ namespace Bluedot.HabboServer.Habbos.Messenger
         }
         #endregion
         #region Property: Friends
-        private HashSet<IBefriendable> _friends;
         /// <summary>
         /// 
         /// </summary>
-        public HashSet<IBefriendable> Friends
+        public ResettableLazy<EventingCollection<HashSet<IBefriendable>, IBefriendable>> Friends
         {
-            get
-            {
-                return _friends;
-            }
-            set
-            {
-                _friends = value;
-            }
+            get;
+            private set;
+        }
+        #endregion
+
+        #region Method: MessengerCategory (Constructor)
+        public MessengerCategory()
+        {
+            Friends = new ResettableLazy<EventingCollection<HashSet<IBefriendable>, IBefriendable>>(() => new EventingCollection<HashSet<IBefriendable>, IBefriendable>());
         }
         #endregion
     }

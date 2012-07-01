@@ -28,7 +28,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
-namespace SmartWeakEvent
+namespace Bluedot.HabboServer.Useful
 {
     /// <summary>
     /// A class for managing a weak event.

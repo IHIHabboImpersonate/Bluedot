@@ -23,7 +23,7 @@
 using System.Collections.Generic;
 #endregion
 
-namespace Bluedot.HabboServer.Cache
+namespace Bluedot.HabboServer.Useful
 {
     public delegate TValue InstanceGenerator<in TKey, out TValue>(TKey index);
 
@@ -37,7 +37,7 @@ namespace Bluedot.HabboServer.Cache
         /// <summary>
         ///   Stores the cached instances.
         /// </summary>
-        private readonly Dictionary<TKey, Nito.Utility.WeakReference<TValue>> _cache = new Dictionary<TKey, Nito.Utility.WeakReference<TValue>>();
+        private readonly Dictionary<TKey, WeakReference<TValue>> _cache = new Dictionary<TKey, WeakReference<TValue>>();
 
         public WeakCache(InstanceGenerator<TKey, TValue> instanceGenerator)
         {
@@ -72,7 +72,7 @@ namespace Bluedot.HabboServer.Cache
                     instance = _instanceGenerator.Invoke(index);
 
                     // And cache it.
-                    _cache.Add(index, new Nito.Utility.WeakReference<TValue>(instance));
+                    _cache.Add(index, new WeakReference<TValue>(instance));
                 }
 
                     // Return the newly cached instance.
@@ -84,7 +84,7 @@ namespace Bluedot.HabboServer.Cache
                 {
                     if (_cache.ContainsKey(index))
                         return;
-                    _cache.Add(index, new Nito.Utility.WeakReference<TValue>(value));
+                    _cache.Add(index, new WeakReference<TValue>(value));
                 }
             }
         }
@@ -107,7 +107,7 @@ namespace Bluedot.HabboServer.Cache
                 // Initilise a List<TKey> to hold the keys of the cache entries to remove.
                 // An initial size of _cache.Count will remove all need for resizing at the expence of some short lived RAM usage.
                 List<TKey> keysToRemove = new List<TKey>(_cache.Count);
-                foreach (KeyValuePair<TKey, Nito.Utility.WeakReference<TValue>> cacheEntry in _cache)
+                foreach (KeyValuePair<TKey, WeakReference<TValue>> cacheEntry in _cache)
                 {
                     TValue targetValue;
                     if(!cacheEntry.Value.TryGetTarget(out targetValue))

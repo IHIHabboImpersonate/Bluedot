@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SmartWeakEvent;
+using Bluedot.HabboServer.Useful;
 
-namespace Bluedot.HabboServer.Collections
+namespace Bluedot.HabboServer.Useful
 {
     public class EventingCollection<TCollection, TItem> : ICollection<TItem>
         where TCollection: ICollection<TItem>, new()

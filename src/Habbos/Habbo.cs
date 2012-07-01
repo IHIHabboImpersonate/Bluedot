@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using Bluedot.HabboServer.Collections;
+using Bluedot.HabboServer.Useful;
 using Bluedot.HabboServer.Database;
 using Bluedot.HabboServer.Habbos.Figure;
 using Bluedot.HabboServer.Habbos.Messenger;
 using Bluedot.HabboServer.Network;
 using Bluedot.HabboServer.Permissions;
-using SmartWeakEvent;
 
 namespace Bluedot.HabboServer.Habbos
 {
@@ -471,20 +470,10 @@ namespace Bluedot.HabboServer.Habbos
 
         #region IBefriendable Properties
         #region Property: MessengerCategories
-        private EventingCollection<HashSet<MessengerCategory>, MessengerCategory> _messengerCategories;
-        /// <summary>
-        /// 
-        /// </summary>
-        public EventingCollection<HashSet<MessengerCategory>, MessengerCategory> MessengerCategories
+        public ResettableLazy<EventingCollection<HashSet<MessengerCategory>, MessengerCategory>> MessengerCategories
         {
-            get
-            {
-                return _messengerCategories;
-            }
-            set
-            {
-                _messengerCategories = value;
-            }
+            get;
+            private set;
         }
         #endregion
         #region Property: Stalkable
@@ -735,6 +724,12 @@ namespace Bluedot.HabboServer.Habbos
         internal Habbo(GameSocket socket)
         {
             Socket = socket;
+        }
+        #endregion
+        #region Method: InitLazy
+        public void InitLazy()
+        {
+            MessengerCategories = new ResettableLazy<EventingCollection<HashSet<MessengerCategory>, MessengerCategory>>(() => new EventingCollection<HashSet<MessengerCategory>, MessengerCategory>());
         }
         #endregion
         #region Method: Login Merge

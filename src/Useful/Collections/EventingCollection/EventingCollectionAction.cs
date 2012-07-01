@@ -1,4 +1,4 @@
-﻿namespace Bluedot.HabboServer.Collections
+﻿namespace Bluedot.HabboServer.Useful
 {
     public enum EventingCollectionAction
     {

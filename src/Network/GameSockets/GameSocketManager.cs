@@ -2,7 +2,7 @@
 using System.Net;
 using Nito.Async;
 using Nito.Async.Sockets;
-using SmartWeakEvent;
+using Bluedot.HabboServer.Useful;
 
 namespace Bluedot.HabboServer.Network
 {

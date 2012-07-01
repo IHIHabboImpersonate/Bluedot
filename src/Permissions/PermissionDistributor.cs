@@ -24,8 +24,8 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Bluedot.HabboServer.Cache;
 using Bluedot.HabboServer.Database;
+using Bluedot.HabboServer.Useful;
 
 #endregion
 

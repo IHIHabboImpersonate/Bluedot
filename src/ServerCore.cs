@@ -12,7 +12,7 @@ using Bluedot.HabboServer.Database;
 using Bluedot.HabboServer.Network.WebAdmin;
 using Bluedot.HabboServer.Permissions;
 using MySql.Data.MySqlClient;
-using SmartWeakEvent;
+using Bluedot.HabboServer.Useful;
 using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
 
