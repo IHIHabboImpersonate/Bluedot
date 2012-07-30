@@ -102,15 +102,5 @@ namespace Bluedot.HabboServer.Habbos.Messenger
         }
         #endregion
         #endregion
-
-        #region Property: MessengerCategories
-        /// <summary>
-        /// 
-        /// </summary>
-        ResettableLazy<EventingCollection<HashSet<MessengerCategory>, MessengerCategory>> MessengerCategories
-        {
-            get;
-        }
-        #endregion
     }
 }

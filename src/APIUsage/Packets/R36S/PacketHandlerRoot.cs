@@ -10,6 +10,7 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
             CoreManager.ServerCore.GameSocketManager.OnPostIncomingConnection += RegisterLoginHandlers;
             Habbo.OnAnyLogin += SendAuthenticationOkay;
             Habbo.OnAnyLogin += RegisterHabboHandlers;
+            Habbo.OnAnyLogin += RegisterMessengerHandlers;
         }
 
         private static void RegisterLoginHandlers(object source, GameSocketConnectionEventArgs args)
@@ -24,6 +25,10 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
             (source as Habbo).Socket.PacketHandlers[7, GameSocketMessageHandlerPriority.DefaultAction] += ProcessHabboInfoRequest;
             (source as Habbo).Socket.PacketHandlers[8, GameSocketMessageHandlerPriority.DefaultAction] += ProcessGetVolumeLevel;
             (source as Habbo).Socket.PacketHandlers[157, GameSocketMessageHandlerPriority.DefaultAction] += ProcessBadgeListingRequest;
+        }
+        private static void RegisterMessengerHandlers(object source, HabboEventArgs args)
+        {
+            (source as Habbo).Socket.PacketHandlers[12, GameSocketMessageHandlerPriority.DefaultAction] += ProcessMessengerInit;
         }
     }
 }

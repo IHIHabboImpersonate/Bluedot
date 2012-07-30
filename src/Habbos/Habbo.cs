@@ -468,7 +468,6 @@ namespace Bluedot.HabboServer.Habbos
         }
         #endregion
 
-        #region IBefriendable Properties
         #region Property: MessengerCategories
         public ResettableLazy<EventingCollection<HashSet<MessengerCategory>, MessengerCategory>> MessengerCategories
         {
@@ -476,6 +475,7 @@ namespace Bluedot.HabboServer.Habbos
             private set;
         }
         #endregion
+        #region IBefriendable Properties
         #region Property: Stalkable
         /// <summary>
         /// 
@@ -711,6 +711,7 @@ namespace Bluedot.HabboServer.Habbos
                 if (dbSession.Habbos.Any(habbo => habbo.Id == id))
                     Id = id;
             }
+            InitLazy();
         }
         internal Habbo(string username)
         {
@@ -720,6 +721,7 @@ namespace Bluedot.HabboServer.Habbos
                 Id = habboData.Id;
                 _username = habboData.Username;
             }
+            InitLazy();
         }
         internal Habbo(GameSocket socket)
         {
