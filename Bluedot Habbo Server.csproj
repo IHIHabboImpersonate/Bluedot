@@ -74,6 +74,8 @@
     <Compile Include="src\APIUsage\Packets\R36S\LoginSenders\MConnectionClosed.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\LoginSenders\MSessionParams.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\LoginSenders\MSetupEncryption.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\MessengerHandlers\ProcessMessengerInit.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\MessengerSenders\MMessengerInit.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\PacketHandlerRoot.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\SubscriptionHandlers\ProcessSubscriptionDataRequest.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\SubscriptionSenders\MSubscriptionData.cs" />
@@ -94,6 +96,11 @@
     <Compile Include="src\Habbos\Badges\BadgeType.cs" />
     <Compile Include="src\Habbos\Badges\BadgeTypeDistributor.cs" />
     <Compile Include="src\Subscriptions\SubscriptionCollection.cs" />
+    <Compile Include="src\Habbos\HabboEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Habbos\Messenger\IBefriendable.cs" />
+    <Compile Include="src\Habbos\Messenger\MessengerCategory.cs" />
     <Compile Include="src\Network\WebAdmin\HttpPathHandler.cs" />
     <Compile Include="src\Network\WebAdmin\HttpRequestEventArgs.cs" />
     <Compile Include="src\Network\WebAdmin\WebAdminManager.cs" />
@@ -102,9 +109,13 @@
     <Compile Include="src\Permissions\PermissionGroup.cs" />
     <Compile Include="src\Permissions\PermissionState.cs" />
     <Compile Include="src\Subscriptions\SubscriptionData.cs" />
-    <Compile Include="src\Useful Types\Caching\WeakCache.cs" />
-    <Compile Include="src\Useful Types\Collections\ReadOnlyDictionary.cs" />
-    <Compile Include="src\Useful Types\FastSmartWeakEvent.cs" />
+    <Compile Include="src\Useful\Caching\WeakCache.cs" />
+    <Compile Include="src\Useful\Collections\EventingCollection\EventingCollection.cs" />
+    <Compile Include="src\Useful\Collections\EventingCollection\EventingCollectionAction.cs" />
+    <Compile Include="src\Useful\Collections\EventingCollection\EventingCollectionEventArgs.cs" />
+    <Compile Include="src\Useful\Collections\EventingCollection\EventingCollectionEventHandler.cs" />
+    <Compile Include="src\Useful\Collections\ReadOnlyDictionary.cs" />
+    <Compile Include="src\Useful\FastSmartWeakEvent.cs" />
     <Compile Include="src\Habbos\FigureParts\Body.cs" />
     <Compile Include="src\Habbos\FigureParts\EyeAccessory.cs" />
     <Compile Include="src\Habbos\FigureParts\FaceAccessory.cs" />
@@ -122,10 +133,8 @@
     <Compile Include="src\Habbos\FigureParts\WaistAccessory.cs" />
     <Compile Include="src\Habbos\Habbo.cs" />
     <Compile Include="src\Habbos\HabboDistributor\HabboDistributor.cs" />
-    <Compile Include="src\Habbos\HabboEventArgs.cs" />
     <Compile Include="src\Habbos\HabboEventHandler.cs" />
     <Compile Include="src\Habbos\HabboFigure.cs" />
-    <Compile Include="src\Habbos\Messenger\HabboMessenger.cs" />
     <Compile Include="src\Install\Category.cs" />
     <Compile Include="src\Install\InstallerCore.cs" />
     <Compile Include="src\Install\InputException.cs" />
@@ -161,8 +170,9 @@
     <Compile Include="src\Permissions\PermissionDistributor.cs" />
     <Compile Include="src\ServerCore.cs" />
     <Compile Include="src\StandardOut.cs" />
-    <Compile Include="src\Useful Types\Nito\SafeGCHandle.cs" />
-    <Compile Include="src\Useful Types\Nito\WeakReference.cs" />
+    <Compile Include="src\Useful\Nito\SafeGCHandle.cs" />
+    <Compile Include="src\Useful\Nito\WeakReference.cs" />
+    <Compile Include="src\Useful\ResettableLazy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />

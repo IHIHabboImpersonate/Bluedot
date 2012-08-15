@@ -2,7 +2,7 @@
 //     Copyright (c) 2009 Nito Programs.
 // </copyright>
 
-namespace Nito.Utility
+namespace Bluedot.HabboServer.Useful
 {
     using System;
     using System.Runtime.InteropServices;

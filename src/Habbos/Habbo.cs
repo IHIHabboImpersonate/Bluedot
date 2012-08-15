@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using Bluedot.HabboServer.Collections;
+using Bluedot.HabboServer.Useful;
 using Bluedot.HabboServer.Database;
 using Bluedot.HabboServer.Habbos.Figure;
 using Bluedot.HabboServer.Habbos.Messenger;
 using Bluedot.HabboServer.Network;
 using Bluedot.HabboServer.Permissions;
 using Bluedot.HabboServer.Habbos;
-using SmartWeakEvent;
 
 namespace Bluedot.HabboServer.Habbos
 {
-    public class Habbo : IMessageable, IPersistable
+    public class Habbo : IMessageable, IPersistable, IBefriendable
     {
         #region Events
         #region Event: OnPreLogin
@@ -469,6 +468,46 @@ namespace Bluedot.HabboServer.Habbos
             }
         }
         #endregion
+
+        #region Property: MessengerCategories
+        public ResettableLazy<EventingCollection<HashSet<MessengerCategory>, MessengerCategory>> MessengerCategories
+        {
+            get;
+            private set;
+        }
+        #endregion
+        #region IBefriendable Properties
+        #region Property: Stalkable
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Stalkable
+        {
+            get;
+            private set;
+        }
+        #endregion
+        #region Property: Requestable
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Requestable
+        {
+            get;
+            private set;
+        }
+        #endregion
+        #region Property: Inviteable
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Inviteable
+        {
+            get;
+            private set;
+        }
+        #endregion
+        #endregion
         
         #region Property: Socket
         /// <summary>
@@ -478,22 +517,6 @@ namespace Bluedot.HabboServer.Habbos
         {
             get;
             private set;
-        }
-        #endregion
-        #region Property: Messenger
-        private HabboMessenger _messenger;
-        /// <summary>
-        /// TODO: Document
-        /// </summary>
-        /// <remarks>Uses lazy loading.</remarks>
-        internal HabboMessenger Messenger
-        {
-            get
-            {
-                if (_messenger == null)
-                    _messenger = new HabboMessenger(this);
-                return _messenger;
-            }
         }
         #endregion
 
@@ -684,21 +707,10 @@ namespace Bluedot.HabboServer.Habbos
         /// <summary>
         /// 
         /// </summary>
-        public SubscriptionCollection Subscriptions
+        public ResettableLazy<SubscriptionCollection> Subscriptions
         {
-            get
-            {
-                // TODO: Thread Safety
-                if (_subscriptions == null)
-                    _subscriptions = new SubscriptionCollection(this);
-                return _subscriptions;
-            }
-            set
-            {
-                // TODO: Thread Safety
-                if (value == null)
-                    _subscriptions = null;
-            }
+            get;
+            private set;
         }
         #endregion
         #endregion
@@ -712,6 +724,7 @@ namespace Bluedot.HabboServer.Habbos
                 if (dbSession.Habbos.Any(habbo => habbo.Id == id))
                     Id = id;
             }
+            InitLazy();
         }
         internal Habbo(string username)
         {
@@ -721,10 +734,18 @@ namespace Bluedot.HabboServer.Habbos
                 Id = habboData.Id;
                 _username = habboData.Username;
             }
+            InitLazy();
         }
         internal Habbo(GameSocket socket)
         {
             Socket = socket;
+        }
+        #endregion
+        #region Method: InitLazy
+        public void InitLazy()
+        {
+            MessengerCategories = new ResettableLazy<EventingCollection<HashSet<MessengerCategory>, MessengerCategory>>(() => new EventingCollection<HashSet<MessengerCategory>, MessengerCategory>());
+            Subscriptions = new ResettableLazy<SubscriptionCollection>(() => new SubscriptionCollection(this));
         }
         #endregion
         #region Method: Login Merge

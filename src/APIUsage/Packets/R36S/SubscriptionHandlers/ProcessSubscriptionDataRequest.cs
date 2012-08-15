@@ -13,7 +13,8 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
             if (subscriptionName != "club_habbo")
                 return;
 
-            SubscriptionData data = sender.Subscriptions[subscriptionName];
+
+            SubscriptionData data = sender.Subscriptions.Value[subscriptionName];
 
             new MSubscriptionData
             {

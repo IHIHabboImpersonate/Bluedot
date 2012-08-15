@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Net;
-using Bluedot.HabboServer.Cache;
-using Bluedot.HabboServer.Database;
+using Bluedot.HabboServer.Useful;
 
 namespace Bluedot.HabboServer.Habbos
 {
