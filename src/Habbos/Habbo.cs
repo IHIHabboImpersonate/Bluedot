@@ -8,6 +8,7 @@ using Bluedot.HabboServer.Habbos.Figure;
 using Bluedot.HabboServer.Habbos.Messenger;
 using Bluedot.HabboServer.Network;
 using Bluedot.HabboServer.Permissions;
+using Bluedot.HabboServer.Habbos;
 using SmartWeakEvent;
 
 namespace Bluedot.HabboServer.Habbos
@@ -674,6 +675,29 @@ namespace Bluedot.HabboServer.Habbos
                 // Setting to null causes the lazy loading to be reset.
                 if (value == null)
                     _badges = null;
+            }
+        }
+        #endregion
+        
+        #region Property: Subscriptions
+        private SubscriptionCollection _subscriptions;
+        /// <summary>
+        /// 
+        /// </summary>
+        public SubscriptionCollection Subscriptions
+        {
+            get
+            {
+                // TODO: Thread Safety
+                if (_subscriptions == null)
+                    _subscriptions = new SubscriptionCollection(this);
+                return _subscriptions;
+            }
+            set
+            {
+                // TODO: Thread Safety
+                if (value == null)
+                    _subscriptions = null;
             }
         }
         #endregion

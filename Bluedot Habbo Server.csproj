@@ -67,7 +67,6 @@
     <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MVolumeLevel.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MCreditBalance.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MHabboData.cs" />
-    <Compile Include="src\APIUsage\Packets\R36S\LoginHandlers\SendAuthenticationOkay.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\LoginHandlers\ProcessSSOTicket.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\LoginHandlers\ProcessSessionRequest.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\LoginHandlers\ProcessEncryptionRequest.cs" />
@@ -76,6 +75,8 @@
     <Compile Include="src\APIUsage\Packets\R36S\LoginSenders\MSessionParams.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\LoginSenders\MSetupEncryption.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\PacketHandlerRoot.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\SubscriptionHandlers\ProcessSubscriptionDataRequest.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\SubscriptionSenders\MSubscriptionData.cs" />
     <Compile Include="src\Configuration\XMLConfig.cs" />
     <Compile Include="src\CoreManager.cs" />
     <Compile Include="src\Database\IPersistable.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="src\Habbos\Badges\BadgeSlot.cs" />
     <Compile Include="src\Habbos\Badges\BadgeType.cs" />
     <Compile Include="src\Habbos\Badges\BadgeTypeDistributor.cs" />
+    <Compile Include="src\Subscriptions\SubscriptionCollection.cs" />
     <Compile Include="src\Network\WebAdmin\HttpPathHandler.cs" />
     <Compile Include="src\Network\WebAdmin\HttpRequestEventArgs.cs" />
     <Compile Include="src\Network\WebAdmin\WebAdminManager.cs" />
@@ -99,6 +101,7 @@
     <Compile Include="src\Permissions\Permission.cs" />
     <Compile Include="src\Permissions\PermissionGroup.cs" />
     <Compile Include="src\Permissions\PermissionState.cs" />
+    <Compile Include="src\Subscriptions\SubscriptionData.cs" />
     <Compile Include="src\Useful Types\Caching\WeakCache.cs" />
     <Compile Include="src\Useful Types\Collections\ReadOnlyDictionary.cs" />
     <Compile Include="src\Useful Types\FastSmartWeakEvent.cs" />
