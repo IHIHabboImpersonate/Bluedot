@@ -65,12 +65,9 @@
     <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessBalanceRequest.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessHabboInfoRequest.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessGetVolumeLevel.cs" />
-    <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessSubscriptionInfoRequest.cs" />
-    <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MSubscriptionInfo.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MVolumeLevel.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MCreditBalance.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboSenders\MHabboData.cs" />
-    <Compile Include="src\APIUsage\Packets\R36S\LoginHandlers\SendAuthenticationOkay.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\LoginHandlers\ProcessSSOTicket.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\LoginHandlers\ProcessSessionRequest.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\LoginHandlers\ProcessEncryptionRequest.cs" />
@@ -79,6 +76,8 @@
     <Compile Include="src\APIUsage\Packets\R36S\LoginSenders\MSessionParams.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\LoginSenders\MSetupEncryption.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\PacketHandlerRoot.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\SubscriptionHandlers\ProcessSubscriptionDataRequest.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\SubscriptionSenders\MSubscriptionData.cs" />
     <Compile Include="src\Configuration\XMLConfig.cs" />
     <Compile Include="src\CoreManager.cs" />
     <Compile Include="src\Database\IPersistable.cs" />

@@ -623,20 +623,16 @@ namespace Bluedot.HabboServer.Habbos
         {
             get
             {
-                lock(_subscriptions)
-                {
-                    if(_subscriptions == null)
-                        _subscriptions = new SubscriptionCollection(this);
-                    return _subscriptions;
-                }
+                // TODO: Thread Safety
+                if (_subscriptions == null)
+                    _subscriptions = new SubscriptionCollection(this);
+                return _subscriptions;
             }
             set
             {
-                lock (_subscriptions)
-                {
-                    if (value == null)
-                        _subscriptions = null;
-                }
+                // TODO: Thread Safety
+                if (value == null)
+                    _subscriptions = null;
             }
         }
         #endregion

@@ -4,7 +4,7 @@ namespace Bluedot.HabboServer.Habbos
 {
     public class SubscriptionCollection
     {
-        private Dictionary<string, SubscriptionData> _subscriptionData;
+        private readonly Dictionary<string, SubscriptionData> _subscriptionData;
 
         #region Property: Subscriber
         /// <summary>
