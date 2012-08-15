@@ -59,6 +59,8 @@
   <ItemGroup>
     <Compile Include="src\APIUsage\ApiCallerRoot.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\Extensions.cs" />
+    <Compile Include="src\APIUsage\Figures\Body\Body180.cs" />
+    <Compile Include="src\APIUsage\Figures\FigureRoot.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessBadgeListingRequest.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessBalanceRequest.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\HabboHandlers\ProcessHabboInfoRequest.cs" />
@@ -120,7 +122,7 @@
     <Compile Include="src\Habbos\FigureParts\EyeAccessory.cs" />
     <Compile Include="src\Habbos\FigureParts\FaceAccessory.cs" />
     <Compile Include="src\Habbos\FigureParts\FigureFactory.cs" />
-    <Compile Include="src\Habbos\FigureParts\FigurePart.cs" />
+    <Compile Include="src\Habbos\FigureParts\FigureSet.cs" />
     <Compile Include="src\Habbos\FigureParts\FigureWaistAccessory.cs" />
     <Compile Include="src\Habbos\FigureParts\Hair.cs" />
     <Compile Include="src\Habbos\FigureParts\Hat.cs" />

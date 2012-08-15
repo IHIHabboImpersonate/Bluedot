@@ -30,11 +30,11 @@ namespace Bluedot.HabboServer.Habbos.Figure
 {
     public class HabboFigureFactory
     {
-        private readonly Dictionary<ushort, Type> _figureModelIDs;
+        private readonly Dictionary<ushort, Type> _figureSetIDs;
 
         public HabboFigureFactory()
         {
-            _figureModelIDs = new Dictionary<ushort, Type>();
+            _figureSetIDs = new Dictionary<ushort, Type>();
         }
 
         public HabboFigure Parse(string figureString, bool gender)
@@ -46,97 +46,96 @@ namespace Bluedot.HabboServer.Habbos.Figure
                                                {
                                                    Gender = gender
                                                };
+            
+            // Split the input string into set types.
+            string[] setTypeStrings = figureString.Split(new[] {'.'});
 
-            // Split the input string into parts of the figure.
-            string[] partStringArray = figureString.Split(new[] {'.'});
-
-            // For each part of the figure...
-            foreach (string partString in partStringArray)
+            // For each set type...
+            foreach (string setTypeString in setTypeStrings)
             {
-                // Split it into part type, model and colours.
-                string[] detailsArray = partString.Split(new[] {'-'});
+                // Split it into set type ID and colours.
+                string[] setStrings = setTypeString.Split(new[] { '-' });
 
 
-                ushort modelID;
+                ushort setID;
 
-                // Parse the ModelID.
-                if (!ushort.TryParse(detailsArray[1], out modelID))
-                    throw new FormatException("Figure ModelID is not a valid ushort in '" + partString + "'.");
+                // Parse the set ID.
+                if (!ushort.TryParse(setStrings[1], out setID))
+                    throw new FormatException("Figure set ID is not a valid ushort in '" + setTypeString + "'.");
 
-                // Make sure the ModelID is valid.
-                if (!_figureModelIDs.ContainsKey(modelID))
-                    throw new KeyNotFoundException("Figure ModelID " + modelID + " is not a valid figure part model.");
+                // Make sure the set ID is registered.
+                if (!_figureSetIDs.ContainsKey(setID))
+                    throw new KeyNotFoundException("Figure set ID " + setID + " is not registered.");
 
-                // Create a new instance of the figure part.
-                FigurePart part = _figureModelIDs[modelID]
+                // Create a new instance of the set type.
+                FigureSet set = _figureSetIDs[setID]
                                       .GetConstructor(new Type[0])
-                                      .Invoke(new object[0]) as FigurePart;
+                                      .Invoke(new object[0]) as FigureSet;
 
                 // Was a primary colour provided?
-                if (detailsArray.Length > 2)
+                if (setStrings.Length > 2)
                 {
                     ushort colourID;
 
-                    // Parse ColorID and validate it.
-                    if (!ushort.TryParse(detailsArray[2], out colourID))
-                        throw new FormatException("Figure ColourID is not a valid ushort in '" + partString + "'.");
+                    // Parse ColourID and validate it.
+                    if (!ushort.TryParse(setStrings[2], out colourID))
+                        throw new FormatException("Figure Colour ID is not a valid ushort in '" + setTypeString + "'.");
 
-                    //Set PrimaryColour for this part.
-                    part.PrimaryColour = colourID;
+                    //Set PrimaryColour for this set.
+                    set.PrimaryColour = colourID;
 
                     // Was a secondary colour provided?
-                    if (detailsArray.Length > 3)
+                    if (setStrings.Length > 3)
                     {
                         // Parse ColourID and validate it.
-                        if (!ushort.TryParse(detailsArray[3], out colourID))
-                            throw new FormatException("Figure ColourID is not a valid ushort in '" + partString + "'.");
+                        if (!ushort.TryParse(setStrings[3], out colourID))
+                            throw new FormatException("Figure ColourID is not a valid ushort in '" + setTypeString + "'.");
 
-                        // Set the SecondaryColour for this part.
-                        part.SecondaryColour = colourID;
+                        // Set the SecondaryColour for this set.
+                        set.SecondaryColour = colourID;
                     }
                 }
 
 
-                // This part is a...
-                switch (detailsArray[0])
+                // This set is a...
+                switch (setStrings[0])
                 {
                         // Shirt
                     case "hd":
                         {
                             // Verify this model is a shirt.
-                            if (!(part is Body))
-                                throw new InvalidCastException("Figure ModelID " + modelID +
-                                                               " is a valid figure model but not a valid body.");
+                            if (!(set is Body))
+                                throw new InvalidCastException("Figure set ID " + setID +" is a valid figure model but not a valid body set.");
 
-                            // Apply the part to the HabboFigure
-                            figureInProgress.Body = part as Body;
+                            // Apply the set to the HabboFigure
+                            figureInProgress.Body = set as Body;
                             break;
                         }
                     default:
-                        continue; // Not a valid part? Ignore it.
+                        continue; // Not a valid set? Ignore it.
                 }
             }
 
             return figureInProgress;
         }
 
-        internal HabboFigureFactory RegisterModelID(Type part)
+        internal HabboFigureFactory RegisterSet(Type set)
         {
-            if (part.IsSubclassOf(typeof (FigurePart)))
+            if (set.IsSubclassOf(typeof (FigureSet)))
             {
-                ushort modelID = (part.GetConstructors()[0].Invoke(new object[0]) as FigurePart).ModelId;
-                _figureModelIDs.Add(modelID, part);
+                ushort setID = (set.GetConstructors()[0].Invoke(new object[0]) as FigureSet).Id;
+                _figureSetIDs.Add(setID, set);
             }
             return this;
         }
 
         internal HabboFigureFactory UnregisterModelID(Type part)
         {
-            if (part.IsSubclassOf(typeof (FigurePart)))
+            if (part.IsSubclassOf(typeof (FigureSet)))
             {
-                ushort modelID = (part.GetConstructors()[0].Invoke(new object[0]) as FigurePart).ModelId;
-                if (_figureModelIDs.ContainsKey(modelID))
-                    _figureModelIDs.Remove(modelID);
+                ushort modelID = (part.GetConstructors()[0].Invoke(new object[0]) as FigureSet).Id;
+                if (_figureSetIDs.ContainsKey(modelID))
+                    _figureSetIDs.Remove(modelID);
             }
             return this;
         }

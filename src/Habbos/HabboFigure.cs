@@ -142,7 +142,7 @@ namespace Bluedot.HabboServer.Habbos.Figure
         #endregion
 
         #region Property: SwimFigure
-        private byte[] _swimFigure;
+        private byte[] _swimFigure = new byte[]{128, 128, 128};
         /// <summary>
         ///   A byte array containing 3 values.
         ///   The values are the RGB colour values of the swim figure.

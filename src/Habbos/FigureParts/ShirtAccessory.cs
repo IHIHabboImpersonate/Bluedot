@@ -23,7 +23,7 @@ using System.Text;
 
 namespace Bluedot.HabboServer.Habbos.Figure
 {
-    public abstract class ShirtAccessory : FigurePart
+    public abstract class ShirtAccessory : FigureSet
     {
         public override string ToString(bool prefixRequired)
         {
@@ -32,7 +32,7 @@ namespace Bluedot.HabboServer.Habbos.Figure
             // TODO: Correct these part characters below
             sb.Append(prefixRequired ? ".HERE-" : "HERE-");
 
-            sb.Append(ModelId);
+            sb.Append(Id);
 
             if (PrimaryColour != 0)
             {

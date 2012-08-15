@@ -21,7 +21,7 @@
 
 namespace Bluedot.HabboServer.Habbos.Figure
 {
-    public abstract class FigurePart
+    public abstract class FigureSet
     {
         #region Property: PrimaryColour
         /// <summary>
@@ -44,17 +44,17 @@ namespace Bluedot.HabboServer.Habbos.Figure
         }
         #endregion
         
-        #region Property: ModelId
+        #region Property: Id
         /// <summary>
-        /// The model ID of this figure part.
+        /// The ID of this figure set.
         /// </summary>
-        public abstract ushort ModelId
+        public abstract ushort Id
         {
             get;
         }
         #endregion
         
-        #region Property: ColourCount\
+        #region Property: ColourCount
         /// <summary>
         /// 
         /// </summary>

@@ -2,7 +2,7 @@
 using Bluedot.HabboServer.Habbos.Figure;
 namespace Bluedot.HabboServer.Habbos
 {
-    public abstract class FigureWaistAccessory : FigurePart
+    public abstract class FigureWaistAccessory : FigureSet
     {
         public override string ToString(bool prefixRequired)
         {
@@ -11,7 +11,7 @@ namespace Bluedot.HabboServer.Habbos
             // TODO: Correct these part characters below
             sb.Append(prefixRequired ? ".HERE-" : "HERE-");
 
-            sb.Append(ModelId);
+            sb.Append(Id);
 
             if (PrimaryColour != 0)
             {
