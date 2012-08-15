@@ -8,8 +8,12 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
         public static void Start()
         {
             CoreManager.ServerCore.GameSocketManager.OnPostIncomingConnection += RegisterLoginHandlers;
-            Habbo.OnAnyLogin += SendAuthenticationOkay;
+            
+            // Register the handlers for logged in clients.
             Habbo.OnAnyLogin += RegisterHabboHandlers;
+
+            // Inform the client of a successful login.
+            Habbo.OnAnyLogin += (source, e) => new MAuthenticationOkay().Send(source as IMessageable);
         }
 
         private static void RegisterLoginHandlers(object source, GameSocketConnectionEventArgs args)
