@@ -14,60 +14,6 @@ namespace Bluedot.HabboServer.Habbos
 {
     public class Habbo : IMessageable, IPersistable, IBefriendable
     {
-        #region Events
-        #region Event: OnPreLogin
-        private readonly FastSmartWeakEvent<HabboEventHandler> _eventOnPreLogin = new FastSmartWeakEvent<HabboEventHandler>();
-        /// <summary>
-        /// Invoked when the LoggedIn property is attempted to be changed to true.
-        /// Cancelling this event will cause the connected client to be disconnected 
-        /// and the value of LoggedIn will remain false.
-        /// </summary>
-        public event HabboEventHandler OnPreLogin
-        {
-            add { _eventOnPreLogin.Add(value); }
-            remove { _eventOnPreLogin.Remove(value); }
-        }
-        #endregion
-        #region Event: OnAnyPreLogin
-        private static readonly FastSmartWeakEvent<HabboEventHandler> _eventOnAnyPreLogin = new FastSmartWeakEvent<HabboEventHandler>();
-        /// <summary>
-        /// Invoked when the LoggedIn property is attempted to be changed to true for any Habbo.
-        /// Cancelling this event will cause the connected client to be disconnected 
-        /// and the value of LoggedIn will remain false.
-        /// </summary>
-        public static event HabboEventHandler OnAnyPreLogin
-        {
-            add { _eventOnAnyPreLogin.Add(value); }
-            remove { _eventOnAnyPreLogin.Remove(value); }
-        }
-        #endregion
-
-        #region Event: OnLogin
-        private readonly FastSmartWeakEvent<HabboEventHandler> _eventOnLogin = new FastSmartWeakEvent<HabboEventHandler>();
-        /// <summary>
-        /// Invoked when the LoggedIn property is changed to true.
-        /// Cancelling this event has no affect.
-        /// </summary>
-        public event HabboEventHandler OnLogin
-        {
-            add { _eventOnLogin.Add(value); }
-            remove { _eventOnLogin.Remove(value); }
-        }
-        #endregion
-        #region Event: OnAnyLogin
-        private static readonly FastSmartWeakEvent<HabboEventHandler> _eventOnAnyLogin = new FastSmartWeakEvent<HabboEventHandler>();
-        /// <summary>
-        /// Invoked when the LoggedIn property is changed to true for any Habbo.
-        /// Cancelling this event has no affect.
-        /// </summary>
-        public static event HabboEventHandler OnAnyLogin
-        {
-            add { _eventOnAnyLogin.Add(value); }
-            remove { _eventOnAnyLogin.Remove(value); }
-        }
-        #endregion
-        #endregion
-        
         #region Properties
         #region Property: Id
         /// <summary>
@@ -313,8 +259,8 @@ namespace Bluedot.HabboServer.Habbos
                     if (!_loggedIn && value)
                     {
                         HabboEventArgs habboEventArgs = new HabboEventArgs();
-                        _eventOnPreLogin.Raise(this, habboEventArgs);
-                        _eventOnAnyPreLogin.Raise(this, habboEventArgs);
+
+                        CoreManager.ServerCore.EventManager.Fire("habbo_login:before", this, habboEventArgs);
 
                         if (habboEventArgs.Cancelled)
                         {
@@ -324,8 +270,7 @@ namespace Bluedot.HabboServer.Habbos
 
                         LastAccess = DateTime.Now;
 
-                        _eventOnLogin.Raise(this, habboEventArgs);
-                        _eventOnAnyLogin.Raise(this, habboEventArgs);
+                        CoreManager.ServerCore.EventManager.Fire("habbo_login:after", this, habboEventArgs);
                     }
                     _loggedIn = value;
                 }

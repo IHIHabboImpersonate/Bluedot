@@ -6,6 +6,7 @@ using System.Net;
 using System.Xml;
 using Bluedot.HabboServer.ApiUsage;
 using Bluedot.HabboServer.Configuration;
+using Bluedot.HabboServer.Events;
 using Bluedot.HabboServer.Habbos.Figure;
 using Bluedot.HabboServer.Install;
 using Bluedot.HabboServer.Database;
@@ -20,21 +21,6 @@ namespace Bluedot.HabboServer
 {
     internal class ServerCore
     {
-        #region Events
-        #region Event: OnShutdown
-        private readonly FastSmartWeakEvent<EventHandler> _eventOnShutdown = new FastSmartWeakEvent<EventHandler>();
-        /// <summary>
-        /// Invoked when the server is closing.
-        /// All last minute cleanup should listen on this.
-        /// </summary>
-        public event EventHandler OnShutdown
-        {
-            add { _eventOnShutdown.Add(value); }
-            remove { _eventOnShutdown.Remove(value); }
-        }
-        #endregion
-        #endregion
-
         #region Fields
         #region Field: _databaseConnection
         private EntityConnection _databaseConnection;
@@ -103,9 +89,25 @@ namespace Bluedot.HabboServer
             private set;
         }
         #endregion
+        #region Property: EventManager
+        /// <summary>
+        /// TODO: Add summary for property
+        /// </summary>
+        public EventManager EventManager
+        {
+            get;
+            private set;
+        }
+        #endregion
         #endregion
 
         #region Methods
+        #region Method: ServerCore (Constructor)
+        public ServerCore()
+        {
+            EventManager = new EventManager();
+        }
+        #endregion
         #region Method: Boot
         internal void Boot(string configPath)
         {
@@ -585,7 +587,7 @@ namespace Bluedot.HabboServer
                     StandardOut.Hidden = false;
                 }
 
-                _eventOnShutdown.Raise(this, EventArgs.Empty);
+                EventManager.Fire("shutdown", this, EventArgs.Empty);
 
                 _databaseConnection.Dispose();
 

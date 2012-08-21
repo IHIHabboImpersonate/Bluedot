@@ -7,105 +7,8 @@ using Bluedot.HabboServer.Useful;
 namespace Bluedot.HabboServer.Useful
 {
     public class EventingCollection<TCollection, TItem> : ICollection<TItem>
-        where TCollection: ICollection<TItem>, new()
+        where TCollection: ICollection<TItem>, new() 
     {
-        #region Events
-        #region Events: Add
-        #region Event: OnPreAdd
-        private readonly FastSmartWeakEvent<EventingCollectionEventHandler<TItem>> _eventOnPreAdd = new FastSmartWeakEvent<EventingCollectionEventHandler<TItem>>();
-        /// <summary>
-        /// 
-        /// </summary>
-        public event EventingCollectionEventHandler<TItem> OnPreAdd
-        {
-            add { _eventOnPreAdd.Add(value); }
-            remove { _eventOnPreAdd.Remove(value); }
-        }
-        #endregion
-        #region Event: OnAnyPreAdd
-        private static readonly FastSmartWeakEvent<EventingCollectionEventHandler<TItem>> _eventOnAnyPreAdd = new FastSmartWeakEvent<EventingCollectionEventHandler<TItem>>();
-        /// <summary>
-        /// 
-        /// </summary>
-        public static event EventingCollectionEventHandler<TItem> OnAnyPreAdd
-        {
-            add { _eventOnAnyPreAdd.Add(value); }
-            remove { _eventOnAnyPreAdd.Remove(value); }
-        }
-        #endregion
-
-        #region Event: OnAdd
-        private readonly FastSmartWeakEvent<EventingCollectionEventHandler<TItem>> _eventOnAdd = new FastSmartWeakEvent<EventingCollectionEventHandler<TItem>>();
-        /// <summary>
-        /// 
-        /// </summary>
-        public event EventingCollectionEventHandler<TItem> OnAdd
-        {
-            add { _eventOnAdd.Add(value); }
-            remove { _eventOnAdd.Remove(value); }
-        }
-        #endregion
-        #region Event: OnAnyAdd
-        private static readonly FastSmartWeakEvent<EventingCollectionEventHandler<TItem>> _eventOnAnyAdd = new FastSmartWeakEvent<EventingCollectionEventHandler<TItem>>();
-        /// <summary>
-        /// 
-        /// </summary>
-        public static event EventingCollectionEventHandler<TItem> OnAnyAdd
-        {
-            add { _eventOnAnyAdd.Add(value); }
-            remove { _eventOnAnyAdd.Remove(value); }
-        }
-        #endregion
-        #endregion
-        #region Events: Remove
-        #region Event: OnPreRemove
-        private readonly FastSmartWeakEvent<EventingCollectionEventHandler<TItem>> _eventOnPreRemove = new FastSmartWeakEvent<EventingCollectionEventHandler<TItem>>();
-        /// <summary>
-        /// 
-        /// </summary>
-        public event EventingCollectionEventHandler<TItem> OnPreRemove
-        {
-            add { _eventOnPreRemove.Add(value); }
-            remove { _eventOnPreRemove.Remove(value); }
-        }
-        #endregion
-        #region Event: OnAnyPreRemove
-        private static readonly FastSmartWeakEvent<EventingCollectionEventHandler<TItem>> _eventOnAnyPreRemove = new FastSmartWeakEvent<EventingCollectionEventHandler<TItem>>();
-        /// <summary>
-        /// 
-        /// </summary>
-        public static event EventingCollectionEventHandler<TItem> OnAnyPreRemove
-        {
-            add { _eventOnAnyPreRemove.Add(value); }
-            remove { _eventOnAnyPreRemove.Remove(value); }
-        }
-        #endregion
-
-        #region Event: OnRemove
-        private readonly FastSmartWeakEvent<EventingCollectionEventHandler<TItem>> _eventOnRemove = new FastSmartWeakEvent<EventingCollectionEventHandler<TItem>>();
-        /// <summary>
-        /// 
-        /// </summary>
-        public event EventingCollectionEventHandler<TItem> OnRemove
-        {
-            add { _eventOnRemove.Add(value); }
-            remove { _eventOnRemove.Remove(value); }
-        }
-        #endregion
-        #region Event: OnAnyRemove
-        private static readonly FastSmartWeakEvent<EventingCollectionEventHandler<TItem>> _eventOnAnyRemove = new FastSmartWeakEvent<EventingCollectionEventHandler<TItem>>();
-        /// <summary>
-        /// 
-        /// </summary>
-        public static event EventingCollectionEventHandler<TItem> OnAnyRemove
-        {
-            add { _eventOnAnyRemove.Add(value); }
-            remove { _eventOnAnyRemove.Remove(value); }
-        }
-        #endregion
-        #endregion
-        #endregion
-
         private TCollection _internalCollection;
 
         #region Method: EventingCollection (Constructor)
@@ -146,17 +49,15 @@ namespace Bluedot.HabboServer.Useful
         public void Add(TItem item)
         {
             EventingCollectionEventArgs<TItem> eventArgs = new EventingCollectionEventArgs<TItem>(item, EventingCollectionAction.Add);
-            _eventOnPreAdd.Raise(this, eventArgs);
-            _eventOnAnyPreAdd.Raise(this, eventArgs);
+
+            CoreManager.ServerCore.EventManager.Fire("eventing_collection_add:before", this, eventArgs);
 
             if (eventArgs.Cancelled)
                 return;
 
-            lock (_internalCollection)
-                _internalCollection.Add(item);
+            _internalCollection.Add(item); // TODO: Thread safety!
 
-            _eventOnAdd.Raise(this, eventArgs);
-            _eventOnAnyAdd.Raise(this, eventArgs);
+            CoreManager.ServerCore.EventManager.Fire("eventing_collection_add:after", this, eventArgs);
         }
 
         /// <summary>
@@ -199,20 +100,18 @@ namespace Bluedot.HabboServer.Useful
         public bool Remove(TItem item)
         {
             EventingCollectionEventArgs<TItem> eventArgs = new EventingCollectionEventArgs<TItem>(item, EventingCollectionAction.Remove);
-            _eventOnPreRemove.Raise(this, eventArgs);
-            _eventOnAnyPreRemove.Raise(this, eventArgs);
+
+            CoreManager.ServerCore.EventManager.Fire("eventing_collection_remove:before", this, eventArgs);
 
             if (eventArgs.Cancelled)
                 return false;
 
             bool result;
-            lock (_internalCollection)
-                result = _internalCollection.Remove(item);
+            result = _internalCollection.Remove(item); // TODO: Thread safety!
 
             if (result)
             {
-                _eventOnRemove.Raise(this, eventArgs);
-                _eventOnAnyRemove.Raise(this, eventArgs);
+                CoreManager.ServerCore.EventManager.Fire("eventing_collection_remove:after", this, eventArgs);
             }
             return result;
         }

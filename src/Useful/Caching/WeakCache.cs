@@ -37,7 +37,8 @@ namespace Bluedot.HabboServer.Useful
         /// <summary>
         ///   Stores the cached instances.
         /// </summary>
-        private readonly Dictionary<TKey, WeakReference<TValue>> _cache = new Dictionary<TKey, WeakReference<TValue>>();
+        //private readonly Dictionary<TKey, WeakReference<TValue>> _cache = new Dictionary<TKey, WeakReference<TValue>>();
+        private readonly WeakDictionary<TKey, TValue> _cache = new WeakDictionary<TKey, TValue>();
 
         public WeakCache(InstanceGenerator<TKey, TValue> instanceGenerator)
         {
@@ -56,27 +57,19 @@ namespace Bluedot.HabboServer.Useful
                 TValue instance;
                 lock (this)
                 {
-                    // Is this Habbo already cached?
-                    if (_cache.ContainsKey(index))
+                    // Is this Habbo already cached and has it not yet been collected and removed from memory?
+                    if (!_cache.TryGetValue(index, out instance))
                     {
-                        // Has the cached Habbo been collected and removed from memory?
-                        if(_cache[index].TryGetTarget(out instance))
-                            // No, return the cached copy.
-                            return instance;
+                        // Create a new instance using the implemented ConstructInstance method.
+                        instance = _instanceGenerator.Invoke(index);
 
-                        // Yes, remove it. We'll have to recache it.
-                        _cache.Remove(index);
+                        // And cache it.
+                        _cache.Add(index, instance);
                     }
-
-                    // Create a new instance using the implemented ConstructInstance method.
-                    instance = _instanceGenerator.Invoke(index);
-
-                    // And cache it.
-                    _cache.Add(index, new WeakReference<TValue>(instance));
                 }
 
-                    // Return the newly cached instance.
-                    return instance;
+                // Return the newly cached instance.
+                return instance;
             }
             set
             {
@@ -84,38 +77,7 @@ namespace Bluedot.HabboServer.Useful
                 {
                     if (_cache.ContainsKey(index))
                         return;
-                    _cache.Add(index, new WeakReference<TValue>(value));
-                }
-            }
-        }
-        #endregion
-        #endregion
-
-        #region Methods
-        #region Method: CleanUp
-        /// <summary>
-        ///   Remove any collected Habbos from the cache.
-        /// </summary>
-        public void CleanUp()
-        {
-            // The WeakReference<T> class in .NET 4.0 appears to be unfinished.
-            // There appears to be missing members and the documentation is hidden away.
-
-            // Because of this I have to store the value somewhere... so I put it here.
-            lock (this)
-            {
-                // Initilise a List<TKey> to hold the keys of the cache entries to remove.
-                // An initial size of _cache.Count will remove all need for resizing at the expence of some short lived RAM usage.
-                List<TKey> keysToRemove = new List<TKey>(_cache.Count);
-                foreach (KeyValuePair<TKey, WeakReference<TValue>> cacheEntry in _cache)
-                {
-                    TValue targetValue;
-                    if(!cacheEntry.Value.TryGetTarget(out targetValue))
-                        keysToRemove.Add(cacheEntry.Key);
-                }
-                foreach (TKey key in keysToRemove)
-                {
-                    _cache.Remove(key);
+                    _cache.Add(index, value);
                 }
             }
         }

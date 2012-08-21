@@ -48,32 +48,6 @@ namespace Bluedot.HabboServer.Network
             get;
             set;
         }
-        
-        #region Event: OnPreIncomingConnection
-        private readonly FastSmartWeakEvent<GameSocketConnectionEventHandler> _eventOnPreIncomingConnection = new FastSmartWeakEvent<GameSocketConnectionEventHandler>();
-        /// <summary>
-        /// Invoked when a connection arrives.
-        /// Cancelling this event will reject the connection.
-        /// </summary>
-        public event GameSocketConnectionEventHandler OnPreIncomingConnection
-        {
-            add { _eventOnPreIncomingConnection.Add(value); }
-            remove { _eventOnPreIncomingConnection.Remove(value); }
-        }
-        #endregion
-
-        #region Event: OnPostIncomingConnection
-        private readonly FastSmartWeakEvent<GameSocketConnectionEventHandler> _eventOnPostIncomingConnection = new FastSmartWeakEvent<GameSocketConnectionEventHandler>();
-        /// <summary>
-        /// Invoked when a connection has arrived, was not cancelled and is now ready.
-        /// Cancelling this event has no affect.
-        /// </summary>
-        public event GameSocketConnectionEventHandler OnPostIncomingConnection
-        {
-            add { _eventOnPostIncomingConnection.Add(value); }
-            remove { _eventOnPostIncomingConnection.Remove(value); }
-        }
-        #endregion
 
         private ServerTcpSocket _listeningSocket;
         private ActionThread _actionThread;
@@ -123,24 +97,19 @@ namespace Bluedot.HabboServer.Network
 
             GameSocketConnectionEventArgs connectionEventArgs = new GameSocketConnectionEventArgs(socket);
 
-            if (_eventOnPreIncomingConnection != null)
+            CoreManager.ServerCore.EventManager.Fire("incoming_game_connection:before", this, connectionEventArgs);
+
+            if (connectionEventArgs.Cancelled)
             {
-                _eventOnPreIncomingConnection.Raise(this, connectionEventArgs);
-                if (connectionEventArgs.Cancelled)
-                {
-                    CoreManager.ServerCore.StandardOut.PrintNotice("Incoming connection rejected: " + internalSocket.RemoteEndPoint);
-                    socket.Disconnect();
-                    return;
-                }
+                CoreManager.ServerCore.StandardOut.PrintNotice("Incoming connection rejected: " + internalSocket.RemoteEndPoint);
+                socket.Disconnect();
+                return;
             }
 
             socket.Start();
 
-            if (_eventOnPostIncomingConnection != null)
-            {
-                _eventOnPostIncomingConnection.Raise(this, connectionEventArgs);
-                CoreManager.ServerCore.StandardOut.PrintNotice("Incoming connection accepted: " + internalSocket.RemoteEndPoint);
-            }
+            CoreManager.ServerCore.EventManager.Fire("incoming_game_connection:after", this, connectionEventArgs);
+            CoreManager.ServerCore.StandardOut.PrintNotice("Incoming connection accepted: " + internalSocket.RemoteEndPoint);
 
             _listeningSocket.AcceptAsync();
         }

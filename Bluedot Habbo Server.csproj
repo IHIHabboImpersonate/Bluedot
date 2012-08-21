@@ -112,12 +112,15 @@
     <Compile Include="src\Permissions\PermissionState.cs" />
     <Compile Include="src\Subscriptions\SubscriptionData.cs" />
     <Compile Include="src\Useful\Caching\WeakCache.cs" />
+    <Compile Include="src\Useful\Collections\WeakHashSet.cs" />
+    <Compile Include="src\Useful\Collections\WeakList.cs" />
     <Compile Include="src\Useful\Collections\EventingCollection\EventingCollection.cs" />
     <Compile Include="src\Useful\Collections\EventingCollection\EventingCollectionAction.cs" />
     <Compile Include="src\Useful\Collections\EventingCollection\EventingCollectionEventArgs.cs" />
     <Compile Include="src\Useful\Collections\EventingCollection\EventingCollectionEventHandler.cs" />
     <Compile Include="src\Useful\Collections\ReadOnlyDictionary.cs" />
-    <Compile Include="src\Useful\FastSmartWeakEvent.cs" />
+    <Compile Include="src\EventManager.cs" />
+    <Compile Include="src\Useful\Collections\WeakDictionary.cs" />
     <Compile Include="src\Habbos\FigureParts\Body.cs" />
     <Compile Include="src\Habbos\FigureParts\EyeAccessory.cs" />
     <Compile Include="src\Habbos\FigureParts\FaceAccessory.cs" />

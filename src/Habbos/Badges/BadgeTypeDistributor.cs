@@ -48,18 +48,6 @@ namespace Bluedot.HabboServer.Habbos
         }
         #endregion
 
-        #region Method: CleanUp
-        /// <summary>
-        ///   Remove any collected Habbos from the cache.
-        /// </summary>
-        private void CleanUp()
-        {
-            // TODO: Look into calling this with http://msdn.microsoft.com/en-us/library/system.gc.registerforfullgcnotification.aspx
-            _idCache.CleanUp();
-            _codeCache.CleanUp();
-        }
-        #endregion
-
         #region Method: CacheInstanceGenerator
         public BadgeType CacheInstanceGenerator(int id)
         {

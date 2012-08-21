@@ -116,17 +116,6 @@ namespace Bluedot.HabboServer.Habbos
             return new Habbo(socket);
         }
         #endregion
-        #region Method: CleanUp
-        /// <summary>
-        ///   Remove any collected Habbos from the cache.
-        /// </summary>
-        private void CleanUp()
-        {
-            // TODO: Look into calling this with http://msdn.microsoft.com/en-us/library/system.gc.registerforfullgcnotification.aspx
-            _idCache.CleanUp();
-            _usernameCache.CleanUp();
-        }
-        #endregion
 
         #region Method: CacheInstanceGenerator
         public Habbo CacheInstanceGenerator(int id)
