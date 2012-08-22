@@ -19,34 +19,42 @@
 
 #endregion
 
+#region Usings
+
 using System.Text;
 
-namespace Bluedot.HabboServer.Habbos.Figure
+#endregion
+
+namespace Bluedot.HabboServer.Figures
 {
-    public abstract class HeadAccessory : FigureSet
+    public abstract class HumanFigure : Figure
     {
-        public override string ToString(bool prefixRequired)
+        #region Properties
+        #region Property: Gender
+        /// <summary>
+        ///   The gender of the user.
+        ///   Male = True
+        ///   Female = False
+        /// </summary>
+        public bool Gender
         {
-            StringBuilder sb = new StringBuilder();
-
-            // TODO: Correct these part characters below
-            sb.Append(prefixRequired ? ".HERE-" : "HERE-");
-
-            sb.Append(Id);
-
-            if (PrimaryColour != 0)
-            {
-                sb.Append('-');
-                sb.Append(PrimaryColour);
-
-                if (SecondaryColour != 0)
-                {
-                    sb.Append('-');
-                    sb.Append(SecondaryColour);
-                }
-            }
-
-            return sb.ToString();
+            get;
+            set;
         }
+        #endregion
+        #region Property: GenderChar
+        public char GenderChar
+        {
+            get
+            {
+                return Gender ? 'M' : 'F';
+            }
+            set
+            {
+                Gender = (value == 'M' ? false : true);
+            }
+        }
+        #endregion
+        #endregion
     }
 }

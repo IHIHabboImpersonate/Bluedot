@@ -21,9 +21,9 @@
 
 using System.Text;
 
-namespace Bluedot.HabboServer.Habbos.Figure
+namespace Bluedot.HabboServer.Figures
 {
-    public abstract class FaceAccessory : FigureSet
+    public abstract class EyeAccessory : HabboFigureSet
     {
         public override string ToString(bool prefixRequired)
         {

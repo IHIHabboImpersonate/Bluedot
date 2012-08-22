@@ -25,36 +25,11 @@ using System.Text;
 
 #endregion
 
-namespace Bluedot.HabboServer.Habbos.Figure
+namespace Bluedot.HabboServer.Figures
 {
-    public class HabboFigure
+    public class HabboFigure : HumanFigure
     {
         #region Properties
-        #region Property: Gender
-        /// <summary>
-        ///   The gender of the user.
-        ///   Male = True
-        ///   Female = False
-        /// </summary>
-        public bool Gender
-        {
-            get;
-            set;
-        }
-        #endregion
-        #region Property: GenderChar
-        public char GenderChar
-        {
-            get
-            {
-                return Gender ? 'M' : 'F';
-            }
-            set
-            {
-                Gender = (value == 'M' ? false : true);
-            }
-        }
-        #endregion
 
         #region Property: Body
         public Body Body

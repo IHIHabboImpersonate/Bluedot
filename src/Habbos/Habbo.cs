@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Bluedot.HabboServer.Rooms;
 using Bluedot.HabboServer.Useful;
 using Bluedot.HabboServer.Database;
-using Bluedot.HabboServer.Habbos.Figure;
+using Bluedot.HabboServer.Figures;
 using Bluedot.HabboServer.Habbos.Messenger;
 using Bluedot.HabboServer.Network;
 using Bluedot.HabboServer.Permissions;
@@ -12,7 +13,7 @@ using Bluedot.HabboServer.Habbos;
 
 namespace Bluedot.HabboServer.Habbos
 {
-    public class Habbo : IMessageable, IPersistable, IBefriendable
+    public class Habbo : Human, IMessageable, IPersistable, IBefriendable
     {
         #region Properties
         #region Property: Id
@@ -102,25 +103,6 @@ namespace Bluedot.HabboServer.Habbos
                     habboData.Username = value;
                     dbSession.SaveChanges();
                 }
-            }
-        }
-        #endregion
-        #region Property: DisplayName
-        private string _displayName;
-        /// <summary>
-        /// The display name of this Habbo.
-        /// If not set then this will return the username instead.
-        /// This property is not saved in the database and is not maintained between instances.
-        /// </summary>
-        public string DisplayName
-        {
-            get
-            {
-                return _displayName ?? _username;
-            }
-            set
-            {
-                _displayName = value;
             }
         }
         #endregion
@@ -284,7 +266,15 @@ namespace Bluedot.HabboServer.Habbos
         /// TODO: Document
         /// </summary>
         /// <remarks>Uses lazy loading.</remarks>
-        public HabboFigure Figure
+        public override Figure Figure
+        {
+            get
+            {
+                return (this as IBefriendable).Figure;
+            }
+        }
+
+        HumanFigure IBefriendable.Figure
         {
             get
             {
@@ -299,6 +289,48 @@ namespace Bluedot.HabboServer.Habbos
                 return _figure;
             }
         }
+        
+        public override IRollerable Roll(FloorPosition to)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IRollerable Roll(FloorPosition from, FloorPosition to)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        ///   Shout a message from the ITalkable to all RoomUnits in the room.
+        /// </summary>
+        /// <param name = "message">The message to send.</param>
+        /// <returns>The current ITalkable object. This allows chaining.</returns>
+        public override ITalkable Shout(string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        ///   Say a message from the ITalkable to near RoomUnits in the room.
+        /// </summary>
+        /// <param name = "message">The message to send.</param>
+        /// <returns>The current ITalkable object. This allows chaining.</returns>
+        public override ITalkable Say(string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        ///   Whisper a message from the ITalkable to another RoomUnit in the room.
+        /// </summary>
+        /// <param name = "recipient">The RoomUnit to recieve the message.</param>
+        /// <param name = "message">The message to send.</param>
+        /// <returns>The current ITalkable object. This allows chaining.</returns>
+        public override ITalkable Whisper(ITalkable recipient, string message)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
         #region Property: Motto
         private string _motto;
@@ -648,7 +680,6 @@ namespace Bluedot.HabboServer.Habbos
         #endregion
         
         #region Property: Subscriptions
-        private SubscriptionCollection _subscriptions;
         /// <summary>
         /// 
         /// </summary>

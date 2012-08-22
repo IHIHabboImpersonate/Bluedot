@@ -19,34 +19,20 @@
 
 #endregion
 
+#region Usings
+
 using System.Text;
 
-namespace Bluedot.HabboServer.Habbos.Figure
+#endregion
+
+namespace Bluedot.HabboServer.Figures
 {
-    public abstract class ShirtAccessory : FigureSet
+    public abstract class Figure
     {
-        public override string ToString(bool prefixRequired)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            // TODO: Correct these part characters below
-            sb.Append(prefixRequired ? ".HERE-" : "HERE-");
-
-            sb.Append(Id);
-
-            if (PrimaryColour != 0)
-            {
-                sb.Append('-');
-                sb.Append(PrimaryColour);
-
-                if (SecondaryColour != 0)
-                {
-                    sb.Append('-');
-                    sb.Append(SecondaryColour);
-                }
-            }
-
-            return sb.ToString();
-        }
+        #region Methods
+        #region Method: ToString
+        public new abstract string ToString();
+        #endregion
+        #endregion
     }
 }

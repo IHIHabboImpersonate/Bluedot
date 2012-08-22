@@ -21,16 +21,15 @@
 
 using System.Text;
 
-namespace Bluedot.HabboServer.Habbos.Figure
+namespace Bluedot.HabboServer.Figures
 {
-    public abstract class Shirt : FigureSet
+    public abstract class Body : HabboFigureSet
     {
         public override string ToString(bool prefixRequired)
         {
             StringBuilder sb = new StringBuilder();
 
-            // TODO: Correct these part characters below
-            sb.Append(prefixRequired ? ".HERE-" : "HERE-");
+            sb.Append(prefixRequired ? ".hd-" : "hd-");
 
             sb.Append(Id);
 

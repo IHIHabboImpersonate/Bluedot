@@ -1,4 +1,5 @@
-﻿using Bluedot.HabboServer.Habbos;
+﻿using Bluedot.HabboServer.Figures;
+using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
 
 namespace Bluedot.HabboServer.ApiUsage.Packets
@@ -12,7 +13,7 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
                 HabboID = sender.Id,
                 Username = sender.Username,
                 Motto = sender.Motto,
-                Figure = sender.Figure
+                Figure = sender.Figure as HabboFigure
             }.Send(sender);
         }
     }

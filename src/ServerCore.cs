@@ -7,7 +7,7 @@ using System.Xml;
 using Bluedot.HabboServer.ApiUsage;
 using Bluedot.HabboServer.Configuration;
 using Bluedot.HabboServer.Events;
-using Bluedot.HabboServer.Habbos.Figure;
+using Bluedot.HabboServer.Figures;
 using Bluedot.HabboServer.Install;
 using Bluedot.HabboServer.Database;
 using Bluedot.HabboServer.Network.WebAdmin;

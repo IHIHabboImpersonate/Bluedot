@@ -93,10 +93,28 @@
     <Compile Include="src\EntryPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Extensions.cs" />
+    <Compile Include="src\Figures\Figure.cs" />
+    <Compile Include="src\Figures\Human\HumanFigure.cs" />
     <Compile Include="src\Habbos\Badges\BadgeCollection.cs" />
     <Compile Include="src\Habbos\Badges\BadgeSlot.cs" />
     <Compile Include="src\Habbos\Badges\BadgeType.cs" />
     <Compile Include="src\Habbos\Badges\BadgeTypeDistributor.cs" />
+    <Compile Include="src\Rooms\MultiPublicRoom.cs" />
+    <Compile Include="src\Rooms\PublicRoom.cs" />
+    <Compile Include="src\Rooms\GuestRoom.cs" />
+    <Compile Include="src\Rooms\Room Units\FloorPosition.cs" />
+    <Compile Include="src\Rooms\ITalkable.cs" />
+    <Compile Include="src\Rooms\IRollerable.cs" />
+    <Compile Include="src\Rooms\Navigator\Category.cs" />
+    <Compile Include="src\Rooms\Navigator\NavigatorListing.cs" />
+    <Compile Include="src\Rooms\Navigator\NavigatorManager.cs" />
+    <Compile Include="src\Rooms\Navigator\NavigatorException.cs" />
+    <Compile Include="src\Rooms\Navigator\NavigatorTreeSearchMode.cs" />
+    <Compile Include="src\Rooms\Navigator\RoomLock.cs" />
+    <Compile Include="src\Rooms\Room Units\DanceType.cs" />
+    <Compile Include="src\Rooms\Room Units\Human.cs" />
+    <Compile Include="src\Rooms\Room Units\RoomUnit.cs" />
+    <Compile Include="src\Rooms\Room.cs" />
     <Compile Include="src\Subscriptions\SubscriptionCollection.cs" />
     <Compile Include="src\Habbos\HabboEventArgs.cs">
       <SubType>Code</SubType>
@@ -126,25 +144,24 @@
     <Compile Include="src\Useful\Collections\ReadOnlyDictionary.cs" />
     <Compile Include="src\EventManager.cs" />
     <Compile Include="src\Useful\Collections\WeakDictionary.cs" />
-    <Compile Include="src\Habbos\FigureParts\Body.cs" />
-    <Compile Include="src\Habbos\FigureParts\EyeAccessory.cs" />
-    <Compile Include="src\Habbos\FigureParts\FaceAccessory.cs" />
-    <Compile Include="src\Habbos\FigureParts\FigureFactory.cs" />
-    <Compile Include="src\Habbos\FigureParts\FigureSet.cs" />
-    <Compile Include="src\Habbos\FigureParts\FigureWaistAccessory.cs" />
-    <Compile Include="src\Habbos\FigureParts\Hair.cs" />
-    <Compile Include="src\Habbos\FigureParts\Hat.cs" />
-    <Compile Include="src\Habbos\FigureParts\HeadAccessory.cs" />
-    <Compile Include="src\Habbos\FigureParts\Jacket.cs" />
-    <Compile Include="src\Habbos\FigureParts\Legs.cs" />
-    <Compile Include="src\Habbos\FigureParts\Shirt.cs" />
-    <Compile Include="src\Habbos\FigureParts\ShirtAccessory.cs" />
-    <Compile Include="src\Habbos\FigureParts\Shoes.cs" />
-    <Compile Include="src\Habbos\FigureParts\WaistAccessory.cs" />
+    <Compile Include="src\Figures\Human\Habbo\FigureParts\Body.cs" />
+    <Compile Include="src\Figures\Human\Habbo\FigureParts\EyeAccessory.cs" />
+    <Compile Include="src\Figures\Human\Habbo\FigureParts\FaceAccessory.cs" />
+    <Compile Include="src\Figures\Human\Habbo\HabboFigureFactory.cs" />
+    <Compile Include="src\Figures\Human\Habbo\HabboFigureSet.cs" />
+    <Compile Include="src\Figures\Human\Habbo\FigureParts\Hair.cs" />
+    <Compile Include="src\Figures\Human\Habbo\FigureParts\Hat.cs" />
+    <Compile Include="src\Figures\Human\Habbo\FigureParts\HeadAccessory.cs" />
+    <Compile Include="src\Figures\Human\Habbo\FigureParts\Jacket.cs" />
+    <Compile Include="src\Figures\Human\Habbo\FigureParts\Legs.cs" />
+    <Compile Include="src\Figures\Human\Habbo\FigureParts\Shirt.cs" />
+    <Compile Include="src\Figures\Human\Habbo\FigureParts\ShirtAccessory.cs" />
+    <Compile Include="src\Figures\Human\Habbo\FigureParts\Shoes.cs" />
+    <Compile Include="src\Figures\Human\Habbo\FigureParts\WaistAccessory.cs" />
     <Compile Include="src\Habbos\Habbo.cs" />
     <Compile Include="src\Habbos\HabboDistributor\HabboDistributor.cs" />
     <Compile Include="src\Habbos\HabboEventHandler.cs" />
-    <Compile Include="src\Habbos\HabboFigure.cs" />
+    <Compile Include="src\Figures\Human\Habbo\HabboFigure.cs" />
     <Compile Include="src\Install\Category.cs" />
     <Compile Include="src\Install\InstallerCore.cs" />
     <Compile Include="src\Install\InputException.cs" />
@@ -208,6 +225,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\APIUsage\Debug\" />
+    <Folder Include="src\Figures\Human\Bots\" />
+    <Folder Include="src\Figures\Pets\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

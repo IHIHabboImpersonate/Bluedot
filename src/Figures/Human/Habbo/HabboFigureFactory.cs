@@ -26,7 +26,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace Bluedot.HabboServer.Habbos.Figure
+namespace Bluedot.HabboServer.Figures
 {
     public class HabboFigureFactory
     {
@@ -68,9 +68,9 @@ namespace Bluedot.HabboServer.Habbos.Figure
                     throw new KeyNotFoundException("Figure set ID " + setID + " is not registered.");
 
                 // Create a new instance of the set type.
-                FigureSet set = _figureSetIDs[setID]
+                HabboFigureSet set = _figureSetIDs[setID]
                                       .GetConstructor(new Type[0])
-                                      .Invoke(new object[0]) as FigureSet;
+                                      .Invoke(new object[0]) as HabboFigureSet;
 
                 // Was a primary colour provided?
                 if (setStrings.Length > 2)
@@ -121,9 +121,9 @@ namespace Bluedot.HabboServer.Habbos.Figure
 
         internal HabboFigureFactory RegisterSet(Type set)
         {
-            if (set.IsSubclassOf(typeof (FigureSet)))
+            if (set.IsSubclassOf(typeof (HabboFigureSet)))
             {
-                ushort setID = (set.GetConstructors()[0].Invoke(new object[0]) as FigureSet).Id;
+                ushort setID = (set.GetConstructors()[0].Invoke(new object[0]) as HabboFigureSet).Id;
                 _figureSetIDs.Add(setID, set);
             }
             return this;
@@ -131,9 +131,9 @@ namespace Bluedot.HabboServer.Habbos.Figure
 
         internal HabboFigureFactory UnregisterModelID(Type part)
         {
-            if (part.IsSubclassOf(typeof (FigureSet)))
+            if (part.IsSubclassOf(typeof (HabboFigureSet)))
             {
-                ushort modelID = (part.GetConstructors()[0].Invoke(new object[0]) as FigureSet).Id;
+                ushort modelID = (part.GetConstructors()[0].Invoke(new object[0]) as HabboFigureSet).Id;
                 if (_figureSetIDs.ContainsKey(modelID))
                     _figureSetIDs.Remove(modelID);
             }

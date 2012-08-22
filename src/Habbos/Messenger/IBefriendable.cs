@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Bluedot.HabboServer.Useful;
-using Bluedot.HabboServer.Habbos.Figure;
+using Bluedot.HabboServer.Figures;
 
 namespace Bluedot.HabboServer.Habbos.Messenger
 {
@@ -38,7 +38,7 @@ namespace Bluedot.HabboServer.Habbos.Messenger
         /// <summary>
         /// 
         /// </summary>
-        HabboFigure Figure
+        HumanFigure Figure
         {
             get;
         }

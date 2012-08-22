@@ -19,9 +19,9 @@
 
 #endregion
 
-namespace Bluedot.HabboServer.Habbos.Figure
+namespace Bluedot.HabboServer.Figures
 {
-    public abstract class FigureSet
+    public abstract class HabboFigureSet
     {
         #region Property: PrimaryColour
         /// <summary>

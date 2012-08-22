@@ -19,7 +19,7 @@
 
 #endregion
 
-using Bluedot.HabboServer.Habbos.Figure;
+using Bluedot.HabboServer.Figures;
 using Bluedot.HabboServer.Network;
 
 namespace Bluedot.HabboServer.ApiUsage.Packets

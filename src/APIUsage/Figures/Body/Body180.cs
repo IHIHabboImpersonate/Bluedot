@@ -1,5 +1,5 @@
 ﻿using System;
-using Bluedot.HabboServer.Habbos.Figure;
+using Bluedot.HabboServer.Figures;
 
 namespace Bluedot.HabboServer.ApiUsage.Figures.Sets
 {
