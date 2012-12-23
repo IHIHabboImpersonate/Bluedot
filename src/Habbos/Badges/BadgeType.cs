@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Bluedot.HabboServer.Database;
+﻿using Bluedot.HabboServer.Database.Actions;
 
 namespace Bluedot.HabboServer.Habbos
 {
@@ -30,26 +29,12 @@ namespace Bluedot.HabboServer.Habbos
         internal BadgeType(int id)
         {
             Id = id;
-            using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
-            {
-                Code =  dbSession
-                            .BadgeTypes
-                                .Where(badgeType => badgeType.Id == id)
-                                .Select(row => new { row.Code })
-                                .Single().Code;
-            }
+            Code = BadgeActions.GetBadgeTypeCodeFromBadgeTypeId(id);
         }
         internal BadgeType(string code)
         {
+            Id = BadgeActions.GetBadgeTypeIdFromBadgeTypeCode(code);
             Code = code;
-            using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
-            {
-                Id =  dbSession
-                        .BadgeTypes
-                            .Where(badgeType => badgeType.Code == code)
-                            .Select(row => new {row.Id})
-                            .Single().Id;
-            }
         }
         #endregion
     }

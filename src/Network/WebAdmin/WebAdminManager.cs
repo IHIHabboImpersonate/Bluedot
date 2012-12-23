@@ -123,12 +123,12 @@ namespace Bluedot.HabboServer.Network.WebAdmin
                 HttpPathHandler handler = this[path];
                 if (handler != null)
                 {
-                    CoreManager.ServerCore.StandardOut.PrintDebug("WebAdmin Request [200]: " + path);
+                    CoreManager.ServerCore.StandardOut.PrintDebug("WebAdmin", "WebAdmin Request [200]: " + path);
                     handler(e.RequestContext);
                     return;
                 }
             }
-            CoreManager.ServerCore.StandardOut.PrintDebug("WebAdmin Request [404]: " + path);
+            CoreManager.ServerCore.StandardOut.PrintDebug("WebAdmin", "WebAdmin Request [404]: " + path);
 
             HttpListenerResponse response = e.RequestContext.Response;
             byte[] buffer = Encoding.UTF8.GetBytes("Not Handled!");

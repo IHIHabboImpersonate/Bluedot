@@ -9,7 +9,7 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
         {
             new MHabboData
             {
-                HabboID = sender.Id,
+                HabboId = sender.Id,
                 Username = sender.Username,
                 Motto = sender.Motto,
                 Figure = sender.Figure

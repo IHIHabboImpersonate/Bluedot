@@ -57,42 +57,42 @@ namespace Bluedot.HabboServer.Habbos.Figure
                 string[] setStrings = setTypeString.Split(new[] { '-' });
 
 
-                ushort setID;
+                ushort setId;
 
                 // Parse the set ID.
-                if (!ushort.TryParse(setStrings[1], out setID))
+                if (!ushort.TryParse(setStrings[1], out setId))
                     throw new FormatException("Figure set ID is not a valid ushort in '" + setTypeString + "'.");
 
                 // Make sure the set ID is registered.
-                if (!_figureSetIDs.ContainsKey(setID))
-                    throw new KeyNotFoundException("Figure set ID " + setID + " is not registered.");
+                if (!_figureSetIDs.ContainsKey(setId))
+                    throw new KeyNotFoundException("Figure set ID " + setId + " is not registered.");
 
                 // Create a new instance of the set type.
-                FigureSet set = _figureSetIDs[setID]
+                FigureSet set = _figureSetIDs[setId]
                                       .GetConstructor(new Type[0])
                                       .Invoke(new object[0]) as FigureSet;
 
                 // Was a primary colour provided?
                 if (setStrings.Length > 2)
                 {
-                    ushort colourID;
+                    ushort colourId;
 
                     // Parse ColourID and validate it.
-                    if (!ushort.TryParse(setStrings[2], out colourID))
+                    if (!ushort.TryParse(setStrings[2], out colourId))
                         throw new FormatException("Figure Colour ID is not a valid ushort in '" + setTypeString + "'.");
 
                     //Set PrimaryColour for this set.
-                    set.PrimaryColour = colourID;
+                    set.PrimaryColour = colourId;
 
                     // Was a secondary colour provided?
                     if (setStrings.Length > 3)
                     {
                         // Parse ColourID and validate it.
-                        if (!ushort.TryParse(setStrings[3], out colourID))
+                        if (!ushort.TryParse(setStrings[3], out colourId))
                             throw new FormatException("Figure ColourID is not a valid ushort in '" + setTypeString + "'.");
 
                         // Set the SecondaryColour for this set.
-                        set.SecondaryColour = colourID;
+                        set.SecondaryColour = colourId;
                     }
                 }
 
@@ -105,7 +105,7 @@ namespace Bluedot.HabboServer.Habbos.Figure
                         {
                             // Verify this model is a shirt.
                             if (!(set is Body))
-                                throw new InvalidCastException("Figure set ID " + setID +" is a valid figure model but not a valid body set.");
+                                throw new InvalidCastException("Figure set ID " + setId +" is a valid figure model but not a valid body set.");
 
                             // Apply the set to the HabboFigure
                             figureInProgress.Body = set as Body;
@@ -123,19 +123,19 @@ namespace Bluedot.HabboServer.Habbos.Figure
         {
             if (set.IsSubclassOf(typeof (FigureSet)))
             {
-                ushort setID = (set.GetConstructors()[0].Invoke(new object[0]) as FigureSet).Id;
-                _figureSetIDs.Add(setID, set);
+                ushort setId = (set.GetConstructors()[0].Invoke(new object[0]) as FigureSet).Id;
+                _figureSetIDs.Add(setId, set);
             }
             return this;
         }
 
-        internal HabboFigureFactory UnregisterModelID(Type part)
+        internal HabboFigureFactory UnregisterModelId(Type part)
         {
             if (part.IsSubclassOf(typeof (FigureSet)))
             {
-                ushort modelID = (part.GetConstructors()[0].Invoke(new object[0]) as FigureSet).Id;
-                if (_figureSetIDs.ContainsKey(modelID))
-                    _figureSetIDs.Remove(modelID);
+                ushort modelId = (part.GetConstructors()[0].Invoke(new object[0]) as FigureSet).Id;
+                if (_figureSetIDs.ContainsKey(modelId))
+                    _figureSetIDs.Remove(modelId);
             }
             return this;
         }

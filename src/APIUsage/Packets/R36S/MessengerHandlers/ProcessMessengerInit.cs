@@ -11,7 +11,7 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
 
             new MMessengerInit
             {
-                Categories = sender.MessengerCategories.Value,
+                Categories = sender.MessengerCategories,
                 UnknownA = 10,
                 UnknownB = 20,
                 UnknownC = 30,

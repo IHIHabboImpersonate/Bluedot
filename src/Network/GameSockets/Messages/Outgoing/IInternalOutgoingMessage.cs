@@ -14,7 +14,7 @@ namespace Bluedot.HabboServer.Network
         /// <summary>
         ///   Gets the ID of this message as an unsigned 32 bit integer.
         /// </summary>
-        uint ID { get; }
+        uint Id { get; }
 
         /// <summary>
         ///   Gets the header of this message, by Base64 encoding the message ID to a 2 byte string.

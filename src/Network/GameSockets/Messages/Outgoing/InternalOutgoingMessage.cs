@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace Bluedot.HabboServer.Network
@@ -20,14 +21,14 @@ namespace Bluedot.HabboServer.Network
         /// <summary>
         ///   Gets the ID of this message as an unsigned 32 bit integer.
         /// </summary>
-        public uint ID { get; private set; }
+        public uint Id { get; private set; }
 
         /// <summary>
         ///   Gets the header of this message, by Base64 encoding the message ID to a 2 byte string.
         /// </summary>
         public string Header
         {
-            get { return Encoding.UTF8.GetString(Base64Encoding.EncodeuUInt32(ID)); }
+            get { return Encoding.UTF8.GetString(Base64Encoding.EncodeuUInt32(Id)); }
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace Bluedot.HabboServer.Network
         /// <param name = "id">The ID of this message as an unsigned 32 bit integer.</param>
         public IInternalOutgoingMessage Initialize(uint id)
         {
-            ID = id;
+            Id = id;
             _content = new List<byte>();
 
             return this;
@@ -149,7 +150,7 @@ namespace Bluedot.HabboServer.Network
         /// <param name = "i">The 32 bit integer to append.</param>
         public IInternalOutgoingMessage Append(Int32 i)
         {
-            Append(i.ToString(), Encoding.UTF8);
+            Append(i.ToString(CultureInfo.InvariantCulture), Encoding.UTF8);
 
             return this;
         }
@@ -227,7 +228,7 @@ namespace Bluedot.HabboServer.Network
         {
             byte[] data = new byte[ContentLength + 2 + 1];
 
-            byte[] headerBytes = Base64Encoding.EncodeuUInt32(ID);
+            byte[] headerBytes = Base64Encoding.EncodeuUInt32(Id);
             data[0] = headerBytes[0];
             data[1] = headerBytes[1];
 

@@ -3,28 +3,33 @@ using Bluedot.HabboServer.Network;
 
 namespace Bluedot.HabboServer.ApiUsage.Packets
 {
+    using System;
+
     public static partial class PacketHandlers
     {
         public static void Start()
         {
-            CoreManager.ServerCore.GameSocketManager.OnPostIncomingConnection += RegisterLoginHandlers;
-            
-            // Register the handlers for logged in clients.
-            Habbo.OnAnyLogin += RegisterHabboHandlers;
-            Habbo.OnAnyLogin += RegisterMessengerHandlers;
-            Habbo.OnAnyLogin += RegisterSubscriptionHandlers;
-            
-            // Inform the client of a successful login.
-            Habbo.OnAnyLogin += (source, e) => new MAuthenticationOkay().Send(source as IMessageable);
+            CoreManager.ServerCore.EventManager
+                .StrongBind("incoming_game_connection:after", RegisterLoginHandlers)
+
+                // Register the handlers for logged in clients.
+                .StrongBind("habbo_login:after", RegisterHabboHandlers)
+                .StrongBind("habbo_login:after", RegisterMessengerHandlers)
+                .StrongBind("habbo_login:after", RegisterSubscriptionHandlers)
+
+                // Inform the client of a successful login.
+                .StrongBind("habbo_login:after", (source, e) => new MAuthenticationOkay().Send(source as IMessageable));
         }
 
-        private static void RegisterLoginHandlers(object source, GameSocketConnectionEventArgs args)
+        private static void RegisterLoginHandlers(object source, EventArgs args)
         {
-            args.Socket.PacketHandlers[206, GameSocketMessageHandlerPriority.DefaultAction] += ProcessEncryptionRequest;
-            args.Socket.PacketHandlers[2002, GameSocketMessageHandlerPriority.DefaultAction] += ProcessSessionRequest;
-            args.Socket.PacketHandlers[204, GameSocketMessageHandlerPriority.DefaultAction] += ProcessSSOTicket;
+            GameSocketConnectionEventArgs typedArgs = args as GameSocketConnectionEventArgs;
+
+            typedArgs.Socket.PacketHandlers[206, GameSocketMessageHandlerPriority.DefaultAction] += ProcessEncryptionRequest;
+            typedArgs.Socket.PacketHandlers[2002, GameSocketMessageHandlerPriority.DefaultAction] += ProcessSessionRequest;
+            typedArgs.Socket.PacketHandlers[204, GameSocketMessageHandlerPriority.DefaultAction] += ProcessSSOTicket;
         }
-        private static void RegisterHabboHandlers(object source, HabboEventArgs args)
+        private static void RegisterHabboHandlers(object source, EventArgs args)
         {
             (source as Habbo).Socket.PacketHandlers[6, GameSocketMessageHandlerPriority.DefaultAction] += ProcessBalanceRequest;
             (source as Habbo).Socket.PacketHandlers[7, GameSocketMessageHandlerPriority.DefaultAction] += ProcessHabboInfoRequest;
@@ -32,11 +37,11 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
             (source as Habbo).Socket.PacketHandlers[157, GameSocketMessageHandlerPriority.DefaultAction] += ProcessBadgeListingRequest;
         }
 
-        private static void RegisterSubscriptionHandlers(object source, HabboEventArgs args)
+        private static void RegisterSubscriptionHandlers(object source, EventArgs args)
         {
             (source as Habbo).Socket.PacketHandlers[26, GameSocketMessageHandlerPriority.DefaultAction] += ProcessSubscriptionDataRequest;
         }
-        private static void RegisterMessengerHandlers(object source, HabboEventArgs args)
+        private static void RegisterMessengerHandlers(object source, EventArgs args)
         {
             (source as Habbo).Socket.PacketHandlers[12, GameSocketMessageHandlerPriority.DefaultAction] += ProcessMessengerInit;
         }

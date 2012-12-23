@@ -38,9 +38,9 @@ namespace Bluedot.HabboServer.Install
             _steps = new Dictionary<string, Step>();
         }
 
-        internal Category AddStep(string installerValueID, Step step)
+        internal Category AddStep(string installerValueId, Step step)
         {
-            _steps.Add(installerValueID, step);
+            _steps.Add(installerValueId, step);
             return this;
         }
 

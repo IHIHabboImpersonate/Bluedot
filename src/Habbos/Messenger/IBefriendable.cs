@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Bluedot.HabboServer.Useful;
 using Bluedot.HabboServer.Habbos.Figure;
 
 namespace Bluedot.HabboServer.Habbos.Messenger

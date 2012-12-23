@@ -27,7 +27,7 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
     {
         public override OutgoingMessage Send(IMessageable target)
         {
-            if (InternalOutgoingMessage.ID == 0)
+            if (InternalOutgoingMessage.Id == 0)
             {
                 InternalOutgoingMessage.Initialize(3);
             }

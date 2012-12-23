@@ -20,6 +20,7 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Bluedot.HabboServer.Habbos.Messenger;
 using Bluedot.HabboServer.Network;
@@ -36,7 +37,7 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
 
         public override OutgoingMessage Send(IMessageable target)
         {
-            if (InternalOutgoingMessage.ID == 0)
+            if (InternalOutgoingMessage.Id == 0)
             {
                 InternalOutgoingMessage.Initialize(12)
                     .AppendInt32(UnknownA)
@@ -49,16 +50,16 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
                 foreach (MessengerCategory category in Categories)
                 {
                     InternalOutgoingMessage
-                        .AppendInt32(category.ID)
+                        .AppendInt32(category.Id)
                         .AppendString(category.Name);
-                    friendCount += category.Friends.Value.Count;
+                    friendCount += category.Friends.Count();
                 }
 
                 InternalOutgoingMessage.AppendInt32(friendCount);
 
                 foreach (MessengerCategory category in Categories)
                 {
-                    foreach (IBefriendable befriendable in category.Friends.Value)
+                    foreach (IBefriendable befriendable in category.Friends)
                     {
                         InternalOutgoingMessage
                             .AppendInt32(befriendable.Id)
@@ -67,9 +68,9 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
                             .AppendBoolean(befriendable.LoggedIn)
                             .AppendBoolean(befriendable.Stalkable)
                             .AppendString(befriendable.Figure.ToString())
-                            .AppendInt32(category.ID)
+                            .AppendInt32(category.Id)
                             .AppendString(befriendable.Motto)
-                            .AppendString(befriendable.LastAccess.ToString());
+                            .AppendString(befriendable.LastAccess.ToString(CultureInfo.InvariantCulture));
                     }
                 }
 

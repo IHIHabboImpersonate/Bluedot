@@ -1,8 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿
+using Bluedot.HabboServer.Database.Actions;
 
 namespace Bluedot.HabboServer.Database
 {
+
     public class PersistentStorage
     {
         private readonly IPersistable _persistable;
@@ -17,64 +18,16 @@ namespace Bluedot.HabboServer.Database
             get
             {
                 string typeName = _persistable.GetType().FullName;
-                long instanceId = _persistable.PersistInstanceProperty();
+                long instanceId = _persistable.PersistableInstanceId;
 
-                try
-                {
-                    using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
-                    {
-                        return dbSession.
-                            PersistentStorage.
-                            Where(
-                                variable => variable.TypeName == typeName &&
-                                            variable.InstanceId == instanceId &&
-                                            variable.VariableName == name).
-                            Select(variable => new { variable.Value }).
-                            Single().
-                            Value;
-                    }
-                }
-                catch (InvalidOperationException)
-                {
-                    return null;
-                }
+                return PersistenceActions.GetPersistentValue(typeName, instanceId, name);
             }
             set
             {
                 string typeName = _persistable.GetType().FullName;
-                long instanceId = _persistable.PersistInstanceProperty();
+                long instanceId = _persistable.PersistableInstanceId;
 
-                lock (this)
-                {
-                    using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
-                    {
-                        try
-                        {
-                            DBPersistentStorage persistentVariable = dbSession.
-                                PersistentStorage.Where(
-                                    variable => variable.TypeName == typeName &&
-                                                variable.InstanceId == instanceId &&
-                                                variable.VariableName == name).
-                                Single();
-
-                            if (value != null)
-                                persistentVariable.Value = value;
-                            else
-                                dbSession.PersistentStorage.DeleteObject(persistentVariable);
-                        }
-                        catch (InvalidOperationException) // Doesn't already exist.
-                        {
-                            dbSession.PersistentStorage.AddObject(new DBPersistentStorage
-                                                                         {
-                                                                             TypeName = typeName,
-                                                                             InstanceId = instanceId,
-                                                                             VariableName = name,
-                                                                             Value = value
-                                                                         });
-                        }
-                        dbSession.SaveChanges();
-                    }
-                }
+                PersistenceActions.SetPersistentValue(typeName, instanceId, name, value);
             }
         }
     }

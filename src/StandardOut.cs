@@ -104,10 +104,10 @@ namespace Bluedot.HabboServer
         ///   Output a debug message.
         /// </summary>
         /// <param name = "message">The message to output.</param>
-        internal StandardOut PrintDebug(string message)
+        internal StandardOut PrintDebug(string category, string message)
         {
             if (Importance <= StandardOutImportance.Debug)
-                Raw("DEBUG", message, ConsoleColor.White);
+                Raw("DEBUG", category + " => " + message, ConsoleColor.White);
             return this;
         }
 
@@ -115,10 +115,10 @@ namespace Bluedot.HabboServer
         ///   Output a warning message.
         /// </summary>
         /// <param name = "message">The message to output.</param>
-        internal StandardOut PrintWarning(string message)
+        internal StandardOut PrintWarning(string category, string message)
         {
             if (Importance <= StandardOutImportance.Warning)
-                Raw("WARNING", message, ConsoleColor.DarkYellow);
+                Raw("WARNING", category + " => " + message, ConsoleColor.DarkYellow);
             return this;
         }
 
@@ -126,10 +126,10 @@ namespace Bluedot.HabboServer
         ///   Output an error message.
         /// </summary>
         /// <param name = "message">The message to output.</param>
-        internal StandardOut PrintError(string message)
+        internal StandardOut PrintError(string category, string message)
         {
             if (Importance <= StandardOutImportance.Error)
-                Raw("ERROR", message, ConsoleColor.Red);
+                Raw("ERROR", category + " => " + message, ConsoleColor.Red);
             return this;
         }
 
@@ -140,10 +140,10 @@ namespace Bluedot.HabboServer
         /// <param name="saveException">If false then the exception will not be saved to file.</param>
         internal StandardOut PrintException(Exception e, bool saveException = true)
         {
-            PrintError("Exception => " + e.GetType().FullName);
-            PrintError("             " + e.Message);
+            PrintError("Exception", e.GetType().FullName);
+            PrintError("         ", e.Message);
             if(saveException)
-                PrintError("             Saved to " + SaveExceptionToFile(e));
+                PrintError("         ", "Saved to " + SaveExceptionToFile(e));
             return this;
         }
 
@@ -152,10 +152,10 @@ namespace Bluedot.HabboServer
         ///   Use this for most things.
         /// </summary>
         /// <param name = "message">The message to output.</param>
-        internal StandardOut PrintNotice(string message)
+        internal StandardOut PrintNotice(string category, string message)
         {
             if (Importance <= StandardOutImportance.Notice)
-                Raw("NOTICE", message, ConsoleColor.Gray);
+                Raw("NOTICE", category + " => " + message, ConsoleColor.Gray);
             return this;
         }
 
@@ -164,10 +164,10 @@ namespace Bluedot.HabboServer
         ///   Use when the message is important but not debugging, a warning or an error.
         /// </summary>
         /// <param name = "message">The message to output.</param>
-        internal StandardOut PrintImportant(string message)
+        internal StandardOut PrintImportant(string category, string message)
         {
             if (Importance <= StandardOutImportance.Important)
-                Raw("IMPORTANT", message, ConsoleColor.Green);
+                Raw("IMPORTANT", category + " => " + message, ConsoleColor.Green);
             return this;
         }
 
