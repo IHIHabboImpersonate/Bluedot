@@ -1,46 +1,26 @@
 ﻿using System;
-using System.Data;
-using System.Data.EntityClient;
 using System.IO;
 using System.Net;
 using System.Xml;
 using Bluedot.HabboServer.ApiUsage;
 using Bluedot.HabboServer.Configuration;
+using Bluedot.HabboServer.Events;
 using Bluedot.HabboServer.Habbos.Figure;
 using Bluedot.HabboServer.Install;
 using Bluedot.HabboServer.Database;
 using Bluedot.HabboServer.Network.WebAdmin;
 using Bluedot.HabboServer.Permissions;
-using MySql.Data.MySqlClient;
-using Bluedot.HabboServer.Useful;
 using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
 
 namespace Bluedot.HabboServer
 {
+
     internal class ServerCore
     {
-        #region Events
-        #region Event: OnShutdown
-        private readonly FastSmartWeakEvent<EventHandler> _eventOnShutdown = new FastSmartWeakEvent<EventHandler>();
-        /// <summary>
-        /// Invoked when the server is closing.
-        /// All last minute cleanup should listen on this.
-        /// </summary>
-        public event EventHandler OnShutdown
-        {
-            add { _eventOnShutdown.Add(value); }
-            remove { _eventOnShutdown.Remove(value); }
-        }
-        #endregion
-        #endregion
-
         #region Fields
-        #region Field: _databaseConnection
-        private EntityConnection _databaseConnection;
-        #endregion
         #region Field: _bootInProgressLocker
-        private object _bootInProgressLocker = new object();
+        private readonly object _bootInProgressLocker = new object();
         #endregion
         
         #endregion
@@ -103,9 +83,35 @@ namespace Bluedot.HabboServer
             private set;
         }
         #endregion
+        #region Property: BadgeTypeDistributor
+        /// <summary>
+        /// TODO: Add summary for property
+        /// </summary>
+        public MySqlConnectionProvider MySqlConnectionProvider
+        {
+            get;
+            private set;
+        }
+        #endregion
+        #region Property: EventManager
+        /// <summary>
+        /// TODO: Add summary for property
+        /// </summary>
+        public EventManager EventManager
+        {
+            get;
+            private set;
+        }
+        #endregion
         #endregion
 
         #region Methods
+        #region Method: ServerCore (Constructor)
+        public ServerCore()
+        {
+            EventManager = new EventManager();
+        }
+        #endregion
         #region Method: Boot
         internal void Boot(string configPath)
         {
@@ -120,7 +126,7 @@ namespace Bluedot.HabboServer
                 #region Standard Out
 
                 StandardOut = new StandardOut();
-                StandardOut.PrintNotice("Standard Out => Ready");
+                StandardOut.PrintNotice("Standard Out", "Ready");
 
                 #endregion
 
@@ -133,86 +139,33 @@ namespace Bluedot.HabboServer
                 if (mainInstallRequired)
                     SaveConfigInstallation();
 
-                StandardOut.PrintNotice("Config File => Loaded");
+                StandardOut.PrintNotice("Config", "Main config file loaded");
                 StandardOut.SetImportance(
                     (StandardOutImportance)
                     Config.ValueAsByte("/config/standardout/importance", (byte) StandardOutImportance.Debug));
 
                 #endregion
 
-                #region Database
+                #region MySQL
 
-                #region Connection Setup
-
-                StandardOut.PrintNotice("Database Manager => Preparing Connection...");
-                MySqlConnectionStringBuilder mysqlConnectionString = new MySqlConnectionStringBuilder
-                                                                         {
-                                                                             Server =
-                                                                                 Config.ValueAsString(
-                                                                                     "/config/mysql/host"),
-                                                                             UserID =
-                                                                                 Config.ValueAsString(
-                                                                                     "/config/mysql/user"),
-                                                                             Password =
-                                                                                 Config.ValueAsString(
-                                                                                     "/config/mysql/password"),
-                                                                             Database =
-                                                                                 Config.ValueAsString(
-                                                                                     "/config/mysql/database"),
-                                                                             Port =
-                                                                                 Config.ValueAsUint(
-                                                                                     "/config/mysql/port", 3306),
-                                                                             MinimumPoolSize =
-                                                                                 Config.ValueAsUint(
-                                                                                     "/config/mysql/minpoolsize", 1),
-                                                                             MaximumPoolSize =
-                                                                                 Config.ValueAsUint(
-                                                                                     "/config/mysql/maxpoolsize", 25),
-                                                                             Pooling = true,
-                                                                             PersistSecurityInfo = false
-                                                                         };
-
-                EntityConnectionStringBuilder entityConnectionString = new EntityConnectionStringBuilder
-                                                                           {
-                                                                               Metadata =
-                                                                                   "res://*/src.Database.StandardModel.csdl|res://*/src.Database.StandardModel.ssdl|res://*/src.Database.StandardModel.msl",
-                                                                               Provider = "MySql.Data.MySqlClient",
-                                                                               ProviderConnectionString =
-                                                                                   mysqlConnectionString.ToString()
-                                                                           };
-                _databaseConnection = new EntityConnection(entityConnectionString.ToString());
-
-                #endregion
-
-                #region Connection Start Up
-
-                StandardOut.PrintNotice("Database Manager => Connecting...");
-                try
-                {
-                    _databaseConnection.Open();
-                }
-                catch (EntityException e)
-                {
-                    StandardOut.PrintError("Database Manager => Connection Failed!");
-                    if (e.InnerException != null)
-                        StandardOut.PrintException(e.InnerException, false);
-                    StandardOut.PrintException(e, false);
-                    StandardOut.PrintError("Database Manager => Connection Failed!");
-                    StandardOut.PrintImportant("Press any key to exit");
-                    Console.ReadKey(true);
-                    return;
-                }
-                StandardOut.PrintNotice("Database Manager => Connected");
-
-                #endregion
+                StandardOut.PrintNotice("MySQL", "Creating connection provider");
+                MySqlConnectionProvider = new MySqlConnectionProvider
+                                              {
+                                                  Host = Config.ValueAsString("/config/mysql/host"),
+                                                  Port = Config.ValueAsUshort("/config/mysql/port", 3306),
+                                                  User = Config.ValueAsString("/config/mysql/user"),
+                                                  Password = Config.ValueAsString("/config/mysql/password"),
+                                                  Database = Config.ValueAsString("/config/mysql/database")
+                                              };
+                StandardOut.PrintNotice("MySQL", "Connection provider ready!");
 
                 #endregion
 
                 #region Figure Factory
 
-                StandardOut.PrintNotice("Habbo Figure Factory => Constructing...");
+                StandardOut.PrintNotice("Habbo Figure Factory", "Constructing...");
                 HabboFigureFactory = new HabboFigureFactory();
-                StandardOut.PrintNotice("Habbo Figure Factory => Ready");
+                StandardOut.PrintNotice("Habbo Figure Factory", "Ready");
 
                 #endregion
 
@@ -220,25 +173,25 @@ namespace Bluedot.HabboServer
 
                 #region PermissionDistributor
 
-                StandardOut.PrintNotice("Permission Distributor => Constructing...");
+                StandardOut.PrintNotice("Permission Distributor", "Constructing...");
                 PermissionDistributor = new PermissionDistributor();
-                StandardOut.PrintNotice("Permission Distributor => Ready");
+                StandardOut.PrintNotice("Permission Distributor", "Ready");
 
                 #endregion
 
                 #region HabboDistributor
 
-                StandardOut.PrintNotice("Habbo Distributor => Constructing...");
+                StandardOut.PrintNotice("Habbo Distributor", "Constructing...");
                 HabboDistributor = new HabboDistributor();
-                StandardOut.PrintNotice("Habbo Distributor => Ready");
+                StandardOut.PrintNotice("Habbo Distributor", "Ready");
 
                 #endregion
 
                 #region BadgeTypeDistributor
 
-                StandardOut.PrintNotice("Badge Type Cache => Constructing...");
+                StandardOut.PrintNotice("Badge Type Cache", "Constructing...");
                 BadgeTypeDistributor = new BadgeTypeDistributor();
-                StandardOut.PrintNotice("Badge Type Cache => Ready");
+                StandardOut.PrintNotice("Badge Type Cache", "Ready");
 
                 #endregion
 
@@ -248,7 +201,7 @@ namespace Bluedot.HabboServer
 
                 #region Game Socket
 
-                StandardOut.PrintNotice("Game Socket => Starting...");
+                StandardOut.PrintNotice("Game Socket Manager", "Starting...");
                 GameSocketManager = new GameSocketManager
                                         {
                                             Address = IPAddress.Any,
@@ -256,31 +209,25 @@ namespace Bluedot.HabboServer
                                             Reader = new ClassicGameSocketReader()
                                         };
                 GameSocketManager.Start();
-                StandardOut.PrintNotice("Game Socket  => Ready!");
+                StandardOut.PrintNotice("Game Socket Manager", "Ready!");
 
                 #endregion
 
                 #region WebAdmin
 
-                StandardOut.PrintNotice("WebAdmin => Starting...");
+                StandardOut.PrintNotice("WebAdmin", "Starting...");
                 WebAdminManager = new WebAdminManager(Config.ValueAsUshort("/config/webadmin/port", 14480));
-                StandardOut.PrintNotice("WebAdmin => Ready!");
+                StandardOut.PrintNotice("WebAdmin", "Ready!");
 
                 #endregion
 
                 #endregion
                 
-                StandardOut.PrintImportant("Starting Pseudo Plugin System...");
+                StandardOut.PrintImportant("Plugin Manager", "Starting Pseudo Plugin System...");
                 ApiCallerRoot.Start();
                 Console.Beep(500, 250);
-                StandardOut.PrintImportant("Bluedot Habbo Server is now functional!");
+                StandardOut.PrintImportant("Core", "Bluedot Habbo Server is now functional!");
             }
-        }
-        #endregion
-        #region Method: GetDatabaseSession
-        public Session GetDatabaseSession()
-        {
-            return new Session(_databaseConnection);
         }
         #endregion
         #region Method: PreInstall
@@ -425,7 +372,7 @@ namespace Bluedot.HabboServer
             InstallerCore installer = CoreManager.InstallerCore;
 
 
-            StandardOut.PrintImportant("Updating configuration file... (Install)");
+            StandardOut.PrintImportant("Config", "Updating configuration file... (Install)");
 
             XmlDocument doc = Config.GetInternalDocument();
             XmlNode rootElement = doc.SelectSingleNode("/config");
@@ -545,7 +492,7 @@ namespace Bluedot.HabboServer
             rootElement.AppendChild(webAdminElement);
 
             Config.Save();
-            StandardOut.PrintImportant("Configuration file saved!");
+            StandardOut.PrintImportant("Config", "Configuration file saved!");
         }
         #endregion
         #region Method: Shutdown
@@ -585,10 +532,8 @@ namespace Bluedot.HabboServer
                     StandardOut.Hidden = false;
                 }
 
-                _eventOnShutdown.Raise(this, EventArgs.Empty);
-
-                _databaseConnection.Dispose();
-
+                EventManager.Fire("shutdown", this, EventArgs.Empty);
+                
                 GameSocketManager.Stop();
                 WebAdminManager.Stop();
 
@@ -599,7 +544,6 @@ namespace Bluedot.HabboServer
                 Console.Beep(2000, 100);
                 Console.Beep(1500, 100);
                 Console.Beep(1000, 100);
-                return;
             }
         }
 

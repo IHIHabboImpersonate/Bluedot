@@ -13,9 +13,8 @@ namespace Bluedot.HabboServer.Network
             get { throw new NotImplementedException(); }
         }
 
-// ReSharper disable ConvertToConstant.Local
-        private string _headerString = "";
-// ReSharper restore ConvertToConstant.Local
+        private readonly string _headerString = "";
+
         /// <summary>
         /// Gets the string representation of the header.
         /// </summary>

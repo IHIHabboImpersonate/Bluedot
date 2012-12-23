@@ -107,6 +107,8 @@ namespace Bluedot.HabboServer.Network
                 _internalSocket.Close();
 
             PacketHandlers = null;
+            Habbo.LoggedIn = false;
+            Habbo.Socket = null;
             Habbo = null;
             return this;
         }
@@ -214,7 +216,7 @@ namespace Bluedot.HabboServer.Network
                 {
                     if (Habbo.LoggedIn)
                         Habbo.LoggedIn = false;
-                    CoreManager.ServerCore.StandardOut.PrintNotice("Client Connection Closed: Gracefully close.");
+                    CoreManager.ServerCore.StandardOut.PrintNotice("Game Socket Manager", "Client Connection Closed: Gracefully close.");
                     Disconnect();
                     return;
                 }
@@ -225,12 +227,10 @@ namespace Bluedot.HabboServer.Network
             {
                 if (args.Error != null)
                 {
-                    CoreManager.ServerCore.StandardOut.PrintError("Client Connection Killed: Socket read error!");
+                    CoreManager.ServerCore.StandardOut.PrintError("Game Socket Manager", "Client Connection Killed: Socket read error!");
                     CoreManager.ServerCore.StandardOut.PrintException(args.Error);
                 }
             }
-
-            return;
         }
         #endregion
 

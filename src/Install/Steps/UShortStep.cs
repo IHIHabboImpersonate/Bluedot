@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 #endregion
 
@@ -66,7 +67,7 @@ namespace Bluedot.HabboServer.Install
 
         internal override object Run()
         {
-            CoreManager.InstallerCore.Out.OverwritePageContents(ToString(_default.ToString()));
+            CoreManager.InstallerCore.Out.OverwritePageContents(ToString(_default.ToString(CultureInfo.InvariantCulture)));
 
             string inputString = Console.ReadLine();
 

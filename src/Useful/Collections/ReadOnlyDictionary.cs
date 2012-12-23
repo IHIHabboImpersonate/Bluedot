@@ -7,8 +7,7 @@ namespace Bluedot.HabboServer.Useful
 {
     public sealed class ReadOnlyDictionary<TKey, TValue> : ReadOnlyCollection<KeyValuePair<TKey, TValue>>
     {
-        public ReadOnlyDictionary(IDictionary<TKey, TValue> items)
-            : base(items.ToList()) { }
+        public ReadOnlyDictionary(IEnumerable<KeyValuePair<TKey, TValue>> items) : base(items.ToList()) { }
         
         public TValue this[TKey key]
         {
@@ -36,7 +35,7 @@ namespace Bluedot.HabboServer.Useful
 
         private IEnumerable<KeyValuePair<TKey, TValue>> GetQuery(TKey key)
         {
-            return (from t in base.Items where t.Key.Equals(key) select t);
+            return (from t in Items where t.Key.Equals(key) select t);
         }
     }
 }

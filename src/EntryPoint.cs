@@ -34,12 +34,14 @@ namespace Bluedot.HabboServer
 {
     internal static class EntryPoint
     {
+// ReSharper disable InconsistentNaming
         [DllImport("user32.dll")]
         static extern bool EnableMenuItem(IntPtr hMenu, uint uIDEnableItem, uint uEnable);
         [DllImport("user32.dll")]
         static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
         internal const UInt32 SC_CLOSE = 0xF060;
         internal const UInt32 MF_GRAYED = 0x00000001;
+// ReSharper restore InconsistentNaming
 
         internal static void Main(string[] arguments)
         {
@@ -212,10 +214,7 @@ namespace Bluedot.HabboServer
         {
             // If the server hasn't started, just exit.
             if (CoreManager.ServerCore == null)
-            {
                 Environment.Exit(0);
-                return;
-            }
 
             // We can't stop CTRL+BREAK closing so we should just force a shutdown.
             if (e.SpecialKey == ConsoleSpecialKey.ControlBreak)

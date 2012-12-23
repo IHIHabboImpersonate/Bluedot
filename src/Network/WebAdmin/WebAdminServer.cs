@@ -180,10 +180,7 @@ namespace Bluedot.HabboServer.Network.WebAdmin
                     IncomingRequest.BeginInvoke(this, e, null, null);
                 }
             }
-            catch
-            {
-                return;
-            }
+            catch {}
         }
         #endregion
 

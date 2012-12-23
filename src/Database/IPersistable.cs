@@ -2,6 +2,6 @@
 {
     public interface IPersistable
     {
-        long PersistInstanceProperty();
+        long PersistableInstanceId { get; }
     }
 }

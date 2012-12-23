@@ -51,7 +51,7 @@ namespace Bluedot.HabboServer.Habbos.Figure
             }
             set
             {
-                Gender = (value == 'M' ? false : true);
+                Gender = (value != 'M');
             }
         }
         #endregion

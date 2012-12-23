@@ -24,23 +24,25 @@ using Bluedot.HabboServer.Network;
 
 namespace Bluedot.HabboServer.ApiUsage.Packets
 {
+    using System.Globalization;
+
     public class MHabboData : OutgoingMessage
     {
         public HabboFigure Figure { get; set; }
-        public int HabboID { get; set; }
+        public int HabboId { get; set; }
         public string Motto { get; set; }
         public string UnknownA { get; set; }
         public string Username { get; set; }
 
         public override OutgoingMessage Send(IMessageable target)
         {
-            if (InternalOutgoingMessage.ID == 0)
+            if (InternalOutgoingMessage.Id == 0)
             {
                 InternalOutgoingMessage.Initialize(5)
-                    .AppendString(HabboID.ToString())
+                    .AppendString(HabboId.ToString(CultureInfo.InvariantCulture))
                     .AppendString(Username) // TODO: Should this be display name?
                     .AppendString(Figure.ToString())
-                    .AppendString(Figure.GenderChar.ToString())
+                    .AppendString(Figure.GenderChar.ToString(CultureInfo.InvariantCulture))
                     .AppendString(Motto)
                     .AppendString(UnknownA)
                     .AppendInt32(12) // TODO: Find out what this does.

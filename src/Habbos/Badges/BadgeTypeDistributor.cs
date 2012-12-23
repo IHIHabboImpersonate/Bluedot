@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+
+using Bluedot.HabboServer.Database.Actions;
 using Bluedot.HabboServer.Useful;
 
 namespace Bluedot.HabboServer.Habbos
@@ -47,21 +50,26 @@ namespace Bluedot.HabboServer.Habbos
             _codeCache = new WeakCache<string, BadgeType>(CacheInstanceGenerator);
         }
         #endregion
-
-        #region Method: CleanUp
-        /// <summary>
-        ///   Remove any collected Habbos from the cache.
-        /// </summary>
-        private void CleanUp()
+        
+        #region Method: GetBadgeCollectionFromHabbo
+        public BadgeCollection GetBadgeCollectionFromHabbo(Habbo habbo)
         {
-            // TODO: Look into calling this with http://msdn.microsoft.com/en-us/library/system.gc.registerforfullgcnotification.aspx
-            _idCache.CleanUp();
-            _codeCache.CleanUp();
+            IDictionary<int, int> badges = BadgeActions.GetBadgeDataFromHabboId(habbo.Id);
+
+            BadgeCollection badgeCollection = new BadgeCollection(badges.Count);
+
+            foreach (KeyValuePair<int, int> badge in badges)
+            {
+                badgeCollection.AddBadge(this[badge.Key]);
+                if (badge.Value != (int)BadgeSlot.NoSlot)
+                    badgeCollection.SetBadgeSlot(this[badge.Key], (BadgeSlot)badge.Value);
+            }
+            return badgeCollection;
         }
         #endregion
 
         #region Method: CacheInstanceGenerator
-        public BadgeType CacheInstanceGenerator(int id)
+        private BadgeType CacheInstanceGenerator(int id)
         {
             try
             {
@@ -72,7 +80,7 @@ namespace Bluedot.HabboServer.Habbos
                 return null;
             }
         }
-        public BadgeType CacheInstanceGenerator(string code)
+        private BadgeType CacheInstanceGenerator(string code)
         {
             try
             {

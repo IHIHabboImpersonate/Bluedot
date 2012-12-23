@@ -1,5 +1,6 @@
 ﻿using Bluedot.HabboServer.ApiUsage.Packets;
 using Bluedot.HabboServer.ApiUsage.Figures;
+using Bluedot.HabboServer.ApiUsage.PermissionEnforcement;
 
 namespace Bluedot.HabboServer.ApiUsage
 {
@@ -9,6 +10,7 @@ namespace Bluedot.HabboServer.ApiUsage
         {
             PacketHandlers.Start();
             FigureRoot.Start();
+            PermissionEnforcementRoot.Start();
         }
     }
 }

@@ -22,11 +22,7 @@
 #region Usings
 
 using System;
-using System.Data.Objects;
-using System.Linq;
-using Bluedot.HabboServer;
-using Bluedot.HabboServer.Database;
-using Bluedot.HabboServer.Habbos;
+using Bluedot.HabboServer.Database.Actions;
 
 #endregion
 
@@ -35,9 +31,28 @@ namespace Bluedot.HabboServer.Habbos
     public class SubscriptionData
     {
         #region Fields
-        #region Field: _subscriptionDatabase
-        private DBSubscription _subscriptionDatabase;
+
+        #region Field: _lengthSkipped
+        /// <summary>
+        /// The total amount of time the subscription has previously spent paused.
+        /// </summary>
+        private int _lengthSkipped;
         #endregion
+
+        #region Field: _pausedStart
+        /// <summary>
+        /// The timestamp that the subscription was paused on. If this is 0 then the subscription is not paused.
+        /// </summary>
+        private int _pausedStart;
+        #endregion
+
+        #region Field: _totalBought
+        /// <summary>
+        /// The total amount of time owned that of the subscription.
+        /// </summary>
+        private int _totalBought;
+        #endregion
+
         #endregion
 
         #region Properties
@@ -46,7 +61,7 @@ namespace Bluedot.HabboServer.Habbos
         /// <summary>
         /// 
         /// </summary>
-        public Bluedot.HabboServer.Habbos.Habbo Subscriber
+        public Habbo Subscriber
         {
             get;
             private set;
@@ -72,25 +87,20 @@ namespace Bluedot.HabboServer.Habbos
         {
             get
             {
-                if (_subscriptionDatabase.LengthSkipped == 0)
-                    return new TimeSpan(0); // Not started yet.
+                if (_lengthSkipped == 0)
+                    return new TimeSpan(0, 0, _totalBought); // Not started yet.
 
-                return new TimeSpan(0, 0,
-                                    DateTime.Now.GetUnixTimestamp() - _subscriptionDatabase.TotalBought + _subscriptionDatabase.LengthSkipped);
+                return new TimeSpan(0, 0, DateTime.Now.GetUnixTimestamp() - _totalBought + _lengthSkipped);
             }
             set
             {
-                using(Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
-                {
-                    dbSession.Subscriptions.Attach(_subscriptionDatabase);
-                    _subscriptionDatabase.TotalBought = DateTime.Now.GetUnixTimestamp() - _subscriptionDatabase.LengthSkipped + (int)value.TotalSeconds;
-                    dbSession.SaveChanges();
-                }
+                _totalBought = DateTime.Now.GetUnixTimestamp() - _lengthSkipped + (int)value.TotalSeconds;
             }
         }
         #endregion
 
         #region Property: Expired
+
         /// <summary>
         /// 
         /// </summary>
@@ -98,22 +108,17 @@ namespace Bluedot.HabboServer.Habbos
         {
             get
             {
-                if (_subscriptionDatabase.LengthSkipped == 0)
+                if (_lengthSkipped == 0)
                     return new TimeSpan(0); // Not started yet.
 
-                return new TimeSpan(0, 0,
-                                    DateTime.Now.GetUnixTimestamp() - _subscriptionDatabase.LengthSkipped);
+                return new TimeSpan(0, 0, DateTime.Now.GetUnixTimestamp() - _lengthSkipped);
             }
             set
             {
-                using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
-                {
-                    dbSession.Subscriptions.Attach(_subscriptionDatabase);
-                    _subscriptionDatabase.LengthSkipped = DateTime.Now.GetUnixTimestamp() - (int)value.TotalSeconds;
-                    dbSession.SaveChanges();
-                }
+                _lengthSkipped = DateTime.Now.GetUnixTimestamp() - (int)value.TotalSeconds;
             }
         }
+
         #endregion
 
         #region Property: IsActive
@@ -124,27 +129,21 @@ namespace Bluedot.HabboServer.Habbos
         {
             get
             {
-                return _subscriptionDatabase.PausedStart == 0;
+                return _pausedStart == 0;
             }
             set
             {
                 if (IsActive == value)
                     return; // Nothing to do.
 
-                using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
+                if (!value)
                 {
-                    dbSession.Subscriptions.Attach(_subscriptionDatabase);
-
-                    if (!value)
-                    {
-                        _subscriptionDatabase.PausedStart = DateTime.Now.GetUnixTimestamp();
-                    }
-                    else
-                    {
-                        _subscriptionDatabase.LengthSkipped += DateTime.Now.GetUnixTimestamp() - _subscriptionDatabase.PausedStart;
-                        _subscriptionDatabase.PausedStart = 0;
-                    }
-                    dbSession.SaveChanges();
+                    _pausedStart = DateTime.Now.GetUnixTimestamp();
+                }
+                else
+                {
+                    _lengthSkipped += DateTime.Now.GetUnixTimestamp() - _pausedStart;
+                    _pausedStart = 0;
                 }
             }
         }
@@ -155,10 +154,16 @@ namespace Bluedot.HabboServer.Habbos
         #region Methods
 
         #region Method: SubscriptionData (Constructor)
-        public SubscriptionData(Bluedot.HabboServer.Habbos.Habbo habbo, string type)
+        public SubscriptionData(Habbo habbo, string type)
         {
             Subscriber = habbo;
             Type = type;
+        }
+        #endregion
+        #region Method: ~SubscriptionData (Destructor)
+        ~SubscriptionData()
+        {
+            Save();
         }
         #endregion
 
@@ -168,26 +173,26 @@ namespace Bluedot.HabboServer.Habbos
         /// </summary>
         public SubscriptionData Reload()
         {
-            using (Session dbSession = CoreManager.ServerCore.GetDatabaseSession())
+            int totalBought;
+            int lengthSkipped;
+            int pausedStart;
+
+            if (SubscriptionActions.GetSubscriptionData(Subscriber.Id, Type, out totalBought, out lengthSkipped, out pausedStart))
             {
-                _subscriptionDatabase = dbSession
-                    .Subscriptions
-                    .Where(subscription => subscription.SubscriberId == Subscriber.Id &&
-                                           subscription.Type == Type)
-                    .DefaultIfEmpty(null)
-                    .SingleOrDefault();
-                if (_subscriptionDatabase != null)
-                    return this;
-
-                _subscriptionDatabase = new DBSubscription
-                {
-                    SubscriberId = Subscriber.Id,
-                    Type = Type
-                };
-                dbSession.Subscriptions.AddObject(_subscriptionDatabase);
-
-                dbSession.SaveChanges();
+                _totalBought = totalBought;
+                _lengthSkipped = lengthSkipped;
+                _pausedStart = pausedStart;
             }
+            return this;
+        }
+        #endregion
+        #region Method: Save
+        /// <summary>
+        /// Causes the subscription data to be saved to the database.
+        /// </summary>
+        public SubscriptionData Save()
+        {
+            SubscriptionActions.SetSubscriptionData(Subscriber.Id, Type, _totalBought, _lengthSkipped, _pausedStart);
             return this;
         }
         #endregion

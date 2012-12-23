@@ -8,10 +8,10 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
     {
         private static void ProcessBadgeListingRequest(Habbo sender, IncomingMessage message)
         {
-            List<BadgeType> allBadges = new List<BadgeType>(sender.Badges.BadgeDictionary.Count);
+            List<BadgeType> allBadges = new List<BadgeType>(sender.Badges.Count);
             Dictionary<BadgeSlot, BadgeType> badgeSlots = new Dictionary<BadgeSlot, BadgeType>(5);
 
-            foreach (KeyValuePair<BadgeType, BadgeSlot> badge in sender.Badges.BadgeDictionary)
+            foreach (KeyValuePair<BadgeType, BadgeSlot> badge in sender.Badges)
             {
                 allBadges.Add(badge.Key);
 

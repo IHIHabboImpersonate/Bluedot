@@ -14,7 +14,7 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
                 return;
 
 
-            SubscriptionData data = sender.Subscriptions.Value[subscriptionName];
+            SubscriptionData data = sender.Subscriptions[subscriptionName];
 
             new MSubscriptionData
             {

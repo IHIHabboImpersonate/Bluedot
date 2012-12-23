@@ -45,9 +45,9 @@ namespace Bluedot.HabboServer.Install
         internal InstallerIn In { get; private set; }
         internal InstallerOut Out { get; private set; }
 
-        internal InstallerCore AddCategory(string installerCategoryID, Category category)
+        internal InstallerCore AddCategory(string installerCategoryId, Category category)
         {
-            _categories.Add(installerCategoryID, category);
+            _categories.Add(installerCategoryId, category);
             return this;
         }
 
@@ -58,14 +58,14 @@ namespace Bluedot.HabboServer.Install
                 CoreManager.
                     ServerCore.
                     StandardOut.
-                    PrintNotice("Installer => No installation tasks detected.");
+                    PrintNotice("Installer", "No installation tasks detected.");
                 return this;
             }
             CoreManager.
                 ServerCore.
                 StandardOut.
-                PrintImportant("Installer => Installation tasks detected!").
-                PrintNotice("Standard Out => Formatting Disabled (Installer)").
+                PrintImportant("Installer", "Installation tasks detected!").
+                PrintNotice("Standard Out", "Formatting Disabled (Installer)").
                 Hidden = true;
 
             Console.WriteLine("Press any key to continue.");
@@ -83,7 +83,7 @@ namespace Bluedot.HabboServer.Install
             }
 
             CoreManager.ServerCore.StandardOut.Hidden = false;
-            CoreManager.ServerCore.StandardOut.PrintNotice("Standard Out => Formatting Enabled (Installer)");
+            CoreManager.ServerCore.StandardOut.PrintNotice("Standard Out", "Formatting Enabled (Installer)");
             return this;
         }
 
