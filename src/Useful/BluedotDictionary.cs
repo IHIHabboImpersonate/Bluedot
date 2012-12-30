@@ -172,28 +172,6 @@ namespace Bluedot.HabboServer.Useful
         #region Method: BluedotDictionary (Constructor)
         public BluedotDictionary(LazyLoadingBehaviour lazyLoading = null, DirtyTrackingBehaviour dirtyTracking = null, ReadOnlyBehaviour readOnly = null, WeakReferenceBehaviour weakReference = null)
         {
-            _strongDictionary = new Dictionary<TKey, TValue>();
-            LazyLoading = lazyLoading;
-            DirtyTracking = dirtyTracking;
-            ReadOnly = readOnly;
-            WeakReference = weakReference;
-
-            if (LazyLoading != null && LazyLoading.Values)
-                _lazyKeys = new HashSet<TKey>();
-
-            if (DirtyTracking != null && DirtyTracking.Values)
-                _dirtyKeys = new HashSet<TKey>();
-
-            if (WeakReference != null && WeakReference.Values)
-                _weakDictionary = new Dictionary<TKey, WeakReference<TValue>>();
-            else
-                _strongDictionary = new Dictionary<TKey, TValue>();
-        }
-        #endregion
-        #region Method: BluedotDictionary (Constructor)
-        public BluedotDictionary(IDictionary<TKey, TValue> initialValues, LazyLoadingBehaviour lazyLoading = null, DirtyTrackingBehaviour dirtyTracking = null, ReadOnlyBehaviour readOnly = null, WeakReferenceBehaviour weakReference = null)
-        {
-            _strongDictionary = new Dictionary<TKey, TValue>(initialValues);
             LazyLoading = lazyLoading;
             DirtyTracking = dirtyTracking;
             ReadOnly = readOnly;

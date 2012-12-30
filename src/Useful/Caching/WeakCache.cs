@@ -6,21 +6,25 @@ namespace Bluedot.HabboServer.Useful
     public class WeakCache<TKey, TValue> where TValue : class
     {
         #region Fields
-        #region Field: _instanceGenerator
-        private readonly Func<TKey, TValue> _instanceGenerator;
-        #endregion
         #region Field: _cache
         /// <summary>
         ///   Stores the cached instances.
         /// </summary>
-        //private readonly Dictionary<TKey, WeakReference<TValue>> _cache = new Dictionary<TKey, WeakReference<TValue>>();
-        private readonly WeakDictionary<TKey, TValue> _cache = new WeakDictionary<TKey, TValue>();
+        private readonly BluedotDictionary<TKey, TValue> _cache;
+        #endregion
+        #region Field: _weakCacheWeakReferenceBehaviour
+        private readonly BluedotDictionary<TKey, TValue>.WeakReferenceBehaviour _weakCacheWeakReferenceBehaviour;
+        #endregion
+        #endregion
 
+        #region Methods
+        #region Method: WeakCache (Constructor)
         public WeakCache(Func<TKey, TValue> instanceGenerator)
         {
-            _instanceGenerator = instanceGenerator;
-        }
+            _weakCacheWeakReferenceBehaviour = new BluedotDictionary<TKey, TValue>.WeakReferenceBehaviour(true, instanceGenerator);
 
+            _cache = new BluedotDictionary<TKey, TValue>(weakReference: _weakCacheWeakReferenceBehaviour);
+        }
         #endregion
         #endregion
 
@@ -30,31 +34,11 @@ namespace Bluedot.HabboServer.Useful
         {
             get
             {
-                TValue instance;
-                lock (this)
-                {
-                    // Is this Habbo already cached and has it not yet been collected and removed from memory?
-                    if (!_cache.TryGetValue(index, out instance))
-                    {
-                        // Create a new instance using the implemented ConstructInstance method.
-                        instance = _instanceGenerator(index);
-
-                        // And cache it.
-                        _cache.Add(index, instance);
-                    }
-                }
-
-                // Return the newly cached instance.
-                return instance;
+                return _cache[index];
             }
             set
             {
-                lock (this)
-                {
-                    if (_cache.ContainsKey(index))
-                        return;
-                    _cache.Add(index, value);
-                }
+                _cache[index] = value;
             }
         }
         #endregion

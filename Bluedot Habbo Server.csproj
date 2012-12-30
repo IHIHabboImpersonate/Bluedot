@@ -116,12 +116,8 @@
     <Compile Include="src\Permissions\PermissionState.cs" />
     <Compile Include="src\Subscriptions\SubscriptionData.cs" />
     <Compile Include="src\Useful\Caching\WeakCache.cs" />
-    <Compile Include="src\Useful\Collections\WeakDictionary.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="src\Useful\Collections\WeakList.cs" />
     <Compile Include="src\Useful\Collections\WeakHashSet.cs" />
-    <Compile Include="src\Useful\Collections\ReadOnlyDictionary.cs" />
     <Compile Include="src\Habbos\FigureParts\Body.cs" />
     <Compile Include="src\Habbos\FigureParts\EyeAccessory.cs" />
     <Compile Include="src\Habbos\FigureParts\FaceAccessory.cs" />
@@ -177,7 +173,6 @@
     <Compile Include="src\ServerCore.cs" />
     <Compile Include="src\StandardOut.cs" />
     <Compile Include="src\Useful\BluedotDictionary.cs" />
-    <Compile Include="src\Useful\LazyDictionary.cs" />
     <Compile Include="src\Useful\WriteLock.cs" />
     <Compile Include="src\Useful\Nito\SafeGCHandle.cs" />
     <Compile Include="src\Useful\Nito\WeakReference.cs" />
