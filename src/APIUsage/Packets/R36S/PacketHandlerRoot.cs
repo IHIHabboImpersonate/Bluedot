@@ -1,10 +1,10 @@
-﻿using Bluedot.HabboServer.Habbos;
+﻿using System;
+using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
+using Bluedot.HabboServer.Useful;
 
 namespace Bluedot.HabboServer.ApiUsage.Packets
 {
-    using System;
-
     public static partial class PacketHandlers
     {
         public static void Start()
@@ -23,27 +23,30 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
 
         private static void RegisterLoginHandlers(object source, EventArgs args)
         {
-            GameSocketConnectionEventArgs typedArgs = args as GameSocketConnectionEventArgs;
+            GameSocket socket = (GameSocket)source;
 
-            typedArgs.Socket.PacketHandlers[206, GameSocketMessageHandlerPriority.DefaultAction] += ProcessEncryptionRequest;
-            typedArgs.Socket.PacketHandlers[2002, GameSocketMessageHandlerPriority.DefaultAction] += ProcessSessionRequest;
-            typedArgs.Socket.PacketHandlers[204, GameSocketMessageHandlerPriority.DefaultAction] += ProcessSSOTicket;
+            socket.PacketHandlers[206, GameSocketMessageHandlerPriority.DefaultAction] += ProcessEncryptionRequest;
+            socket.PacketHandlers[2002, GameSocketMessageHandlerPriority.DefaultAction] += ProcessSessionRequest;
+            socket.PacketHandlers[204, GameSocketMessageHandlerPriority.DefaultAction] += ProcessSSOTicket;
         }
         private static void RegisterHabboHandlers(object source, EventArgs args)
         {
-            (source as Habbo).Socket.PacketHandlers[6, GameSocketMessageHandlerPriority.DefaultAction] += ProcessBalanceRequest;
-            (source as Habbo).Socket.PacketHandlers[7, GameSocketMessageHandlerPriority.DefaultAction] += ProcessHabboInfoRequest;
-            (source as Habbo).Socket.PacketHandlers[8, GameSocketMessageHandlerPriority.DefaultAction] += ProcessGetVolumeLevel;
-            (source as Habbo).Socket.PacketHandlers[157, GameSocketMessageHandlerPriority.DefaultAction] += ProcessBadgeListingRequest;
+            Habbo habbo = (Habbo)source;
+            habbo.Socket.PacketHandlers[6, GameSocketMessageHandlerPriority.DefaultAction] += ProcessBalanceRequest;
+            habbo.Socket.PacketHandlers[7, GameSocketMessageHandlerPriority.DefaultAction] += ProcessHabboInfoRequest;
+            habbo.Socket.PacketHandlers[8, GameSocketMessageHandlerPriority.DefaultAction] += ProcessGetVolumeLevel;
+            habbo.Socket.PacketHandlers[157, GameSocketMessageHandlerPriority.DefaultAction] += ProcessBadgeListingRequest;
         }
 
         private static void RegisterSubscriptionHandlers(object source, EventArgs args)
         {
-            (source as Habbo).Socket.PacketHandlers[26, GameSocketMessageHandlerPriority.DefaultAction] += ProcessSubscriptionDataRequest;
+            Habbo habbo = (Habbo)source;
+            habbo.Socket.PacketHandlers[26, GameSocketMessageHandlerPriority.DefaultAction] += ProcessSubscriptionDataRequest;
         }
         private static void RegisterMessengerHandlers(object source, EventArgs args)
         {
-            (source as Habbo).Socket.PacketHandlers[12, GameSocketMessageHandlerPriority.DefaultAction] += ProcessMessengerInit;
+            Habbo habbo = (Habbo)source;
+            habbo.Socket.PacketHandlers[12, GameSocketMessageHandlerPriority.DefaultAction] += ProcessMessengerInit;
         }
     }
 }

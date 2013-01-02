@@ -110,6 +110,7 @@
     <Compile Include="src\Permissions\PermissionState.cs" />
     <Compile Include="src\Subscriptions\SubscriptionData.cs" />
     <Compile Include="src\Useful\Caching\WeakCache.cs" />
+    <Compile Include="src\Useful\CancelReasonEventArgs.cs" />
     <Compile Include="src\Useful\Collections\WeakList.cs" />
     <Compile Include="src\Useful\Collections\WeakHashSet.cs" />
     <Compile Include="src\Habbos\FigureParts\Body.cs" />

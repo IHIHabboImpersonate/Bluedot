@@ -1,12 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
 
 using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
+using Bluedot.HabboServer.Useful;
 
 namespace Bluedot.HabboServer.ApiUsage.Packets
 {
-    using System;
-
     public static partial class PacketHandlers
     {
         private static void ProcessSSOTicket(Habbo sender, IncomingMessage message)
@@ -23,7 +22,7 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
                     Reason = ConnectionClosedReason.InvalidSSOTicket
                 }.Send(sender);
                 
-                sender.Socket.Disconnect(); // Invalid SSO Ticket - Disconnect!
+                sender.Socket.Disconnect("Invalid SSO Ticket");
             }
             else
             {
@@ -35,7 +34,7 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
                         {
                             Reason = ConnectionClosedReason.ConcurrentLogin
                         }.Send(fullHabbo);
-                    fullHabbo.Socket.Disconnect();
+                    fullHabbo.Socket.Disconnect("Concurrent Login");
                 }
 
                 LoginMerge(fullHabbo, sender);
@@ -46,13 +45,13 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
         #region Method: LoginMerge
         private static void LoginMerge(Habbo fullHabbo, Habbo connectionHabbo)
         {
-            CancelEventArgs eventArgs = new CancelEventArgs();
+            CancelReasonEventArgs eventArgs = new CancelReasonEventArgs();
             CoreManager.ServerCore.EventManager.Fire("habbo_login:before", fullHabbo, eventArgs);
 
             if (eventArgs.Cancel)
             {
                 if (connectionHabbo.Socket != null)
-                    connectionHabbo.Socket.Disconnect();
+                    connectionHabbo.Socket.Disconnect(eventArgs.CancelReason);
                 return;
             }
 

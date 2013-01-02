@@ -1,33 +1,13 @@
 ﻿using System;
 using System.Net;
+
+using Bluedot.HabboServer.Useful;
+
 using Nito.Async;
 using Nito.Async.Sockets;
 
 namespace Bluedot.HabboServer.Network
 {
-    public delegate void GameSocketConnectionEventHandler(object source, GameSocketConnectionEventArgs args);
-
-    public class GameSocketConnectionEventArgs : EventArgs
-    {
-        public GameSocket Socket
-        {
-            get;
-            private set;
-        }
-
-        public bool Cancelled { get; private set; }
-
-        internal GameSocketConnectionEventArgs(GameSocket socket)
-        {
-            Socket = socket;
-        }
-
-        public void Cancel()
-        {
-            Cancelled = true;
-        }
-    }
-
     public class GameSocketManager
     {
         public GameSocketReader Reader
@@ -94,18 +74,17 @@ namespace Bluedot.HabboServer.Network
             ServerChildTcpSocket internalSocket = args.Result;
             GameSocket socket = new GameSocket(internalSocket, Reader);
 
-            GameSocketConnectionEventArgs connectionEventArgs = new GameSocketConnectionEventArgs(socket);
+            CancelReasonEventArgs connectionEventArgs = new CancelReasonEventArgs();
 
-            CoreManager.ServerCore.EventManager.Fire("incoming_game_connection:before", this, connectionEventArgs);
-            if (connectionEventArgs.Cancelled)
+            CoreManager.ServerCore.EventManager.Fire("incoming_game_connection:before", socket, connectionEventArgs);
+            if (connectionEventArgs.Cancel)
             {
-                CoreManager.ServerCore.StandardOut.PrintNotice("Game Socket Manager", "Incoming connection rejected: " + internalSocket.RemoteEndPoint);
-                socket.Disconnect();
+                socket.Disconnect("Connection rejected from " + internalSocket.RemoteEndPoint + "(" + connectionEventArgs.CancelReason + ")");
                 return;
             }
 
             socket.Start();
-            CoreManager.ServerCore.EventManager.Fire("incoming_game_connection:after", this, connectionEventArgs);
+            CoreManager.ServerCore.EventManager.Fire("incoming_game_connection:after", socket, connectionEventArgs);
             CoreManager.ServerCore.StandardOut.PrintNotice("Game Socket Manager", "Incoming connection accepted: " + internalSocket.RemoteEndPoint);
 
             _listeningSocket.AcceptAsync();

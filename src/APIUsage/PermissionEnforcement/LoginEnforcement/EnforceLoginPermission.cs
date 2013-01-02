@@ -1,7 +1,7 @@
 ﻿using System;
-using System.ComponentModel;
 
 using Bluedot.HabboServer.Habbos;
+using Bluedot.HabboServer.Useful;
 
 namespace Bluedot.HabboServer.ApiUsage.PermissionEnforcement
 {
@@ -10,9 +10,12 @@ namespace Bluedot.HabboServer.ApiUsage.PermissionEnforcement
         internal static void EnforceLoginPermission(object sender, EventArgs eventArgs)
         {
             Habbo habbo = (Habbo)sender;
-
+            CancelReasonEventArgs cancelReasonEventArgs = (CancelReasonEventArgs)eventArgs;
             if (!habbo.HasPermission("habbo_login"))
-                ((CancelEventArgs)eventArgs).Cancel = true;
+            {
+                cancelReasonEventArgs.Cancel = true;
+                cancelReasonEventArgs.CancelReason = "Permission \"habbo_login\" missing!";
+            }
         }
     }
 }
