@@ -63,7 +63,10 @@ namespace Bluedot.HabboServer.Database.Actions
                 {
                     while (reader.Read())
                     {
-                        permissions.Add((string)reader["permission_name"], (PermissionState)reader["permission_state"]);
+                        if((sbyte)reader["permission_state"] == 1)
+                            permissions.Add((string)reader["permission_name"], PermissionState.Allow);
+                        else
+                            permissions.Add((string)reader["permission_name"], PermissionState.Deny);
                     }
 
                     return permissions;
