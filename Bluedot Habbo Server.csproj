@@ -52,6 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\APIUsage\ApiCallerRoot.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\EventHandlers\ProcessEventCategoryValidationRequest.cs" />
+    <Compile Include="src\APIUsage\Packets\R36S\EventSenders\MEventCategoryValid.cs" />
     <Compile Include="src\APIUsage\Packets\R36S\Extensions.cs" />
     <Compile Include="src\APIUsage\Figures\Body\Body180.cs" />
     <Compile Include="src\APIUsage\Figures\FigureRoot.cs" />
