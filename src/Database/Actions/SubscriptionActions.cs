@@ -59,7 +59,7 @@ namespace Bluedot.HabboServer.Database.Actions
 
             using (connection = connection ?? CoreManager.ServerCore.MySqlConnectionProvider.GetConnection())
             {
-                return connection.GetCachedCommand("INSERT INTO `subscription` (`habbo_id`, `subscription_type`, `total_bought`, `skipped_length`, `paused_length`) VALUES (@habbo_id, @subscription_type, @total_bought, @skipped_length, @paused_length) ON DUPLICATE KEY UPDATE SET `total_bought` = @total_bought, `skipped_length` = @skipped_length, `paused_length` = @paused_length").ExecuteNonQuery(parameters) >= 1;
+                return connection.GetCachedCommand("INSERT INTO `subscription` (`habbo_id`, `subscription_type`, `total_bought`, `skipped_length`, `paused_length`) VALUES (@habbo_id, @subscription_type, @total_bought, @skipped_length, @paused_start) ON DUPLICATE KEY UPDATE SET `total_bought` = @total_bought, `skipped_length` = @skipped_length, `paused_length` = @paused_start").ExecuteNonQuery(parameters) >= 1;
             }
         }
         #endregion
