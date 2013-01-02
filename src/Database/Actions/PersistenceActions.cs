@@ -6,8 +6,6 @@ namespace Bluedot.HabboServer.Database.Actions
     public static class PersistenceActions
     {
         #region Action: GetPersistentValue
-        private static WrappedMySqlCommand _getPersistentValue;
-
         /// <summary>
         /// Retrieves a persistent value.
         /// </summary>

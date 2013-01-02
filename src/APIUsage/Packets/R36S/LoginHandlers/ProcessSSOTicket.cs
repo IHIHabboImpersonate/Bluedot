@@ -10,7 +10,7 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
     {
         private static void ProcessSSOTicket(Habbo sender, IncomingMessage message)
         {
-            ClassicIncomingMessage classicMessage = message as ClassicIncomingMessage;
+            ClassicIncomingMessage classicMessage = (ClassicIncomingMessage)message;
 
             Habbo fullHabbo = CoreManager.ServerCore.HabboDistributor.GetHabboFromSSOTicket(
                 classicMessage.PopPrefixedString());

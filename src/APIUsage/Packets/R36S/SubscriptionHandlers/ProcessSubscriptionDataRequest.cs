@@ -7,7 +7,8 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
     {
         private static void ProcessSubscriptionDataRequest(Habbo sender, IncomingMessage message)
         {
-            string subscriptionName = (message as ClassicIncomingMessage).PopPrefixedString();
+            ClassicIncomingMessage classicMessage = (ClassicIncomingMessage)message;
+            string subscriptionName = classicMessage.PopPrefixedString();
 
             // Only "club_habbo" is valid for this client.
             if (subscriptionName != "club_habbo")
