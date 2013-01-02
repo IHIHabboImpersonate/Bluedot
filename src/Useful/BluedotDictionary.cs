@@ -321,39 +321,32 @@ namespace Bluedot.HabboServer.Useful
                     return true;
                 }
 
-
-                if (LazyLoading == null || !LazyLoading.Values)
-                {
-                    value = default(TValue);
-                    return false;
-                }
-
-                if (_lazyKeys.Contains(key))
+                if (LazyLoading != null && LazyLoading.Values && _lazyKeys.Contains(key))
                 {
                     _lazyKeys.Remove(key);
                     value = LazyLoading.ValueFactory(key);
                     _strongDictionary.Add(key, LazyLoading.ValueFactory(key));
                     return true;
                 }
-
-                value = default(TValue);
-                return false;
             }
-            if (_weakDictionary.ContainsKey(key))
+            else
             {
-                if(_weakDictionary[key].TryGetTarget(out value))
+                if (_weakDictionary.ContainsKey(key))
+                {
+                    if (_weakDictionary[key].TryGetTarget(out value))
+                        return true;
+                    value = WeakReference.ValueFactory(key);
+                    _weakDictionary[key] = new WeakReference<TValue>(value);
                     return true;
-                value = WeakReference.ValueFactory(key);
-                _weakDictionary[key] = new WeakReference<TValue>(value);
-                return true;
-            }
+                }
 
-            if (_lazyKeys.Contains(key))
-            {
-                _lazyKeys.Remove(key);
-                value = LazyLoading.ValueFactory(key);
-                _weakDictionary.Add(key, new WeakReference<TValue>(value));
-                return true;
+                if (LazyLoading != null && LazyLoading.Values && _lazyKeys.Contains(key))
+                {
+                    _lazyKeys.Remove(key);
+                    value = LazyLoading.ValueFactory(key);
+                    _weakDictionary.Add(key, new WeakReference<TValue>(value));
+                    return true;
+                }
             }
 
             value = default(TValue);
