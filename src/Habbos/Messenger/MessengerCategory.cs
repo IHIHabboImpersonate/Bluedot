@@ -55,7 +55,7 @@ namespace Bluedot.HabboServer.Habbos.Messenger
         }
         #endregion
 
-        private static readonly BluedotDictionary<int, Habbo>.LazyLoadingBehaviour _habboLazyLoadingBehavour = new BluedotDictionary<int, Habbo>.LazyLoadingBehaviour(true, id => CoreManager.ServerCore.HabboDistributor[id]);
+        private static readonly BluedotDictionary<int, Habbo>.LazyLoadingBehaviour _habboLazyLoadingBehavour = new BluedotDictionary<int, Habbo>.LazyLoadingBehaviour(false, true, id => CoreManager.ServerCore.HabboDistributor[id]);
         private static readonly BluedotDictionary<int, Habbo>.WeakReferenceBehaviour _habboWeakReferenceBehaviour = new BluedotDictionary<int, Habbo>.WeakReferenceBehaviour(true);
 
         #region Method: MessengerCategory (Constructor)

@@ -321,12 +321,21 @@ namespace Bluedot.HabboServer.Useful
                     return true;
                 }
 
-                if (LazyLoading != null && LazyLoading.Values && _lazyKeys.Contains(key))
+                if (LazyLoading != null && LazyLoading.Values)
                 {
-                    _lazyKeys.Remove(key);
-                    value = LazyLoading.ValueFactory(key);
-                    _strongDictionary.Add(key, LazyLoading.ValueFactory(key));
-                    return true;
+                    if (_lazyKeys.Contains(key))
+                    {
+                        _lazyKeys.Remove(key);
+                        value = LazyLoading.ValueFactory(key);
+                        _strongDictionary.Add(key, value);
+                        return true;
+                    }
+                    if(LazyLoading.Keys)
+                    {
+                        value = LazyLoading.ValueFactory(key);
+                        _strongDictionary.Add(key, value);
+                        return true;
+                    }
                 }
             }
             else
@@ -340,12 +349,21 @@ namespace Bluedot.HabboServer.Useful
                     return true;
                 }
 
-                if (LazyLoading != null && LazyLoading.Values && _lazyKeys.Contains(key))
+                if (LazyLoading != null && LazyLoading.Values)
                 {
-                    _lazyKeys.Remove(key);
-                    value = LazyLoading.ValueFactory(key);
-                    _weakDictionary.Add(key, new WeakReference<TValue>(value));
-                    return true;
+                    if (_lazyKeys.Contains(key))
+                    {
+                        _lazyKeys.Remove(key);
+                        value = LazyLoading.ValueFactory(key);
+                        _weakDictionary.Add(key, new WeakReference<TValue>(value));
+                        return true;
+                    }
+                    if (LazyLoading.Keys)
+                    {
+                        value = LazyLoading.ValueFactory(key);
+                        _weakDictionary.Add(key, new WeakReference<TValue>(value));
+                        return true;
+                    }
                 }
             }
 
@@ -433,6 +451,12 @@ namespace Bluedot.HabboServer.Useful
         #region Type: LazyLoadingBehaviour
         public class LazyLoadingBehaviour
         {
+            public bool Keys
+            {
+                get;
+                private set;
+            }
+
             public bool Values
             {
                 get;
@@ -445,8 +469,9 @@ namespace Bluedot.HabboServer.Useful
                 private set;
             }
 
-            public LazyLoadingBehaviour(bool lazyValues, Func<TKey, TValue> lazyValueFactory)
+            public LazyLoadingBehaviour(bool lazyKeys, bool lazyValues, Func<TKey, TValue> lazyValueFactory)
             {
+                Keys = lazyKeys;
                 Values = lazyValues;
                 ValueFactory = lazyValueFactory;
             }

@@ -25,7 +25,7 @@ namespace Bluedot.HabboServer.Useful
         public WeakCache(Func<TKey, TValue> instanceGenerator)
         {
             _weakCacheWeakReferenceBehaviour = new BluedotDictionary<TKey, TValue>.WeakReferenceBehaviour(true);
-            _weakCacheLazyLoadingBehaviour = new BluedotDictionary<TKey, TValue>.LazyLoadingBehaviour(true, instanceGenerator);
+            _weakCacheLazyLoadingBehaviour = new BluedotDictionary<TKey, TValue>.LazyLoadingBehaviour(true, true, instanceGenerator);
 
              _cache = new BluedotDictionary<TKey, TValue>(weakReference: _weakCacheWeakReferenceBehaviour, lazyLoading: _weakCacheLazyLoadingBehaviour);
         }
