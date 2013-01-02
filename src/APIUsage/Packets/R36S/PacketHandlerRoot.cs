@@ -16,6 +16,7 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
                 .StrongBind("habbo_login:after", RegisterHabboHandlers)
                 .StrongBind("habbo_login:after", RegisterMessengerHandlers)
                 .StrongBind("habbo_login:after", RegisterSubscriptionHandlers)
+                .StrongBind("habbo_login:after", RegisterRoomEventHandlers)
 
                 // Inform the client of a successful login.
                 .StrongBind("habbo_login:after", (source, e) => new MAuthenticationOkay().Send(source as IMessageable));
@@ -29,6 +30,7 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
             socket.PacketHandlers[2002, GameSocketMessageHandlerPriority.DefaultAction] += ProcessSessionRequest;
             socket.PacketHandlers[204, GameSocketMessageHandlerPriority.DefaultAction] += ProcessSSOTicket;
         }
+
         private static void RegisterHabboHandlers(object source, EventArgs args)
         {
             Habbo habbo = (Habbo)source;
@@ -43,10 +45,17 @@ namespace Bluedot.HabboServer.ApiUsage.Packets
             Habbo habbo = (Habbo)source;
             habbo.Socket.PacketHandlers[26, GameSocketMessageHandlerPriority.DefaultAction] += ProcessSubscriptionDataRequest;
         }
+
         private static void RegisterMessengerHandlers(object source, EventArgs args)
         {
             Habbo habbo = (Habbo)source;
             habbo.Socket.PacketHandlers[12, GameSocketMessageHandlerPriority.DefaultAction] += ProcessMessengerInit;
+        }
+
+        private static void RegisterRoomEventHandlers(object source, EventArgs args)
+        {
+            Habbo habbo = (Habbo)source;
+            habbo.Socket.PacketHandlers[315, GameSocketMessageHandlerPriority.DefaultAction] += ProcessEventCategoryValidationRequest;
         }
     }
 }
