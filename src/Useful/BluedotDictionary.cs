@@ -335,8 +335,8 @@ namespace Bluedot.HabboServer.Useful
                 {
                     if (_weakDictionary[key].TryGetTarget(out value))
                         return true;
-                    value = WeakReference.ValueFactory(key);
-                    _weakDictionary[key] = new WeakReference<TValue>(value);
+                    if (WeakReference.Values)
+                        _weakDictionary[key] = new WeakReference<TValue>(value);
                     return true;
                 }
 
@@ -417,11 +417,8 @@ namespace Bluedot.HabboServer.Useful
             foreach (KeyValuePair<TKey, WeakReference<TValue>> weakPair in _weakDictionary)
             {
                 TValue tempValue;
-                if (!weakPair.Value.TryGetTarget(out tempValue))
-                {
-                    tempValue = WeakReference.ValueFactory(weakPair.Key);
-                }
-                yield return new KeyValuePair<TKey, TValue>(weakPair.Key, tempValue);
+                if (weakPair.Value.TryGetTarget(out tempValue))
+                    yield return new KeyValuePair<TKey, TValue>(weakPair.Key, tempValue);
             }
         }
 
@@ -509,16 +506,9 @@ namespace Bluedot.HabboServer.Useful
                 private set;
             }
 
-            public Func<TKey, TValue> ValueFactory
-            {
-                get;
-                private set;
-            }
-
-            public WeakReferenceBehaviour(bool weakValues, Func<TKey, TValue> weakValueFactory)
+            public WeakReferenceBehaviour(bool weakValues)
             {
                 Values = weakValues;
-                ValueFactory = weakValueFactory;
             }
         }
         #endregion
