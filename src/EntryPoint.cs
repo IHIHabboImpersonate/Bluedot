@@ -132,7 +132,7 @@ namespace Bluedot.HabboServer
             Console.Clear();
 
             Console.WriteLine("[===[ BLUEDOT STOP ERROR ]===]");
-            Console.WriteLine("An unhandled exception has caused BLuedot to close!");
+            Console.WriteLine("An unhandled exception has caused Bluedot to close!");
             Console.WriteLine("Details of the exception are below.");
             Console.WriteLine();
             Console.WriteLine("Time (UTC): " + DateTime.UtcNow);
