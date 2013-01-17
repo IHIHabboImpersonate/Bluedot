@@ -21,27 +21,28 @@ namespace Bluedot.HabboServer.Useful
         #region Method: ResettableLazy (Constructor)
         public ResettableLazyDirty(Action valueFactory)
         {
-            _lock = new ReaderWriterLockSlim();
+            _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
             _isDirty = false;
 
-            this._valueFactorySetter = valueFactory;
-            _lazyValue = new Lazy<T>(GetValue, LazyThreadSafetyMode.ExecutionAndPublication);
+            _valueFactorySetter = valueFactory;
+            _lazyValue = new Lazy<T>(GetFactoryValue, LazyThreadSafetyMode.ExecutionAndPublication);
         }
         public ResettableLazyDirty(Func<T> valueFactory)
         {
-            _lock = new ReaderWriterLockSlim();
+            _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
             _isDirty = false;
 
-            this._valueFactoryReturner = valueFactory;
-            _lazyValue = new Lazy<T>(GetValue, LazyThreadSafetyMode.ExecutionAndPublication);
+            _valueFactoryReturner = valueFactory;
+            _lazyValue = new Lazy<T>(GetFactoryValue, LazyThreadSafetyMode.ExecutionAndPublication);
         }
 
-        private T GetValue()
+        private T GetFactoryValue()
         {
-            if(this._valueFactoryReturner != null)
-                return this._valueFactoryReturner();
+            if(_valueFactoryReturner != null)
+                return _valueFactoryReturner();
 
-            this._valueFactorySetter();
+            _valueFactorySetter();
+
             _isDirty = false;
             return _dirtyValue;
         }
@@ -84,18 +85,47 @@ namespace Bluedot.HabboServer.Useful
         {
             get
             {
-                _lock.EnterReadLock();
+                if (_isDirty)
+                {
+                    _lock.EnterReadLock();
+                    try
+                    {
+                        if (_isDirty)
+                            return _dirtyValue;
+                    }
+                    finally
+                    {
+                        _lock.ExitReadLock();
+                    }
+                }
+
+                if (_lazyValue.IsValueCreated)
+                {
+                    _lock.EnterReadLock();
+                    try
+                    {
+                        if (_lazyValue.IsValueCreated)
+                            return _lazyValue.Value;
+                    }
+                    finally
+                    {
+                        _lock.ExitReadLock();
+                    }
+                }
+
+                _lock.EnterWriteLock();
                 try
                 {
-                    if(_isDirty)
+                    if (_isDirty)
                         return _dirtyValue;
                     return _lazyValue.Value;
                 }
                 finally
                 {
-                    _lock.ExitReadLock();
+                    _lock.ExitWriteLock();
                 }
             }
+
             set
             {
                 _lock.EnterWriteLock();
@@ -115,7 +145,7 @@ namespace Bluedot.HabboServer.Useful
             _lock.EnterWriteLock();
             try
             {
-                _lazyValue = new Lazy<T>(GetValue);
+                _lazyValue = new Lazy<T>(GetFactoryValue);
                 _isDirty = false;
             }
             finally

@@ -2,12 +2,8 @@
 
 namespace Bluedot.HabboServer.Useful
 {
-
-    /// <summary>
-    /// A resettable lazy with dirty tracking.
-    /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class WriteLock<T> // What a name...
+    public class WriteLock<T>
     {
         private readonly ReaderWriterLockSlim _lock;
         private T _value;
