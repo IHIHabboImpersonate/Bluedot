@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Xml;
 using Bluedot.HabboServer.ApiUsage;
+using Bluedot.HabboServer.ApiUsage.Plugins;
 using Bluedot.HabboServer.Configuration;
 using Bluedot.HabboServer.Events;
 using Bluedot.HabboServer.Habbos.Figure;
@@ -56,6 +57,13 @@ namespace Bluedot.HabboServer
         #endregion
         #region Property: PermissionDistributor
         public PermissionDistributor PermissionDistributor
+        {
+            get;
+            private set;
+        }
+        #endregion
+        #region Property: FuseRightManager
+        public FuseRightManager FuseRightManager
         {
             get;
             private set;
@@ -176,6 +184,13 @@ namespace Bluedot.HabboServer
                 StandardOut.PrintNotice("Permission Distributor", "Constructing...");
                 PermissionDistributor = new PermissionDistributor();
                 StandardOut.PrintNotice("Permission Distributor", "Ready");
+
+                #endregion
+                #region FuseRightManager
+
+                StandardOut.PrintNotice("Fuse Right Manager", "Constructing...");
+                FuseRightManager = new FuseRightManager();
+                StandardOut.PrintNotice("Fuse Right Manager", "Ready");
 
                 #endregion
 

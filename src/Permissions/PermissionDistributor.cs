@@ -97,5 +97,12 @@ namespace Bluedot.HabboServer.Permissions
         }
         #endregion
         #endregion
+
+        internal bool HasPermission(IDictionary<string, PermissionState> permissions, string permission)
+        {
+            if (!permissions.ContainsKey(permission))
+                return false;
+            return permissions[permission] == PermissionState.Allow;
+        }
     }
 }

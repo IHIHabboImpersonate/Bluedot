@@ -394,6 +394,7 @@ namespace Bluedot.HabboServer.Habbos
             _permissions = new ResettableLazyDirty<IDictionary<string, PermissionState>>(() => CoreManager.ServerCore.PermissionDistributor.GetHabboPermissions(this));
 
             _figure = new ResettableLazyDirty<HabboFigure>(() => LoadFigure());
+            _motto = new ResettableLazyDirty<string>(() => HabboActions.GetMottoFromHabboId(Id));
 
             MessengerCategories = new HashSet<MessengerCategory>();
             Subscriptions = new WeakCache<string, SubscriptionData>(subscriptionsName => new SubscriptionData(this, subscriptionsName));
@@ -420,9 +421,7 @@ namespace Bluedot.HabboServer.Habbos
         #region Method: HasPermission
         public bool HasPermission(string permission)
         {
-            if (!_permissions.Value.ContainsKey(permission))
-                return false;
-            return _permissions.Value[permission] == PermissionState.Allow;
+            return CoreManager.ServerCore.PermissionDistributor.HasPermission(_permissions.Value, permission);
         }
         #endregion  
         

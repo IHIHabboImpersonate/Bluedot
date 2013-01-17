@@ -322,5 +322,50 @@ namespace Bluedot.HabboServer.Database.Actions
             }
         }
         #endregion
+
+        #region Action: GetMottoFromHabboId
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name=""></param>
+        /// <param name="connection">The connection to use. If not specified (or null) then a connection will be picked automatically.</param>
+        /// <returns></returns>
+        public static string GetMottoFromHabboId(int habboId, WrappedMySqlConnection connection = null)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@habbo_id", habboId);
+
+            object returnValue;
+            using (connection = connection ?? CoreManager.ServerCore.MySqlConnectionProvider.GetConnection())
+            {
+                // Get the value from the database.
+                returnValue = connection.GetCachedCommand("SELECT `motto` FROM `habbos` WHERE `habbo_id` = @habbo_id").ExecuteScalar(parameters);
+            }
+
+            if (returnValue != null)
+                return (string)returnValue;
+            throw new NoResultsException();
+        }
+        #endregion
+        #region Action: SetMottoFromHabboId
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name=""></param>
+        /// <param name="connection">The connection to use. If not specified (or null) then a connection will be picked automatically.</param>
+        /// <returns></returns>
+        public static bool SetMottoFromHabboId(int habboId, string motto, WrappedMySqlConnection connection = null)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@habbo_id", habboId);
+            parameters.Add("@motto", motto);
+
+            using (connection = connection ?? CoreManager.ServerCore.MySqlConnectionProvider.GetConnection())
+            {
+                // Get the value from the database and return it.
+                return connection.GetCachedCommand("UPDATE `habbos` SET `motto` = @motto WHERE `habbo_id` = @habbo_id").ExecuteNonQuery(parameters) > 0;
+            }
+        }
+        #endregion
     }
 }
