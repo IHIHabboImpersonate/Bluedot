@@ -21,7 +21,7 @@ namespace Bluedot.HabboServer.Database.Actions
 
             using (connection = connection ?? CoreManager.ServerCore.MySqlConnectionProvider.GetConnection())
             {
-                using (MySqlDataReader reader = connection.GetCachedCommand("SELECT `total_bought`, `skipped_length`, `paused_start` FROM `subscription` WHERE `habbo_id` = @habbo_id AND `subscription_type` = @subscription_type LIMIT 1").ExecuteReader(parameters))
+                using (MySqlDataReader reader = connection.GetCachedCommand("SELECT `total_bought`, `skipped_length`, `paused_start` FROM `subscriptions` WHERE `habbo_id` = @habbo_id AND `subscription_type` = @subscription_type LIMIT 1").ExecuteReader(parameters))
                 {
                     if (!reader.HasRows)
                     {
@@ -59,7 +59,7 @@ namespace Bluedot.HabboServer.Database.Actions
 
             using (connection = connection ?? CoreManager.ServerCore.MySqlConnectionProvider.GetConnection())
             {
-                return connection.GetCachedCommand("INSERT INTO `subscription` (`habbo_id`, `subscription_type`, `total_bought`, `skipped_length`, `paused_length`) VALUES (@habbo_id, @subscription_type, @total_bought, @skipped_length, @paused_start) ON DUPLICATE KEY UPDATE `total_bought` = @total_bought, `skipped_length` = @skipped_length, `paused_length` = @paused_start").ExecuteNonQuery(parameters) >= 1;
+                return connection.GetCachedCommand("INSERT INTO `subscriptions` (`habbo_id`, `subscription_type`, `total_bought`, `skipped_length`, `paused_start`) VALUES (@habbo_id, @subscription_type, @total_bought, @skipped_length, @paused_start) ON DUPLICATE KEY UPDATE `total_bought` = @total_bought, `skipped_length` = @skipped_length, `paused_start` = @paused_start").ExecuteNonQuery(parameters) >= 1;
             }
         }
         #endregion
