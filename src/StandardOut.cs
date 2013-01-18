@@ -175,7 +175,7 @@ namespace Bluedot.HabboServer
 #if DEBUG
         public StandardOut PrintDebugModeMessage(string message)
         {
-            Raw("DEBUG-MODE", message, ConsoleColor.Cyan);
+            Raw("DEBUG-MODE", message, ConsoleColor.Magenta);
             return this;
         }
 #endif
