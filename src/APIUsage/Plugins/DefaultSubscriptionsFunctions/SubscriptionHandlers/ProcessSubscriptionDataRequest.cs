@@ -1,4 +1,5 @@
-﻿using Bluedot.HabboServer.Habbos;
+﻿using Bluedot.HabboServer.ApiUsage.Libraries.Subscriptions;
+using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
 
 namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultSubscriptionsFunctions

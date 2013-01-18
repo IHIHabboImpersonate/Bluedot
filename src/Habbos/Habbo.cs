@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Bluedot.HabboServer.ApiUsage.Libraries.Subscriptions;
 using Bluedot.HabboServer.Database;
 using Bluedot.HabboServer.Database.Actions;
 using Bluedot.HabboServer.Useful;

@@ -114,7 +114,7 @@
     <Compile Include="src\Network\WebAdmin\WebAdminServer.cs" />
     <Compile Include="src\Permissions\FuseRightManager.cs" />
     <Compile Include="src\Permissions\PermissionState.cs" />
-    <Compile Include="src\Subscriptions\SubscriptionData.cs" />
+    <Compile Include="src\APIUsage\Libraries\Subscriptions\SubscriptionData.cs" />
     <Compile Include="src\Useful\Caching\WeakCache.cs" />
     <Compile Include="src\Useful\CancelReasonEventArgs.cs" />
     <Compile Include="src\Useful\Collections\WeakList.cs" />
@@ -195,7 +195,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Reference Packaging\MySql.Data.Entity.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="src\APIUsage\Libraries\Navigator\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

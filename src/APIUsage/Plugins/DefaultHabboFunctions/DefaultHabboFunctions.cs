@@ -1,7 +1,6 @@
 ﻿using System;
 using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
-using Bluedot.HabboServer.Useful;
 
 namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultHabboFunctions
 {
