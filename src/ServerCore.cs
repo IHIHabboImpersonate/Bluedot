@@ -2,6 +2,8 @@
 using System.IO;
 using System.Net;
 using System.Xml;
+
+using Bluedot.HabboServer.APIUsage.Libraries.Navigator;
 using Bluedot.HabboServer.ApiUsage;
 using Bluedot.HabboServer.ApiUsage.Plugins;
 using Bluedot.HabboServer.Configuration;
@@ -13,6 +15,8 @@ using Bluedot.HabboServer.Network.WebAdmin;
 using Bluedot.HabboServer.Permissions;
 using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
+
+using Category = Bluedot.HabboServer.Install.Category;
 
 namespace Bluedot.HabboServer
 {
@@ -110,6 +114,15 @@ namespace Bluedot.HabboServer
             get;
             private set;
         }
+
+        #endregion
+        #region Property: NavigatorManager
+        public NavigatorManager NavigatorManager
+        {
+            get;
+            private set;
+        }
+
         #endregion
         #endregion
 
@@ -188,9 +201,17 @@ namespace Bluedot.HabboServer
                 #endregion
                 #region FuseRightManager
 
-                StandardOut.PrintNotice("Fuse Right Manager", "Constructing...");
+                StandardOut.PrintNotice("Fuse Right NavigatorManager", "Constructing...");
                 FuseRightManager = new FuseRightManager();
-                StandardOut.PrintNotice("Fuse Right Manager", "Ready");
+                StandardOut.PrintNotice("Fuse Right NavigatorManager", "Ready");
+
+                #endregion
+
+                #region NavigatorManager
+
+                StandardOut.PrintNotice("Navigator Manager", "Constructing...");
+                NavigatorManager = new NavigatorManager();
+                StandardOut.PrintNotice("Navigator Manager", "Ready");
 
                 #endregion
 
@@ -238,7 +259,7 @@ namespace Bluedot.HabboServer
 
                 #endregion
                 
-                StandardOut.PrintImportant("Plugin Manager", "Starting Pseudo Plugin System...");
+                StandardOut.PrintImportant("Plugin NavigatorManager", "Starting Pseudo Plugin System...");
                 ApiCallerRoot.Start();
                 Console.Beep(500, 250);
                 StandardOut.PrintImportant("Core", "Bluedot Habbo Server is now functional!");

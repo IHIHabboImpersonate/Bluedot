@@ -52,6 +52,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\APIUsage\ApiCallerRoot.cs" />
+    <Compile Include="src\APIUsage\Libraries\Navigator\Category.cs" />
+    <Compile Include="src\APIUsage\Libraries\Navigator\TreeSearchMode.cs" />
+    <Compile Include="src\APIUsage\Libraries\Navigator\NavigatorManager.cs" />
+    <Compile Include="src\APIUsage\Libraries\Navigator\GuestRoomListing.cs" />
+    <Compile Include="src\APIUsage\Libraries\Navigator\RoomLock.cs" />
+    <Compile Include="src\APIUsage\Libraries\Navigator\RoomListing.cs" />
+    <Compile Include="src\APIUsage\Libraries\Navigator\Listing.cs" />
+    <Compile Include="src\APIUsage\Libraries\Navigator\ListingEventArgs.cs" />
     <Compile Include="src\APIUsage\Plugins\ClassicFigures\ClassicFigures.cs" />
     <Compile Include="src\APIUsage\Plugins\DefaultLoginFunctions\LoginSenders\MFuseRights.cs" />
     <Compile Include="src\APIUsage\Plugins\DefaultRoomEventsFunctions\RoomEventHandlers\ProcessEventCategoryValidationRequest.cs" />
