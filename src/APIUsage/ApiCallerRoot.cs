@@ -2,7 +2,7 @@
 
 namespace Bluedot.HabboServer.ApiUsage.Plugins
 {
-    interface ITempPlugin
+    interface IPseudoPlugin
     {
         void Start();
     }
@@ -10,16 +10,16 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins
     {
         public static void Start()
         {
-            List<ITempPlugin> plugins = new List<ITempPlugin>();
+            List<IPseudoPlugin> plugins = new List<IPseudoPlugin>();
 
             plugins.Add(new DefaultLoginFunctions.DefaultLoginFunctions());
             plugins.Add(new DefaultHabboFunctions.DefaultHabboFunctions());
             plugins.Add(new DefaultMessengerFunctions.DefaultMessengerFunctions());
-            plugins.Add(new DefaultRoomEventsFunctions.DefaultRoomEventsFunctions());
             plugins.Add(new DefaultSubscriptionsFunctions.DefaultSubscriptionsFunctions());
             plugins.Add(new ClassicFigures.ClassicFigures());
+            plugins.Add(new TestingSandbox.TestingSandbox());
 
-            foreach (ITempPlugin plugin in plugins)
+            foreach (IPseudoPlugin plugin in plugins)
             {
                 plugin.Start();
             }

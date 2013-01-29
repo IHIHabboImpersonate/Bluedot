@@ -21,7 +21,7 @@
 
 using System.Text;
 
-namespace Bluedot.HabboServer.Habbos.Figure
+namespace Bluedot.HabboServer.Rooms.Figure
 {
     public abstract class Shirt : FigureSet
     {

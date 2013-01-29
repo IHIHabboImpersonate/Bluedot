@@ -8,7 +8,7 @@ using Bluedot.HabboServer.Useful;
 
 namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultLoginFunctions
 {
-    public class DefaultLoginFunctions : ITempPlugin
+    public class DefaultLoginFunctions : IPseudoPlugin
     {
         public void Start()
         {

@@ -47,5 +47,22 @@ namespace Bluedot.HabboServer.Useful
         }
         #endregion
         #endregion
+
+        #region Methods
+        #region Method: ContainsKey
+        public bool ContainsKey(TKey key)
+        {
+            return _cache.ContainsKey(key);
+        }
+        #endregion
+
+        #region Method: Add
+        public WeakCache<TKey, TValue> Add(TKey key, TValue value)
+        {
+            _cache.Add(key, value);
+            return this;
+        }
+        #endregion
+        #endregion
     }
 }

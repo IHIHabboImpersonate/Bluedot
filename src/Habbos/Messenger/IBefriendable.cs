@@ -1,5 +1,5 @@
 ﻿using System;
-using Bluedot.HabboServer.Habbos.Figure;
+using Bluedot.HabboServer.Rooms.Figure;
 
 namespace Bluedot.HabboServer.Habbos.Messenger
 {

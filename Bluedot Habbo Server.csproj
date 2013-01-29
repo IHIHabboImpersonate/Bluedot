@@ -52,18 +52,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\APIUsage\ApiCallerRoot.cs" />
-    <Compile Include="src\APIUsage\Libraries\Navigator\Category.cs" />
-    <Compile Include="src\APIUsage\Libraries\Navigator\TreeSearchMode.cs" />
-    <Compile Include="src\APIUsage\Libraries\Navigator\NavigatorManager.cs" />
-    <Compile Include="src\APIUsage\Libraries\Navigator\GuestRoomListing.cs" />
-    <Compile Include="src\APIUsage\Libraries\Navigator\RoomLock.cs" />
-    <Compile Include="src\APIUsage\Libraries\Navigator\RoomListing.cs" />
-    <Compile Include="src\APIUsage\Libraries\Navigator\Listing.cs" />
-    <Compile Include="src\APIUsage\Libraries\Navigator\ListingEventArgs.cs" />
+    <Compile Include="src\APIUsage\Libraries\StandardPrivateRoomModels1\RoomModelB.cs" />
+    <Compile Include="src\APIUsage\Libraries\StandardPrivateRoomModels1\RoomModelC.cs" />
+    <Compile Include="src\APIUsage\Libraries\StandardPrivateRoomModels1\RoomModelD.cs" />
+    <Compile Include="src\APIUsage\Libraries\StandardPrivateRoomModels1\RoomModelF.cs" />
+    <Compile Include="src\APIUsage\Libraries\StandardPrivateRoomModels1\RoomModelE.cs" />
+    <Compile Include="src\APIUsage\Libraries\StandardPrivateRoomModels1\RoomModelA.cs" />
     <Compile Include="src\APIUsage\Plugins\ClassicFigures\ClassicFigures.cs" />
+    <Compile Include="src\APIUsage\Plugins\ManagedRoomLoading\ExtensionMethods.cs" />
+    <Compile Include="src\APIUsage\Plugins\ManagedRoomLoading\ManagedRoomLoading.cs" />
     <Compile Include="src\APIUsage\Plugins\DefaultLoginFunctions\LoginSenders\MFuseRights.cs" />
-    <Compile Include="src\APIUsage\Plugins\DefaultRoomEventsFunctions\RoomEventHandlers\ProcessEventCategoryValidationRequest.cs" />
-    <Compile Include="src\APIUsage\Plugins\DefaultRoomEventsFunctions\RoomEventSenders\MEventCategoryValid.cs" />
     <Compile Include="src\APIUsage\Plugins\DefaultHabboFunctions\Extensions.cs" />
     <Compile Include="src\APIUsage\Plugins\ClassicFigures\Body\Body180.cs" />
     <Compile Include="src\APIUsage\Plugins\DefaultHabboFunctions\HabboHandlers\ProcessBadgeListingRequest.cs" />
@@ -75,7 +73,6 @@
     <Compile Include="src\APIUsage\Plugins\DefaultHabboFunctions\HabboSenders\MCreditBalance.cs" />
     <Compile Include="src\APIUsage\Plugins\DefaultHabboFunctions\HabboSenders\MHabboData.cs" />
     <Compile Include="src\APIUsage\Plugins\DefaultHabboFunctions\DefaultHabboFunctions.cs" />
-    <Compile Include="src\APIUsage\Plugins\DefaultRoomEventsFunctions\DefaultRoomEventsFunctions.cs" />
     <Compile Include="src\APIUsage\Plugins\DefaultSubscriptionsFunctions\DefaultSubscriptionsFunctions.cs" />
     <Compile Include="src\APIUsage\Plugins\DefaultMessengerFunctions\DefaultMessengerFunctions.cs" />
     <Compile Include="src\APIUsage\Plugins\DefaultLoginFunctions\LoginHandlers\ProcessSSOTicket.cs" />
@@ -90,9 +87,20 @@
     <Compile Include="src\APIUsage\Plugins\DefaultSubscriptionsFunctions\SubscriptionHandlers\ProcessSubscriptionDataRequest.cs" />
     <Compile Include="src\APIUsage\Plugins\DefaultSubscriptionsFunctions\SubscriptionSenders\MSubscriptionData.cs" />
     <Compile Include="src\APIUsage\Plugins\DefaultLoginFunctions\DefaultLoginFunctions.cs" />
+    <Compile Include="src\APIUsage\Plugins\TestingSandbox\TestingSandbox.cs" />
     <Compile Include="src\Configuration\XMLConfig.cs" />
+    <Compile Include="src\Habbos\RoomUnitFigure.cs" />
+    <Compile Include="src\InstanceStorage.cs" />
+    <Compile Include="src\IInstanceStorage.cs" />
+    <Compile Include="src\Rooms\RoomPosition.cs" />
+    <Compile Include="src\Rooms\IRoomOwner.cs" />
+    <Compile Include="src\Rooms\PrivateRoom.cs" />
+    <Compile Include="src\Rooms\IPlayerHuman.cs" />
+    <Compile Include="src\Rooms\IHuman.cs" />
+    <Compile Include="src\Rooms\IRoomUnit.cs" />
+    <Compile Include="src\Rooms\Room.cs" />
+    <Compile Include="src\Rooms\RoomDistributor.cs" />
     <Compile Include="src\CoreManager.cs" />
-    <Compile Include="src\Database\Actions\BadgeActions.cs" />
     <Compile Include="src\Database\Actions\NoResultsException.cs" />
     <Compile Include="src\Database\Actions\PermissionActions.cs" />
     <Compile Include="src\Database\Actions\PersistenceActions.cs" />
@@ -100,20 +108,13 @@
     <Compile Include="src\Database\Actions\HabboActions.cs" />
     <Compile Include="src\Database\WrappedMySqlConnection.cs" />
     <Compile Include="src\Database\WrappedMySqlCommand.cs" />
-    <Compile Include="src\Database\IPersistable.cs" />
+    <Compile Include="src\Database\IPersistableStorage.cs" />
     <Compile Include="src\Database\MySqlConnectionProvider.cs" />
     <Compile Include="src\Database\PersistentStorage.cs" />
     <Compile Include="src\EntryPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\EventManager.cs" />
     <Compile Include="src\Extensions.cs" />
-    <Compile Include="src\Habbos\Badges\BadgeCollection.cs" />
-    <Compile Include="src\Habbos\Badges\BadgeSlot.cs" />
-    <Compile Include="src\Habbos\Badges\BadgeType.cs" />
-    <Compile Include="src\Habbos\Badges\BadgeTypeDistributor.cs" />
-    <Compile Include="src\Habbos\HabboEventArgs.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="src\Habbos\Messenger\IBefriendable.cs" />
     <Compile Include="src\Habbos\Messenger\MessengerCategory.cs" />
     <Compile Include="src\Network\WebAdmin\HttpPathHandler.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="src\Permissions\FuseRightManager.cs" />
     <Compile Include="src\Permissions\PermissionState.cs" />
     <Compile Include="src\APIUsage\Libraries\Subscriptions\SubscriptionData.cs" />
+    <Compile Include="src\Rooms\RoomUnitMoveEventArgs.cs" />
     <Compile Include="src\Useful\Caching\WeakCache.cs" />
     <Compile Include="src\Useful\CancelReasonEventArgs.cs" />
     <Compile Include="src\Useful\Collections\BiDirectionalDictionary.cs" />
@@ -149,7 +151,6 @@
     <Compile Include="src\Habbos\FigureParts\WaistAccessory.cs" />
     <Compile Include="src\Habbos\Habbo.cs" />
     <Compile Include="src\Habbos\HabboDistributor.cs" />
-    <Compile Include="src\Habbos\HabboEventHandler.cs" />
     <Compile Include="src\Habbos\HabboFigure.cs" />
     <Compile Include="src\Install\Category.cs" />
     <Compile Include="src\Install\InstallerCore.cs" />

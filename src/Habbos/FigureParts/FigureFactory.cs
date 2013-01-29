@@ -26,7 +26,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace Bluedot.HabboServer.Habbos.Figure
+namespace Bluedot.HabboServer.Rooms.Figure
 {
     public class HabboFigureFactory
     {

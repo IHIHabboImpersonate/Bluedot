@@ -5,7 +5,7 @@ using Bluedot.HabboServer.Useful;
 
 namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultMessengerFunctions
 {
-    public class DefaultMessengerFunctions : ITempPlugin
+    public class DefaultMessengerFunctions : IPseudoPlugin
     {
         public void Start()
         {

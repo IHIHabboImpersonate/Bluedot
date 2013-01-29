@@ -3,12 +3,12 @@ using System.IO;
 using System.Net;
 using System.Xml;
 
-using Bluedot.HabboServer.APIUsage.Libraries.Navigator;
 using Bluedot.HabboServer.ApiUsage;
 using Bluedot.HabboServer.ApiUsage.Plugins;
 using Bluedot.HabboServer.Configuration;
 using Bluedot.HabboServer.Events;
-using Bluedot.HabboServer.Habbos.Figure;
+using Bluedot.HabboServer.Rooms;
+using Bluedot.HabboServer.Rooms.Figure;
 using Bluedot.HabboServer.Install;
 using Bluedot.HabboServer.Database;
 using Bluedot.HabboServer.Network.WebAdmin;
@@ -31,6 +31,13 @@ namespace Bluedot.HabboServer
         #endregion
 
         #region Properties
+        #region Property: MySqlConnectionProvider
+        public MySqlConnectionProvider MySqlConnectionProvider
+        {
+            get;
+            private set;
+        }
+        #endregion
         #region Property: Config
         public XmlConfig Config
         {
@@ -85,26 +92,6 @@ namespace Bluedot.HabboServer
             private set;
         }
         #endregion
-        #region Property: BadgeTypeDistributor
-        /// <summary>
-        /// TODO: Add summary for property
-        /// </summary>
-        public BadgeTypeDistributor BadgeTypeDistributor
-        {
-            get;
-            private set;
-        }
-        #endregion
-        #region Property: BadgeTypeDistributor
-        /// <summary>
-        /// TODO: Add summary for property
-        /// </summary>
-        public MySqlConnectionProvider MySqlConnectionProvider
-        {
-            get;
-            private set;
-        }
-        #endregion
         #region Property: EventManager
         /// <summary>
         /// TODO: Add summary for property
@@ -116,13 +103,12 @@ namespace Bluedot.HabboServer
         }
 
         #endregion
-        #region Property: NavigatorManager
-        public NavigatorManager NavigatorManager
+        #region Property: RoomDistributor
+        public RoomDistributor RoomDistributor
         {
             get;
             private set;
         }
-
         #endregion
         #endregion
 
@@ -191,46 +177,29 @@ namespace Bluedot.HabboServer
                 #endregion
 
                 #region Distributors
-
                 #region PermissionDistributor
-
                 StandardOut.PrintNotice("Permission Distributor", "Constructing...");
                 PermissionDistributor = new PermissionDistributor();
                 StandardOut.PrintNotice("Permission Distributor", "Ready");
-
                 #endregion
-                #region FuseRightManager
 
+                #region FuseRightManager
                 StandardOut.PrintNotice("Fuse Right NavigatorManager", "Constructing...");
                 FuseRightManager = new FuseRightManager();
                 StandardOut.PrintNotice("Fuse Right NavigatorManager", "Ready");
-
-                #endregion
-
-                #region NavigatorManager
-
-                StandardOut.PrintNotice("Navigator Manager", "Constructing...");
-                NavigatorManager = new NavigatorManager();
-                StandardOut.PrintNotice("Navigator Manager", "Ready");
-
                 #endregion
 
                 #region HabboDistributor
-
                 StandardOut.PrintNotice("Habbo Distributor", "Constructing...");
                 HabboDistributor = new HabboDistributor();
                 StandardOut.PrintNotice("Habbo Distributor", "Ready");
-
                 #endregion
 
-                #region BadgeTypeDistributor
-
-                StandardOut.PrintNotice("Badge Type Cache", "Constructing...");
-                BadgeTypeDistributor = new BadgeTypeDistributor();
-                StandardOut.PrintNotice("Badge Type Cache", "Ready");
-
+                #region RoomDistributor
+                StandardOut.PrintNotice("Room Distributor", "Constructing...");
+                RoomDistributor = new RoomDistributor();
+                StandardOut.PrintNotice("Room Distributor", "Ready");
                 #endregion
-
                 #endregion
 
                 #region Network

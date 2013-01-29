@@ -8,10 +8,11 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultHabboFunctions
     {
         internal static void ProcessBadgeListingRequest(Habbo sender, IncomingMessage message)
         {
-            List<BadgeType> allBadges = new List<BadgeType>(sender.Badges.Count);
-            Dictionary<BadgeSlot, BadgeType> badgeSlots = new Dictionary<BadgeSlot, BadgeType>(5);
+            // TODO: Send badges to client
+            /*List<string> allBadges = new List<string>(sender.Badges.Count);
+            Dictionary<BadgeSlot, string> badgeSlots = new Dictionary<BadgeSlot, string>(5);
 
-            foreach (KeyValuePair<BadgeType, BadgeSlot> badge in sender.Badges)
+            foreach (KeyValuePair<string, BadgeSlot> badge in sender.Badges)
             {
                 allBadges.Add(badge.Key);
 
@@ -23,7 +24,7 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultHabboFunctions
                 {
                     AllBadges = allBadges,
                     BadgeSlots = badgeSlots
-                }.Send(sender);
+                }.Send(sender);*/
         }
     }
 }

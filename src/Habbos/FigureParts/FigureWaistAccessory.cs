@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using Bluedot.HabboServer.Habbos.Figure;
+using Bluedot.HabboServer.Rooms.Figure;
 namespace Bluedot.HabboServer.Habbos
 {
     public abstract class FigureWaistAccessory : FigureSet

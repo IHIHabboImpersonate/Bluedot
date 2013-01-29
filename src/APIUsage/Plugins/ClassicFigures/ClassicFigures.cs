@@ -1,12 +1,12 @@
 ﻿using System;
 
 using Bluedot.HabboServer.Habbos;
-using Bluedot.HabboServer.Habbos.Figure;
+using Bluedot.HabboServer.Rooms.Figure;
 using Bluedot.HabboServer.Network;
 
 namespace Bluedot.HabboServer.ApiUsage.Plugins.ClassicFigures
 {
-    public class ClassicFigures : ITempPlugin
+    public class ClassicFigures : IPseudoPlugin
     {
         public void Start()
         {

@@ -4,7 +4,7 @@ using Bluedot.HabboServer.Network;
 
 namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultHabboFunctions
 {
-    public class DefaultHabboFunctions : ITempPlugin
+    public class DefaultHabboFunctions : IPseudoPlugin
     {
         public void Start()
         {

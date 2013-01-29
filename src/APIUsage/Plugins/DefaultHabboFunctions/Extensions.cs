@@ -8,15 +8,15 @@ namespace Bluedot.HabboServer.ApiUsage
         #region Property: Volume
         public static byte VolumeProperty(this Habbo habbo)
         {
-            if (habbo.PersistentValues["Client.Volume"] == null)
+            if (habbo.PersistentStorage["Client.Volume"] == null)
                 return 100;
-            return habbo.PersistentValues["Client.Volume"][0];
+            return habbo.PersistentStorage["Client.Volume"][0];
         }
         public static Habbo VolumeProperty(this Habbo habbo, byte volume)
         {
             if (volume > 100)
                 volume = 100;
-            habbo.PersistentValues["Client.Volume"] = new[] {volume};
+            habbo.PersistentStorage["Client.Volume"] = new[] {volume};
 
             return habbo;
         }

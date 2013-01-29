@@ -48,14 +48,28 @@ namespace Bluedot.HabboServer.Events
             {
                 foreach (EventHandler handler in _strongEvents[eventName])
                 {
-                    handler.Invoke(source, args);
+                    try
+                    {
+                        handler.Invoke(source, args);
+                    }
+                    catch (Exception e)
+                    {
+                        CoreManager.ServerCore.StandardOut.PrintException(e);
+                    }
                 }
             }
             if (_weakEvents.ContainsKey(eventName))
             {
                 foreach (EventHandler handler in _weakEvents[eventName])
                 {
-                    handler.Invoke(source, args);
+                    try
+                    {
+                        handler.Invoke(source, args);
+                    }
+                    catch (Exception e)
+                    {
+                        CoreManager.ServerCore.StandardOut.PrintException(e);
+                    }
                 }
             }
             return this;

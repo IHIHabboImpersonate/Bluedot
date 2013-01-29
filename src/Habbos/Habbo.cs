@@ -4,19 +4,22 @@ using System.Collections.Generic;
 using Bluedot.HabboServer.ApiUsage.Libraries.Subscriptions;
 using Bluedot.HabboServer.Database;
 using Bluedot.HabboServer.Database.Actions;
+using Bluedot.HabboServer.Rooms;
+using Bluedot.HabboServer.Rooms.Figure;
 using Bluedot.HabboServer.Useful;
-using Bluedot.HabboServer.Habbos.Figure;
 using Bluedot.HabboServer.Habbos.Messenger;
 using Bluedot.HabboServer.Network;
 using Bluedot.HabboServer.Permissions;
 
 namespace Bluedot.HabboServer.Habbos
 {
-    public class Habbo : IMessageable, IPersistable, IBefriendable
+    public class Habbo : IPlayerHuman, IMessageable, IInstanceStorage, IPersistableStorage, IRoomOwner
     {
         #region Properties
 
         #region Property: Id
+
+        private RoomUnitFigure _genericFigure;
 
         /// <summary>
         /// The ID of this habbo.
@@ -152,7 +155,6 @@ namespace Bluedot.HabboServer.Habbos
         #endregion
 
         #region Property: LoggedIn
-
         /// <summary>
         ///   Is the Habbo logged in.
         /// </summary>
@@ -161,13 +163,48 @@ namespace Bluedot.HabboServer.Habbos
             get;
             internal set;
         }
+        #endregion
 
+
+        #region Property: Position
+        private RoomPosition _position;
+        public RoomPosition Position
+        {
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                RoomUnitMoveEventArgs args = new RoomUnitMoveEventArgs(_position, value);
+                CoreManager.ServerCore.EventManager.Fire("roomunit_move:before", this, args);
+
+                if (!args.Cancel)
+                {
+                    if (_position.Room != value.Room) // Is the room unit changing rooms?
+                    {
+                        // TODO: Room changing logic here.
+                    }
+
+                    // TODO: Stuff here?
+
+                    _position = value;
+                    CoreManager.ServerCore.EventManager.Fire("roomunit_move:after", this, args);
+                }
+            }
+        }
+        #endregion
+
+        #region Property: RoomUnitId
+        public int RoomUnitId
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Property: Figure
-
         private ResettableLazyDirty<HabboFigure> _figure;
-
         /// <summary>
         /// TODO: Document
         /// </summary>
@@ -183,7 +220,13 @@ namespace Bluedot.HabboServer.Habbos
                 _figure.Value = value;
             }
         }
-
+        public RoomUnitFigure GenericFigure
+        {
+            get
+            {
+                return Figure;
+            }
+        }
         #endregion
 
         #region Property: Motto
@@ -283,22 +326,26 @@ namespace Bluedot.HabboServer.Habbos
 
         #endregion
 
-        #region Property: PersistentValues
-
-        private PersistentStorage _persistentValues;
-
-        /// <summary>
-        /// Document
-        /// </summary>
-        /// <remarks>Uses lazy loading.</remarks>
-        public PersistentStorage PersistentValues
+        #region Property: InstanceStorage
+        private InstanceStorage _instanceStorage;
+        public InstanceStorage InstanceStorage
         {
             get
             {
-                return _persistentValues;
+                return _instanceStorage;
             }
         }
+        #endregion
 
+        #region Property: PersistentStorage
+        private PersistentStorage _persistentStorage;
+        public PersistentStorage PersistentStorage
+        {
+            get
+            {
+                return _persistentStorage;
+            }
+        }
         #endregion
 
         #region Property: PersistInstanceId
@@ -326,24 +373,6 @@ namespace Bluedot.HabboServer.Habbos
                 return _permissions.Value;
             }
         }
-        #endregion
-
-        #region Property: Badges
-
-        private ResettableLazyDirty<BadgeCollection> _badges;
-
-        /// <summary>
-        /// TODO: Add summary.
-        /// </summary>
-        /// <remarks>Uses lazy loading.</remarks>
-        public BadgeCollection Badges
-        {
-            get
-            {
-                return _badges.Value;
-            }
-        }
-
         #endregion
 
         #region Property: Subscriptions
@@ -381,7 +410,6 @@ namespace Bluedot.HabboServer.Habbos
         #endregion
 
         #region Method: Init
-
         private void Init()
         {
             _loginId = new ResettableLazyDirty<int>(() => HabboActions.GetLoginIdFromHabboId(Id));
@@ -390,7 +418,8 @@ namespace Bluedot.HabboServer.Habbos
             _lastAccess = new ResettableLazyDirty<DateTime>(() => HabboActions.GetLastAccessDateFromHabboId(Id));
             _credits = new ResettableLazyDirty<int>(() => HabboActions.GetCreditsFromHabboId(Id));
 
-            _persistentValues = new PersistentStorage(this);
+            _instanceStorage = new InstanceStorage();
+            _persistentStorage = new PersistentStorage(this);
 
             _permissions = new ResettableLazyDirty<IDictionary<string, PermissionState>>(() => CoreManager.ServerCore.PermissionDistributor.GetHabboPermissions(this));
 
@@ -399,14 +428,10 @@ namespace Bluedot.HabboServer.Habbos
 
             MessengerCategories = new HashSet<MessengerCategory>();
             Subscriptions = new WeakCache<string, SubscriptionData>(subscriptionsName => new SubscriptionData(this, subscriptionsName));
-
-            _badges = new ResettableLazyDirty<BadgeCollection>(() => CoreManager.ServerCore.BadgeTypeDistributor.GetBadgeCollectionFromHabbo(this));
         }
-
         #endregion
         
         #region Method: SendMessage
-
         public IMessageable SendMessage(IInternalOutgoingMessage message)
         {
 #if DEBUG
@@ -416,7 +441,6 @@ namespace Bluedot.HabboServer.Habbos
             Socket.Send(message.GetBytes());
             return this;
         }
-
         #endregion
 
         #region Method: HasPermission
@@ -435,7 +459,6 @@ namespace Bluedot.HabboServer.Habbos
             _figure.Value = CoreManager.ServerCore.HabboFigureFactory.Parse(figureString, gender);
         }
         #endregion
-
         #endregion
     }
 }

@@ -5,7 +5,7 @@ using Bluedot.HabboServer.Useful;
 
 namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultSubscriptionsFunctions
 {
-    public class DefaultSubscriptionsFunctions : ITempPlugin
+    public class DefaultSubscriptionsFunctions : IPseudoPlugin
     {
         public void Start()
         {

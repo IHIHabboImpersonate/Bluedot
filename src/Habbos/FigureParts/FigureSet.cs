@@ -19,7 +19,7 @@
 
 #endregion
 
-namespace Bluedot.HabboServer.Habbos.Figure
+namespace Bluedot.HabboServer.Rooms.Figure
 {
     public abstract class FigureSet
     {

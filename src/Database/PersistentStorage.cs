@@ -1,31 +1,31 @@
 ﻿
+using Bluedot.HabboServer.Database;
 using Bluedot.HabboServer.Database.Actions;
 
-namespace Bluedot.HabboServer.Database
+namespace Bluedot.HabboServer
 {
-
     public class PersistentStorage
     {
-        private readonly IPersistable _persistable;
+        private readonly IPersistableStorage _persistableStorage;
 
-        public PersistentStorage(IPersistable persistable)
+        public PersistentStorage(IPersistableStorage persistableStorage)
         {
-            _persistable = persistable;
+            _persistableStorage = persistableStorage;
         }
 
         public byte[] this[string name]
         {
             get
             {
-                string typeName = _persistable.GetType().FullName;
-                long instanceId = _persistable.PersistableInstanceId;
+                string typeName = _persistableStorage.GetType().FullName;
+                long instanceId = _persistableStorage.PersistableInstanceId;
 
                 return PersistenceActions.GetPersistentValue(typeName, instanceId, name);
             }
             set
             {
-                string typeName = _persistable.GetType().FullName;
-                long instanceId = _persistable.PersistableInstanceId;
+                string typeName = _persistableStorage.GetType().FullName;
+                long instanceId = _persistableStorage.PersistableInstanceId;
 
                 PersistenceActions.SetPersistentValue(typeName, instanceId, name, value);
             }

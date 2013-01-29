@@ -10,7 +10,7 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultHabboFunctions
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<BadgeType> AllBadges
+        public ICollection<string> AllBadges
         {
             get;
             set;
@@ -20,7 +20,7 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultHabboFunctions
         /// <summary>
         /// 
         /// </summary>
-        public IDictionary<BadgeSlot, BadgeType> BadgeSlots
+        public IDictionary<BadgeSlot, string> BadgeSlots
         {
             get;
             set;
@@ -33,21 +33,31 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultHabboFunctions
             {
                 InternalOutgoingMessage.Initialize(229)
                     .AppendInt32(AllBadges.Count);
-                foreach (BadgeType badge in AllBadges)
+                foreach (string badge in AllBadges)
                 {
                     InternalOutgoingMessage
-                        .AppendString(badge.Code);
+                        .AppendString(badge);
                 }
-                foreach (KeyValuePair<BadgeSlot, BadgeType> slotBadge in BadgeSlots)
+                foreach (KeyValuePair<BadgeSlot, string> slotBadge in BadgeSlots)
                 {
                     InternalOutgoingMessage
                         .AppendInt32((int) slotBadge.Key)
-                        .AppendString(slotBadge.Value.Code);
+                        .AppendString(slotBadge.Value);
                 }
             }
 
             target.SendMessage(InternalOutgoingMessage);
             return this;
         }
+    }
+
+    public enum BadgeSlot
+    {
+        NoSlot,
+        Slot1,
+        Slot2,
+        Slot3,
+        Slot4,
+        Slot5
     }
 }

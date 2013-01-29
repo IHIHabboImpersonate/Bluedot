@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bluedot Habbo Server", "Bluedot Habbo Server.csproj", "{C4A7184F-5843-4D97-889F-FBC8153007F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bluedot Habbo Server for Android", "..\AndroidWrapper\Bluedot Habbo Server for Android.csproj", "{741EEFF8-1C7E-49CF-9548-C2226562B61F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,20 +23,6 @@ Global
 		{C4A7184F-5843-4D97-889F-FBC8153007F1}.Release|Mixed Platforms.Build.0 = Release|x86
 		{C4A7184F-5843-4D97-889F-FBC8153007F1}.Release|x86.ActiveCfg = Release|x86
 		{C4A7184F-5843-4D97-889F-FBC8153007F1}.Release|x86.Build.0 = Release|x86
-		{741EEFF8-1C7E-49CF-9548-C2226562B61F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{741EEFF8-1C7E-49CF-9548-C2226562B61F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{741EEFF8-1C7E-49CF-9548-C2226562B61F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{741EEFF8-1C7E-49CF-9548-C2226562B61F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{741EEFF8-1C7E-49CF-9548-C2226562B61F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{741EEFF8-1C7E-49CF-9548-C2226562B61F}.Debug|Mixed Platforms.Deploy.0 = Debug|Any CPU
-		{741EEFF8-1C7E-49CF-9548-C2226562B61F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{741EEFF8-1C7E-49CF-9548-C2226562B61F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{741EEFF8-1C7E-49CF-9548-C2226562B61F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{741EEFF8-1C7E-49CF-9548-C2226562B61F}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{741EEFF8-1C7E-49CF-9548-C2226562B61F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{741EEFF8-1C7E-49CF-9548-C2226562B61F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{741EEFF8-1C7E-49CF-9548-C2226562B61F}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
-		{741EEFF8-1C7E-49CF-9548-C2226562B61F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
