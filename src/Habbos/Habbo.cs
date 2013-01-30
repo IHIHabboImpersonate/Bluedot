@@ -435,8 +435,7 @@ namespace Bluedot.HabboServer.Habbos
         public IMessageable SendMessage(IInternalOutgoingMessage message)
         {
 #if DEBUG
-            CoreManager.ServerCore.StandardOut.PrintDebugModeMessage(
-                "OUTGOING => " + message.Header + message.ContentString);
+            CoreManager.ServerCore.GameSocketManager.PacketOutputChannel.WriteMessage("OUTGOING => " + message.Header + message.ContentString);
 #endif
             Socket.Send(message.GetBytes());
             return this;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 
+using Bluedot.HabboServer.Network.StandardOut;
 using Bluedot.HabboServer.Useful;
 
 using Nito.Async;
@@ -28,11 +29,24 @@ namespace Bluedot.HabboServer.Network
             set;
         }
 
+#if DEBUG
+        internal Channel PacketOutputChannel
+        {
+            get;
+            private set;
+        }
+#endif
+
         private ServerTcpSocket _listeningSocket;
         private ActionThread _actionThread;
 
         public GameSocketManager Start()
         {
+#if DEBUG
+            PacketOutputChannel = CoreManager.ServerCore.StandardOutManager.NewChannel();
+            PacketOutputChannel.Name = "Game Socket Packet Output";
+#endif
+
             _actionThread = new ActionThread
                                 {
                                     Name = "BLUEDOT-GameSocketThread"
@@ -52,10 +66,10 @@ namespace Bluedot.HabboServer.Network
 
         public GameSocketManager Stop()
         {
-            CoreManager.ServerCore.StandardOut.PrintImportant("Game Socket Manager", "Stopping...");
+            CoreManager.ServerCore.StandardOutManager.ImportantChannel.WriteMessage("Game Socket Manager => Stopping...");
             _listeningSocket.Close();
             _actionThread.Join();
-            CoreManager.ServerCore.StandardOut.PrintImportant("Game Socket Manager", "Stopped!");
+            CoreManager.ServerCore.StandardOutManager.ImportantChannel.WriteMessage("Game Socket Manager => Stopped!");
 
             return this;
         }
@@ -65,8 +79,13 @@ namespace Bluedot.HabboServer.Network
             if(args.Error != null)
             {
                 // TODO: Die safely?
-                CoreManager.ServerCore.StandardOut.PrintError("Game Socket Manager", "Incoming connection failed!!");
-                CoreManager.ServerCore.StandardOut.PrintException(args.Error);
+                CoreManager.ServerCore.StandardOutManager.ErrorChannel.WriteMessage("Game Socket Manager => Incoming connection failed!!");
+
+                // TODO: Pretty exception reporting
+                Console.WriteLine();
+                Console.WriteLine(args.Error.Message);
+                Console.WriteLine(args.Error.StackTrace);
+
                 _listeningSocket.AcceptAsync();
                 return;
             }
@@ -85,7 +104,7 @@ namespace Bluedot.HabboServer.Network
 
             socket.Start();
             CoreManager.ServerCore.EventManager.Fire("incoming_game_connection:after", socket, connectionEventArgs);
-            CoreManager.ServerCore.StandardOut.PrintNotice("Game Socket Manager", "Incoming connection accepted: " + internalSocket.RemoteEndPoint);
+            CoreManager.ServerCore.StandardOutManager.NoticeChannel.WriteMessage("Game Socket Manager => Incoming connection accepted: " + internalSocket.RemoteEndPoint);
 
             _listeningSocket.AcceptAsync();
         }

@@ -92,6 +92,9 @@
     <Compile Include="src\Habbos\RoomUnitFigure.cs" />
     <Compile Include="src\InstanceStorage.cs" />
     <Compile Include="src\IInstanceStorage.cs" />
+    <Compile Include="src\Network\StandardOut\StandardOutConnection.cs" />
+    <Compile Include="src\Network\StandardOut\StandardOutEncryptionMethod.cs" />
+    <Compile Include="src\Network\StandardOut\StandardOutManager.cs" />
     <Compile Include="src\Rooms\RoomPosition.cs" />
     <Compile Include="src\Rooms\IRoomOwner.cs" />
     <Compile Include="src\Rooms\PrivateRoom.cs" />
@@ -158,7 +161,7 @@
     <Compile Include="src\Install\InstallationEventArgs.cs" />
     <Compile Include="src\Install\InstallerIn.cs" />
     <Compile Include="src\Install\InstallerOut.cs" />
-    <Compile Include="src\Install\Output.cs" />
+    <Compile Include="src\Install\InstallerStandardOut.cs" />
     <Compile Include="src\Install\Steps\ByteStep.cs" />
     <Compile Include="src\Install\Steps\IntStep.cs" />
     <Compile Include="src\Install\Steps\PasswordStep.cs" />
@@ -186,7 +189,6 @@
     <Compile Include="src\Network\GameSockets\GameSocketManager.cs" />
     <Compile Include="src\Permissions\PermissionDistributor.cs" />
     <Compile Include="src\ServerCore.cs" />
-    <Compile Include="src\StandardOut.cs" />
     <Compile Include="src\Useful\BluedotDictionary.cs" />
     <Compile Include="src\Useful\WriteLock.cs" />
     <Compile Include="src\Useful\Nito\SafeGCHandle.cs" />

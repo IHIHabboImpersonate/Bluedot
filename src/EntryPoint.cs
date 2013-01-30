@@ -43,13 +43,21 @@ namespace Bluedot.HabboServer
         internal const UInt32 MF_GRAYED = 0x00000001;
 // ReSharper restore InconsistentNaming
 
+        private static bool _waitOnBsod = false;
+
         internal static void Main(string[] arguments)
         {
+            Console.Title = "Bluedot Habbo Server";
+            Console.WriteLine();
+            Console.WriteLine("Bluedot Habbo Server - Preparing...");
+
             #region Exit management
+            Console.WriteLine("Disabling close window button...");
             // Disable close button to prevent unsafe closing.
             IntPtr current = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
             EnableMenuItem(GetSystemMenu(current, false), SC_CLOSE, MF_GRAYED);
 
+            Console.WriteLine("Binding shutdown to CTRL + C and CTRL + Break...");
             // Reassign CTRL+C and CTRL+BREAK to safely shutdown.
             Console.TreatControlCAsInput = false;
             Console.CancelKeyPress += ShutdownKey;
@@ -57,16 +65,19 @@ namespace Bluedot.HabboServer
 
 
             Thread.CurrentThread.Name = "BLUEDOT-EntryThread";
-            
+
+            Console.WriteLine("Setting up packaged reference loading...");
             // Allows embedded resources to be loaded.
             AppDomain.CurrentDomain.AssemblyResolve += LoadPackagedReferences;
 
+            Console.WriteLine("Setting up fatel exception handler (BSOD style)...");
             // Bluescreen in the event of a fatal unhandled exception.
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
 
 
             string configFile = "config.xml";
 
+            Console.WriteLine("Parsing command line arguments...");
             Regex nameValueRegex = new Regex("^--(?<name>[\\w-]+)=(?<value>.+)$");
 
             foreach (string argument in arguments)
@@ -75,6 +86,8 @@ namespace Bluedot.HabboServer
                 string name = nameValueMatch.Groups["name"].Value;
                 string value = nameValueMatch.Groups["value"].Value;
 
+                Console.WriteLine("  " + name + " - " + value);
+
                 switch (name)
                 {
                     case "config-file":
@@ -82,18 +95,22 @@ namespace Bluedot.HabboServer
                             configFile = value;
                             break;
                         }
+                    case "bsod-wait":
+                        {
+                            _waitOnBsod = true;
+                            break;
+                        }
                 }
             }
-
-            Console.Title = "Bluedot Habbo Server";
-            Console.WriteLine("Bluedot Habbo Server");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-
+            Console.WriteLine("Config location: " + configFile);
+            
+            Console.WriteLine("Preparing installer core...");
             CoreManager.InitialiseInstallerCore();
-            CoreManager.InitialiseServerCore();
 
+            Console.WriteLine("Preparing server core...");
+            CoreManager.InitialiseServerCore();
+            
+            Console.WriteLine("Starting server core...");
             CoreManager.ServerCore.Boot(Path.Combine(Environment.CurrentDirectory, configFile));
         }
 
@@ -117,10 +134,13 @@ namespace Bluedot.HabboServer
         {
             if (!e.IsTerminating)
                 return;
-
-            if (CoreManager.ServerCore != null)
-                if (CoreManager.ServerCore.StandardOut != null)
-                    CoreManager.ServerCore.StandardOut.Hidden = true;
+            
+            if(_waitOnBsod)
+            {
+                Console.WriteLine();
+                Console.WriteLine("BLUEDOT STOP ERROR - Press any key to show!");
+                Console.ReadKey(true);
+            }
 
             #region Bluescreen Output
             Console.WindowWidth = Console.BufferWidth = Console.WindowWidth * 2;
@@ -195,7 +215,7 @@ namespace Bluedot.HabboServer
             // If the server is at least partially started then give it a chance to shut down safely.
             if(CoreManager.ServerCore != null)
             {
-                // Wait 5 seconds for everything to exit then force it.
+                // Wait at least 5 seconds for everything to exit then force it.
                 new Thread(() =>
                 {
                     Thread.Sleep(5000);
@@ -216,7 +236,7 @@ namespace Bluedot.HabboServer
             if (CoreManager.ServerCore == null)
                 Environment.Exit(0);
 
-            // We can't stop CTRL+BREAK closing so we should just force a shutdown.
+            // We can't stop CTRL+BREAK closing so we should just force a safe shutdown.
             if (e.SpecialKey == ConsoleSpecialKey.ControlBreak)
                 CoreManager.ServerCore.Shutdown();
             else
@@ -226,12 +246,5 @@ namespace Bluedot.HabboServer
                 CoreManager.ServerCore.Shutdown(true);
             }
         }
-    }
-
-    internal enum BootResult
-    {
-        AllClear,
-        SocketBindingFailure,
-        UnknownFailure
     }
 }

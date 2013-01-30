@@ -71,15 +71,11 @@ namespace Bluedot.HabboServer.Network.WebAdmin
 
                     if (value == null)
                     {
-#if DEBUG
-                        CoreManager.ServerCore.StandardOut.PrintDebugModeMessage("WebAdmin handler removed: " + path);
-#endif
+                        CoreManager.ServerCore.StandardOutManager.DebugChannel.WriteMessage("Web Admin => Handler removed: " + path);
                         return;
                     }
                     _paths.Add(path, value);
-#if DEBUG
-                    CoreManager.ServerCore.StandardOut.PrintDebugModeMessage("WebAdmin handler " + (newEntry ? "added" : "changed")  + ": " + path);
-#endif
+                    CoreManager.ServerCore.StandardOutManager.DebugChannel.WriteMessage("Web Admin => Handler " + (newEntry ? "added" : "changed") + ": " + path);
                 }
             }
         }
@@ -123,12 +119,12 @@ namespace Bluedot.HabboServer.Network.WebAdmin
                 HttpPathHandler handler = this[path];
                 if (handler != null)
                 {
-                    CoreManager.ServerCore.StandardOut.PrintDebug("WebAdmin", "WebAdmin Request [200]: " + path);
+                    CoreManager.ServerCore.StandardOutManager.DebugChannel.WriteMessage("Web Admin => WebAdmin Request [200]: " + path);
                     handler(e.RequestContext);
                     return;
                 }
             }
-            CoreManager.ServerCore.StandardOut.PrintDebug("WebAdmin", "WebAdmin Request [404]: " + path);
+            CoreManager.ServerCore.StandardOutManager.DebugChannel.WriteMessage("Web Admin => WebAdmin Request [404]: " + path);
 
             HttpListenerResponse response = e.RequestContext.Response;
             byte[] buffer = Encoding.UTF8.GetBytes("Not Handled!");

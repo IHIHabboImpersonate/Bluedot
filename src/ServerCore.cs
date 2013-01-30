@@ -7,6 +7,7 @@ using Bluedot.HabboServer.ApiUsage;
 using Bluedot.HabboServer.ApiUsage.Plugins;
 using Bluedot.HabboServer.Configuration;
 using Bluedot.HabboServer.Events;
+using Bluedot.HabboServer.Network.StandardOut;
 using Bluedot.HabboServer.Rooms;
 using Bluedot.HabboServer.Rooms.Figure;
 using Bluedot.HabboServer.Install;
@@ -80,8 +81,8 @@ namespace Bluedot.HabboServer
             private set;
         }
         #endregion
-        #region Property: StandardOut
-        public StandardOut StandardOut
+        #region Property: StandardOutManager
+        public StandardOutManager StandardOutManager
         {
             get;
             private set;
@@ -125,37 +126,34 @@ namespace Bluedot.HabboServer
             lock (_bootInProgressLocker)
             {
                 #region Ensure Directory Structure
-
-                XmlConfig.EnsureDirectory(new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, "dumps")));
-
+                //XmlConfig.EnsureDirectory(new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, "dumps")));
                 #endregion
-
-                #region Standard Out
-
-                StandardOut = new StandardOut();
-                StandardOut.PrintNotice("Standard Out", "Ready");
-
-                #endregion
-
+                
                 #region Config & Installation
-
+                Console.WriteLine("Loading config file at: " + configPath);
                 Config = new XmlConfig(configPath);
 
+                Console.WriteLine("Checking if basic installation tasks are required...");
                 bool mainInstallRequired = PreInstall(); // Register the main installation if required.
                 CoreManager.InstallerCore.Run();
                 if (mainInstallRequired)
+                {
+                    Console.WriteLine("Saving config file...");
                     SaveConfigInstallation();
+                }
+                #endregion
+                
+                #region Standard Out
+                ushort standardOutPort = Config.ValueAsUshort("/config/network/standardoutport", 14481);
+                Console.WriteLine("Starting StandardOutManager on port " + standardOutPort);
+                StandardOutManager = new StandardOutManager(standardOutPort);
+                Console.WriteLine("StandardOutManager started!");
 
-                StandardOut.PrintNotice("Config", "Main config file loaded");
-                StandardOut.SetImportance(
-                    (StandardOutImportance)
-                    Config.ValueAsByte("/config/standardout/importance", (byte) StandardOutImportance.Debug));
-
+                Console.WriteLine("The rest of the start up output will also be sent to the debug channel.");
                 #endregion
 
                 #region MySQL
-
-                StandardOut.PrintNotice("MySQL", "Creating connection provider");
+                BasicConsoleWrite("MySQL => Creating connection provider");
                 MySqlConnectionProvider = new MySqlConnectionProvider
                                               {
                                                   Host = Config.ValueAsString("/config/mysql/host"),
@@ -164,74 +162,72 @@ namespace Bluedot.HabboServer
                                                   Password = Config.ValueAsString("/config/mysql/password"),
                                                   Database = Config.ValueAsString("/config/mysql/database")
                                               };
-                StandardOut.PrintNotice("MySQL", "Connection provider ready!");
-
+                BasicConsoleWrite("MySQL => Connection provider ready!");
                 #endregion
 
                 #region Figure Factory
-
-                StandardOut.PrintNotice("Habbo Figure Factory", "Constructing...");
+                BasicConsoleWrite("Habbo Figure Factory => Constructing...");
                 HabboFigureFactory = new HabboFigureFactory();
-                StandardOut.PrintNotice("Habbo Figure Factory", "Ready");
-
+                BasicConsoleWrite("Habbo Figure Factory => Ready");
                 #endregion
 
                 #region Distributors
                 #region PermissionDistributor
-                StandardOut.PrintNotice("Permission Distributor", "Constructing...");
+                BasicConsoleWrite("Permission Distributor => Constructing...");
                 PermissionDistributor = new PermissionDistributor();
-                StandardOut.PrintNotice("Permission Distributor", "Ready");
+                BasicConsoleWrite("Permission Distributor => Ready");
                 #endregion
 
                 #region FuseRightManager
-                StandardOut.PrintNotice("Fuse Right NavigatorManager", "Constructing...");
+                BasicConsoleWrite("Fuse Right Manager => Constructing...");
                 FuseRightManager = new FuseRightManager();
-                StandardOut.PrintNotice("Fuse Right NavigatorManager", "Ready");
+                BasicConsoleWrite("Fuse Right Manager => Ready");
                 #endregion
 
                 #region HabboDistributor
-                StandardOut.PrintNotice("Habbo Distributor", "Constructing...");
+                BasicConsoleWrite("Habbo Distributor => Constructing...");
                 HabboDistributor = new HabboDistributor();
-                StandardOut.PrintNotice("Habbo Distributor", "Ready");
+                BasicConsoleWrite("Habbo Distributor => Ready");
                 #endregion
 
                 #region RoomDistributor
-                StandardOut.PrintNotice("Room Distributor", "Constructing...");
+                BasicConsoleWrite("Room Distributor => Constructing...");
                 RoomDistributor = new RoomDistributor();
-                StandardOut.PrintNotice("Room Distributor", "Ready");
+                BasicConsoleWrite("Room Distributor => Ready");
                 #endregion
                 #endregion
 
                 #region Network
-
                 #region Game Socket
-
-                StandardOut.PrintNotice("Game Socket Manager", "Starting...");
+                BasicConsoleWrite("Game Socket Manager => Starting...");
                 GameSocketManager = new GameSocketManager
                                         {
                                             Address = IPAddress.Any,
-                                            Port = 14478,
+                                            Port = Config.ValueAsUshort("/config/network/port", 14478),
                                             Reader = new ClassicGameSocketReader()
                                         };
                 GameSocketManager.Start();
-                StandardOut.PrintNotice("Game Socket Manager", "Ready!");
-
+                BasicConsoleWrite("Game Socket Manager => Ready!");
                 #endregion
 
                 #region WebAdmin
-
-                StandardOut.PrintNotice("WebAdmin", "Starting...");
+                BasicConsoleWrite("WebAdmin => Starting...");
                 WebAdminManager = new WebAdminManager(Config.ValueAsUshort("/config/webadmin/port", 14480));
-                StandardOut.PrintNotice("WebAdmin", "Ready!");
-
+                BasicConsoleWrite("WebAdmin => Ready!");
                 #endregion
 
                 #endregion
-                
-                StandardOut.PrintImportant("Plugin NavigatorManager", "Starting Pseudo Plugin System...");
+
+                BasicConsoleWrite("Plugin NavigatorManager => Starting Pseudo Plugin System...");
                 ApiCallerRoot.Start();
                 Console.Beep(500, 250);
-                StandardOut.PrintImportant("Core", "Bluedot Habbo Server is now functional!");
+                BasicConsoleWrite("Core => Bluedot Habbo Server is now functional!");
+                _disableConventialStandardOut = true;
+
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine("Output is no longer sent to conventional StandardOut!");
+                Console.WriteLine("Connect to the StardardOutManager on port " + standardOutPort);
             }
         }
         #endregion
@@ -242,22 +238,6 @@ namespace Bluedot.HabboServer
             {
                 // Yes, add to the Installer Core.
                 CoreManager.InstallerCore.
-                    AddCategory(
-                        "StandardOut",
-                        new Category().
-                            AddStep("Importance",
-                                    new StringStep(
-                                        "Default Importance",
-                                        "This is the minimum importance level that messages must have to be printed to standard out.",
-                                        new[]
-                                            {
-                                                "DEBUG",
-                                                "NOTICE",
-                                                "IMPORTANT",
-                                                "WARNING",
-                                                "ERROR"
-                                            },
-                                        "NOTICE"))).
                     AddCategory(
                         "Database",
                         new Category().
@@ -375,10 +355,7 @@ namespace Bluedot.HabboServer
         private void SaveConfigInstallation()
         {
             InstallerCore installer = CoreManager.InstallerCore;
-
-
-            StandardOut.PrintImportant("Config", "Updating configuration file... (Install)");
-
+            
             XmlDocument doc = Config.GetInternalDocument();
             XmlNode rootElement = doc.SelectSingleNode("/config");
 
@@ -387,7 +364,7 @@ namespace Bluedot.HabboServer
             XmlElement networkElement = doc.CreateElement("network");
             XmlElement webAdminElement = doc.CreateElement("webadmin");
 
-            #region StandardOut
+            #region StandardOutManager
 
             #region Importance
 
@@ -497,7 +474,6 @@ namespace Bluedot.HabboServer
             rootElement.AppendChild(webAdminElement);
 
             Config.Save();
-            StandardOut.PrintImportant("Config", "Configuration file saved!");
         }
         #endregion
         #region Method: Shutdown
@@ -505,8 +481,8 @@ namespace Bluedot.HabboServer
         {
             Console.TreatControlCAsInput = true;
 
-            // If StandardOut is not started then nothing is and we are already done.
-            if (StandardOut == null)
+            // If Config is not set then nothing is and we are already done.
+            if (Config == null)
                 return;
 
             lock (_bootInProgressLocker)
@@ -515,32 +491,33 @@ namespace Bluedot.HabboServer
                 {
                     Console.Beep(1000, 100);
                     Console.Beep(1000, 100);
-
-                    StandardOut.Hidden = true;
-
-                    Console.Clear();
+                    
+                    // Clear out previous input.
                     while (Console.KeyAvailable)
                     {
                         Console.ReadKey(true);
                     }
 
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine();
                     Console.WriteLine("Are you sure you want to shutdown Bluedot?");
-                    Console.Write("Press Y to confirm! ");
+                    Console.WriteLine("Press Y to confirm! ");
+                    Console.WriteLine();
 
                     if (Console.ReadKey(true).Key != ConsoleKey.Y)
                     {
-                        StandardOut.Hidden = false;
                         Console.TreatControlCAsInput = false;
+                        Console.WriteLine("Shutdown cancelled.");
                         return;
                     }
-                    StandardOut.Hidden = false;
+                    Console.WriteLine("Shutting down. Please wait...");
                 }
 
                 EventManager.Fire("shutdown", this, EventArgs.Empty);
                 
                 GameSocketManager.Stop();
                 WebAdminManager.Stop();
+
+                StandardOutManager.Stop();
 
                 Console.Beep(4000, 100);
                 Console.Beep(3500, 100);
@@ -552,6 +529,21 @@ namespace Bluedot.HabboServer
             }
         }
 
+        #endregion
+
+        #region Method: BasicConsoleWrite
+        private bool _disableConventialStandardOut = false;
+        internal void BasicConsoleWrite(string message)
+        {
+            if (!_disableConventialStandardOut)
+                Console.WriteLine(message);
+            
+            try
+            {
+                StandardOutManager.DebugChannel.WriteMessage(message);
+            }
+            catch {}
+        }
         #endregion
         #endregion
     }

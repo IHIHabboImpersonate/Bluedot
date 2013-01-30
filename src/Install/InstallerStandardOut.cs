@@ -28,9 +28,9 @@ using System.Text;
 
 namespace Bluedot.HabboServer.Install
 {
-    internal class StandardOut
+    internal class InstallerStandardOut
     {
-        internal StandardOut SetCategoryTitle(string text)
+        internal InstallerStandardOut SetCategoryTitle(string text)
         {
             int requiredPadding = Console.BufferWidth - text.Length;
 
@@ -49,7 +49,7 @@ namespace Bluedot.HabboServer.Install
             return this;
         }
 
-        internal StandardOut SetStep(byte current, byte total)
+        internal InstallerStandardOut SetStep(byte current, byte total)
         {
             string text = current + "/" + total;
 
@@ -58,7 +58,7 @@ namespace Bluedot.HabboServer.Install
             return this;
         }
 
-        internal StandardOut SetStatus(string text, ConsoleColor foreground = ConsoleColor.Gray,
+        internal InstallerStandardOut SetStatus(string text, ConsoleColor foreground = ConsoleColor.Gray,
                                        ConsoleColor background = ConsoleColor.Black)
         {
             Console.ForegroundColor = foreground;
@@ -76,7 +76,7 @@ namespace Bluedot.HabboServer.Install
             return this;
         }
 
-        internal StandardOut ClearPage()
+        internal InstallerStandardOut ClearPage()
         {
             Console.SetCursorPosition(0, 6);
 
@@ -90,7 +90,7 @@ namespace Bluedot.HabboServer.Install
             return this;
         }
 
-        internal StandardOut SetPage(string contents)
+        internal InstallerStandardOut SetPage(string contents)
         {
             ClearPage();
             Console.SetCursorPosition(0, 6);

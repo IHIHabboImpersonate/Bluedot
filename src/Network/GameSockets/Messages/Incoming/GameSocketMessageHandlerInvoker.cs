@@ -19,9 +19,7 @@ namespace Bluedot.HabboServer.Network
                 // Are there any handlers registered for this packet?
                 if (!_handlers.ContainsKey(message.HeaderId))
                 {
-#if DEBUG
-                    CoreManager.ServerCore.StandardOut.PrintDebugModeMessage("Unhandled HeaderID " + message.HeaderId + " (\"" + message.HeaderString + "\")");
-#endif
+                    CoreManager.ServerCore.StandardOutManager.DebugChannel.WriteMessage("Game Socket Manager => Unhandled HeaderID " + message.HeaderId + " (\"" + message.HeaderString + "\")");
                     // No, do nothing.
                     return this;
                 }

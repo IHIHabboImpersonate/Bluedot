@@ -55,20 +55,11 @@ namespace Bluedot.HabboServer.Install
         {
             if (_categories.Count == 0)
             {
-                CoreManager.
-                    ServerCore.
-                    StandardOut.
-                    PrintNotice("Installer", "No installation tasks detected.");
+                Console.WriteLine("No installation tasks detected.");
                 return this;
             }
-            CoreManager.
-                ServerCore.
-                StandardOut.
-                PrintImportant("Installer", "Installation tasks detected!").
-                PrintNotice("Standard Out", "Formatting Disabled (Installer)").
-                Hidden = true;
-
-            Console.WriteLine("Press any key to continue.");
+            Console.WriteLine();
+            Console.WriteLine("Installation tasks detected - Press any key to continue");
 
             Console.ReadKey();
 
@@ -82,8 +73,7 @@ namespace Bluedot.HabboServer.Install
                     category.Value.Run());
             }
 
-            CoreManager.ServerCore.StandardOut.Hidden = false;
-            CoreManager.ServerCore.StandardOut.PrintNotice("Standard Out", "Formatting Enabled (Installer)");
+            Console.WriteLine("Installation tasks finished - resuming server start up.");
             return this;
         }
 

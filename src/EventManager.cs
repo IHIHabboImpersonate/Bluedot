@@ -54,7 +54,10 @@ namespace Bluedot.HabboServer.Events
                     }
                     catch (Exception e)
                     {
-                        CoreManager.ServerCore.StandardOut.PrintException(e);
+                        // TODO: Pretty exception reporting
+                        Console.WriteLine();
+                        Console.WriteLine(e.Message);
+                        Console.WriteLine(e.StackTrace);
                     }
                 }
             }
@@ -68,7 +71,10 @@ namespace Bluedot.HabboServer.Events
                     }
                     catch (Exception e)
                     {
-                        CoreManager.ServerCore.StandardOut.PrintException(e);
+                        // TODO: Pretty exception reporting
+                        Console.WriteLine();
+                        Console.WriteLine(e.Message);
+                        Console.WriteLine(e.StackTrace);
                     }
                 }
             }

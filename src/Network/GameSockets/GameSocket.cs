@@ -2,6 +2,8 @@
 using System.Net;
 using System.Net.Sockets;
 using Bluedot.HabboServer.Habbos;
+using Bluedot.HabboServer.Network.StandardOut;
+
 using Nito.Async;
 using Nito.Async.Sockets;
 
@@ -105,7 +107,7 @@ namespace Bluedot.HabboServer.Network
         {
             if (_internalSocket != null)
                 _internalSocket.Close();
-            CoreManager.ServerCore.StandardOut.PrintNotice("Game Socket Manager", "Client Connection Closed: " + reason);
+            CoreManager.ServerCore.StandardOutManager.NoticeChannel.WriteMessage("Game Socket Manager => Client Connection Closed: " + reason);
 
             PacketHandlers = null;
             Habbo.LoggedIn = false;
@@ -198,7 +200,7 @@ namespace Bluedot.HabboServer.Network
         {
             IncomingMessage message = _protocolReader.ParseMessage(data);
 #if DEBUG
-            CoreManager.ServerCore.StandardOut.PrintDebugModeMessage("INCOMING => " + data.ToUtf8String());
+            CoreManager.ServerCore.GameSocketManager.PacketOutputChannel.WriteMessage("INCOMING => " + data.ToUtf8String());
 #endif
             PacketHandlers.Invoke(Habbo, message);
 
@@ -227,8 +229,11 @@ namespace Bluedot.HabboServer.Network
             {
                 if (args.Error != null)
                 {
-                    CoreManager.ServerCore.StandardOut.PrintError("Game Socket Manager", "Client Connection Killed: ");
-                    CoreManager.ServerCore.StandardOut.PrintException(args.Error);
+                    CoreManager.ServerCore.StandardOutManager.ErrorChannel.WriteMessage("Game Socket Manager => Client Connection Killed: ");
+                    // TODO: Pretty exception reporting
+                    Console.WriteLine();
+                    Console.WriteLine(args.Error.Message);
+                    Console.WriteLine(args.Error.StackTrace);
                 }
             }
         }
