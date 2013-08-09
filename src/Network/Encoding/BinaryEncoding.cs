@@ -6,7 +6,7 @@ using System.Text;
 
 #endregion
 
-namespace Bluedot.HabboServer.Network
+namespace IHI.Server.Network
 {
     internal static class BinaryEncoding
     {

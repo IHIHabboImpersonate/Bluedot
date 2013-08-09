@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace Bluedot.HabboServer.Network.WebAdmin
+namespace IHI.Server.Network.WebAdmin
 {
     public class HttpRequestEventArgs : EventArgs
     {

@@ -1,4 +1,4 @@
-﻿namespace Bluedot.HabboServer.Database
+﻿namespace IHI.Server.Database
 {
     public interface IPersistableStorage
     {

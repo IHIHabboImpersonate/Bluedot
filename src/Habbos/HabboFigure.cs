@@ -4,7 +4,7 @@ using System.Text;
 
 #endregion
 
-namespace Bluedot.HabboServer.Rooms.Figure
+namespace IHI.Server.Rooms.Figure
 {
     public class HabboFigure : RoomUnitFigure
     {

@@ -6,7 +6,7 @@ using System.Globalization;
 
 #endregion
 
-namespace Bluedot.HabboServer.Install
+namespace IHI.Server.Install
 {
     internal class UShortStep : Step
     {

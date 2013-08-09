@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace Bluedot.HabboServer.Install
+namespace IHI.Server.Install
 {
-    internal class InstallerCore
+    public class InstallerCore
     {
         private readonly IDictionary<string, Category> _categories;
         private readonly IDictionary<string, IDictionary<string, object>> _installerOutputValues;
@@ -30,12 +30,12 @@ namespace Bluedot.HabboServer.Install
             return this;
         }
 
-        internal InstallerCore Run()
+        internal bool Run()
         {
             if (_categories.Count == 0)
             {
                 Console.WriteLine("No installation tasks detected.");
-                return this;
+                return false;
             }
             Console.WriteLine();
             Console.WriteLine("Installation tasks detected - Press any key to continue");
@@ -53,7 +53,7 @@ namespace Bluedot.HabboServer.Install
             }
 
             Console.WriteLine("Installation tasks finished - resuming server start up.");
-            return this;
+            return true;
         }
 
         internal object GetInstallerOutputValue(string category, string name)

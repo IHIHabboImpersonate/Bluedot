@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bluedot.HabboServer.Permissions
+namespace IHI.Server.Permissions
 {
     public class FuseRightEventArgs : EventArgs
     {

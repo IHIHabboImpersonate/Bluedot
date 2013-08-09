@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using Bluedot.HabboServer.Useful;
-using Bluedot.HabboServer.ApiUsage.Plugins;
-using Bluedot.HabboServer.Events;
+using IHI.Server.Useful;
+using IHI.Server.Plugins;
+using IHI.Server.Events;
 
-namespace Bluedot.HabboServer.ApiUsage.Plugins
+namespace IHI.Server.Plugins
 {
     public class EventFirer
     {
-        private IPseudoPlugin _plugin;
+        private Plugin _plugin;
 
-        internal EventFirer(IPseudoPlugin plugin)
+        internal EventFirer(Plugin plugin)
         {
             _plugin = plugin;
         }

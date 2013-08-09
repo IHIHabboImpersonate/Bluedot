@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace Bluedot.HabboServer.Install
+namespace IHI.Server.Install
 {
     internal class StringStep : Step
     {

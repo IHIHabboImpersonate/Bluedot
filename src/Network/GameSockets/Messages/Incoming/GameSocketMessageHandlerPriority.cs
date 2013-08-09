@@ -1,4 +1,4 @@
-﻿namespace Bluedot.HabboServer.Network
+﻿namespace IHI.Server.Network
 {
     /// <summary>
     ///   The priority for packet handlers to execute.

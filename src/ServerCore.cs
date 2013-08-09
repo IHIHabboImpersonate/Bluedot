@@ -4,27 +4,27 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Xml;
 
-using Bluedot.HabboServer.ApiUsage;
-using Bluedot.HabboServer.ApiUsage.Plugins;
-using Bluedot.HabboServer.Configuration;
-using Bluedot.HabboServer.Events;
-using Bluedot.HabboServer.Rooms;
-using Bluedot.HabboServer.Rooms.Figure;
-using Bluedot.HabboServer.Install;
-using Bluedot.HabboServer.Database;
-using Bluedot.HabboServer.Network.WebAdmin;
-using Bluedot.HabboServer.Permissions;
-using Bluedot.HabboServer.Habbos;
-using Bluedot.HabboServer.Network;
+using IHI.Server.Plugins;
+using IHI.Server.Configuration;
+using IHI.Server.Events;
+using IHI.Server.Rooms;
+using IHI.Server.Rooms.Figure;
+using IHI.Server.Install;
+using IHI.Server.Database;
+using IHI.Server.Network.WebAdmin;
+using IHI.Server.Permissions;
+using IHI.Server.Habbos;
+using IHI.Server.Network;
 
-using Category = Bluedot.HabboServer.Install.Category;
+using Category = IHI.Server.Install.Category;
 using System.Collections.Generic;
-using Bluedot.HabboServer.Network.GameSockets;
+using IHI.Server.Network.GameSockets;
 using System.ComponentModel;
+using System.Threading;
 
-namespace Bluedot.HabboServer
+namespace IHI.Server
 {
-    internal class ServerCore
+    public class ServerCore
     {
         #region Fields
         #region Field: _bootInProgressLocker
@@ -120,6 +120,13 @@ namespace Bluedot.HabboServer
             private set;
         }
         #endregion
+        #region Property: PluginManager
+        public PluginManager PluginManager
+        {
+            get;
+            private set;
+        }
+        #endregion
         #endregion
 
         #region Methods
@@ -128,6 +135,10 @@ namespace Bluedot.HabboServer
         {
             EventManager = new EventManager();
             OfficalEventFirer = new EventFirer(null);
+
+            StringLocale = new StringLocale();
+            PluginManager = new PluginManager();
+            GameSocketManagers = new Dictionary<string, GameSocketManager>();
         }
         #endregion
         #region Method: Boot
@@ -136,16 +147,20 @@ namespace Bluedot.HabboServer
             lock (_bootInProgressLocker)
             {
                 StandardOut = log4net.LogManager.GetLogger("DEFAULT_STDOUT");
-                StringLocale = new StringLocale();
                 StringLocale.SetDefaults();
 
                 #region Ensure Directory Structure
                 XmlConfig.EnsureDirectory(new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, "dumps")));
+                XmlConfig.EnsureDirectory(new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, "plugins")));
+                XmlConfig.EnsureDirectory(new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, "libs")));
                 #endregion
-
+                
                 BootTaskLoadConfig();
-                BootTaskConnectMySql();
+                BootTaskLoadPlugins();
 
+                BootTaskRunInstaller();
+
+                BootTaskConnectMySql();
 
                 Task.WaitAll(new[]
                                  {
@@ -155,18 +170,17 @@ namespace Bluedot.HabboServer
                                      Task.Factory.StartNew(BootTaskPrepareRooms)
                                  });
 
-                GameSocketManagers = new Dictionary<string, GameSocketManager>();
                 Task.Factory.StartNew(BootTaskStartWebAdmin);
 
-                StandardOut.Info(StringLocale.GetString("CORE:BOOT_STARTING_PLUGINS"));
-                ApiCallerRoot.Start();
+                BootTaskStartPlugins();
+
                 StandardOut.Info("Core => " + StringLocale.GetString("CORE:BOOT_COMPLETE"));
 
                 Console.Beep(500, 250);
             }
         }
         #endregion
-        
+
         #region Method: BootTaskLoadConfig
         private void BootTaskLoadConfig()
         {
@@ -177,8 +191,12 @@ namespace Bluedot.HabboServer
 
             StandardOut.Info(StringLocale.GetString("CORE:BOOT_INSTALL_CHECKING"));
             bool mainInstallRequired = PrepareInstall(); // Register the main installation if required.
-            CoreManager.InstallerCore.Run();
-            if (mainInstallRequired)
+        }
+        #endregion
+        #region Method: BootTaskRunInstaller
+        private void BootTaskRunInstaller()
+        {
+            if (CoreManager.InstallerCore.Run())
             {
                 StandardOut.Info(StringLocale.GetString("CORE:BOOT_INSTALL_SAVING"));
                 SaveConfigInstallation();
@@ -201,6 +219,33 @@ namespace Bluedot.HabboServer
             StandardOut.Info("MySQL => " + StringLocale.GetString("CORE:BOOT_MYSQL_READY"));
         }
         #endregion
+        #region Method: BootTaskLoadPlugins
+        private void BootTaskLoadPlugins()
+        {
+            List<Task> taskList = new List<Task>();
+            StandardOut.Info("Plugin Manager => " + StringLocale.GetString("CORE:BOOT_PLUGINS_LOADING"));
+            foreach (string path in PluginManager.GetAllPotentialPluginPaths())
+            {
+                taskList.Add(Task.Factory.StartNew(() => { PluginManager.LoadPluginAtPath(path); }));
+            }
+            Task.WaitAll(taskList.ToArray());
+            StandardOut.Info("Plugin Manager => " + StringLocale.GetString("CORE:BOOT_PLUGINS_LOADED"));
+        }
+        #endregion
+        #region Method: BootTaskStartPlugins
+        private void BootTaskStartPlugins()
+        {
+            List<Task> taskList = new List<Task>();
+            StandardOut.Info("Plugin Manager => " + StringLocale.GetString("CORE:BOOT_PLUGINS_STARTING"));
+            foreach (Plugin plugin in PluginManager.GetLoadedPlugins())
+            {
+                taskList.Add(Task.Factory.StartNew(() => { PluginManager.StartPlugin(plugin); }));
+            }
+            Task.WaitAll(taskList.ToArray());
+            StandardOut.Info("Plugin Manager => " + StringLocale.GetString("CORE:BOOT_PLUGINS_STARTED"));
+        }
+        #endregion
+
 
         #region Method: BootTaskPrepareFigures
         public void BootTaskPrepareFigures()
@@ -323,7 +368,7 @@ namespace Bluedot.HabboServer
                             AddStep("DatebaseName",
                                     new StringStep(
                                         "MySQL Database Name",
-                                        "This is the name of the database IHI should use.",
+                                        "This is the name of the database IHI.Server should use.",
                                         new[]
                                             {
                                                 "ihi",
@@ -520,7 +565,7 @@ namespace Bluedot.HabboServer
                     }
 
                     Console.WriteLine();
-                    Console.WriteLine("Are you sure you want to shutdown Bluedot?");
+                    Console.WriteLine("Are you sure you want to shutdown?");
                     Console.WriteLine("Press Y to confirm!");
                     Console.WriteLine();
 
@@ -533,10 +578,15 @@ namespace Bluedot.HabboServer
                     Console.WriteLine("Shutting down. Please wait...");
                 }
 
+                Thread forceThread = new Thread(new ThreadStart(ForceShutdown));
+                forceThread.IsBackground = true;
+                forceThread.Start();
+
                 CoreManager.ServerCore.OfficalEventFirer.Fire("shutdown", EventPriority.Before, this, EventArgs.Empty);
                 CoreManager.ServerCore.OfficalEventFirer.Fire("shutdown", EventPriority.After, this, EventArgs.Empty);
                 
                 WebAdminManager.Stop();
+
 
                 Console.Beep(4000, 100);
                 Console.Beep(3500, 100);
@@ -546,6 +596,47 @@ namespace Bluedot.HabboServer
                 Console.Beep(1500, 100);
                 Console.Beep(1000, 100);
             }
+        }
+
+        private void ForceShutdown()
+        {
+            Thread.Sleep(2500);
+            bool force = false;
+            while (!force)
+            {
+                Thread.Sleep(5000);
+                Console.Beep(400, 150);
+                Console.Beep(700, 150);
+                Console.Beep(400, 150);
+
+                Console.WriteLine();
+                Console.WriteLine();
+
+                ConsoleColor oldColour = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Something is preventing the shutdown, would you like to force it?");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("WARNING: THIS MAY CAUSE DAMAGE TO YOUR DATABASE! DO SO AT YOUR OWN RISK!");
+                Console.WriteLine("         This is however safer than killing the process externally (e.g. Task Manager)");
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Press F to FORCE close!");
+                Console.ForegroundColor = oldColour;
+
+                if (Console.ReadKey(true).Key != ConsoleKey.F)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Waiting 5 more seconds for shutdown...");
+                    Console.ForegroundColor = oldColour;
+                }
+                else
+                    force = true;
+            }
+
+            Console.Beep(400, 750);
+            Console.Beep(400, 750);
+            Console.Beep(400, 750);
+            Environment.Exit(1);
         }
 
         #endregion

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Bluedot.HabboServer.Useful
+namespace IHI.Server.Useful
 {
     // TODO: Thread Safety
     // TODO: WeakReferenceBehaviour.RemoveCollected

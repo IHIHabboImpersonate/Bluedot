@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Bluedot.HabboServer.Useful;
+using IHI.Server.Useful;
 
-namespace Bluedot.HabboServer.Habbos.Messenger
+namespace IHI.Server.Habbos.Messenger
 {
     using System.Linq;
 

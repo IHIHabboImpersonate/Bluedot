@@ -1,18 +1,18 @@
-﻿using Bluedot.HabboServer.Install;
+﻿using IHI.Server.Install;
 
-namespace Bluedot.HabboServer
+namespace IHI.Server
 {
-    class CoreManager
+    public class CoreManager
     {
         /// <summary>
         ///   The instance of the server Core
         /// </summary>
-        internal static ServerCore ServerCore { get; private set; }
+        public static ServerCore ServerCore { get; private set; }
 
         /// <summary>
         ///   The instance of the installer Core.
         /// </summary>
-        internal static InstallerCore InstallerCore { get; private set; }
+        public static InstallerCore InstallerCore { get; private set; }
 
         internal static void InitialiseServerCore()
         {

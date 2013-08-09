@@ -1,15 +1,15 @@
 ﻿#region Usings
 
 using System.Collections.Generic;
-using Bluedot.HabboServer.Database;
-using Bluedot.HabboServer.Database.Actions;
-using Bluedot.HabboServer.Habbos;
+using IHI.Server.Database;
+using IHI.Server.Database.Actions;
+using IHI.Server.Habbos;
 
 
 #endregion
 
 
-namespace Bluedot.HabboServer.Permissions
+namespace IHI.Server.Permissions
 {
 
     public class PermissionDistributor

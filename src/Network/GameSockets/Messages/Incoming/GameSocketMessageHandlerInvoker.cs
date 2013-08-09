@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Bluedot.HabboServer.Habbos;
+using IHI.Server.Habbos;
 
-namespace Bluedot.HabboServer.Network
+namespace IHI.Server.Network
 {
     public class GameSocketMessageHandlerInvoker
     {

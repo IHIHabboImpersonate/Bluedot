@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace Bluedot.HabboServer.Rooms.Figure
+namespace IHI.Server.Rooms.Figure
 {
     public class HabboFigureFactory
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace Bluedot.HabboServer.Network
+namespace IHI.Server.Network
 {
     internal class InternalOutgoingMessage : IInternalOutgoingMessage
     {

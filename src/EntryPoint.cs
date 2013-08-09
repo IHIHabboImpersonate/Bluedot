@@ -9,7 +9,7 @@ using System.Threading;
 
 #endregion
 
-namespace Bluedot.HabboServer
+namespace IHI.Server
 {
     internal static class EntryPoint
     {
@@ -104,7 +104,7 @@ namespace Bluedot.HabboServer
         }
         public static Assembly LoadPackagedDll(string name)
         {
-            String resourceName = "Bluedot.HabboServer.Reference_Packaging." + name + ".dll";
+            String resourceName = "IHI.Server.Reference_Packaging." + name + ".dll";
 
             using (Stream stream = Assembly.GetEntryAssembly().GetManifestResourceStream(resourceName))
             {

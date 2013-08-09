@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bluedot.HabboServer.Useful
+namespace IHI.Server.Useful
 {
 
     public class WeakCache<TKey, TValue> where TValue : class

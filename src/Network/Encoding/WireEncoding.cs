@@ -4,7 +4,7 @@ using System;
 
 #endregion
 
-namespace Bluedot.HabboServer.Network
+namespace IHI.Server.Network
 {
     internal static class WireEncoding
     {

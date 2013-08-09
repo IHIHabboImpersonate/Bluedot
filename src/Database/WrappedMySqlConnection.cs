@@ -2,9 +2,9 @@
 
 using MySql.Data.MySqlClient;
 
-using Bluedot.HabboServer.Useful;
+using IHI.Server.Useful;
 
-namespace Bluedot.HabboServer.Database
+namespace IHI.Server.Database
 {
     public class WrappedMySqlConnection : IDisposable
     {

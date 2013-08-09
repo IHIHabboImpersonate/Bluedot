@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace Bluedot.HabboServer.Useful
+namespace IHI.Server.Useful
 {
     public class NestedSetDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {

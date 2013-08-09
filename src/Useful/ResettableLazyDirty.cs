@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace Bluedot.HabboServer.Useful
+namespace IHI.Server.Useful
 {
     /// <summary>
     /// A resettable lazy with dirty tracking.

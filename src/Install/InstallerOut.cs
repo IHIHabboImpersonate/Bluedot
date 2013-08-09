@@ -5,7 +5,7 @@ using System.Text;
 
 #endregion
 
-namespace Bluedot.HabboServer.Install
+namespace IHI.Server.Install
 {
     internal class InstallerOut
     {

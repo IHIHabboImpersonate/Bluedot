@@ -4,15 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-using Bluedot.HabboServer.Database.Actions;
-using Bluedot.HabboServer.Habbos;
-using Bluedot.HabboServer.Network;
-using Bluedot.HabboServer.Useful;
+using IHI.Server.Database.Actions;
+using IHI.Server.Habbos;
+using IHI.Server.Network;
+using IHI.Server.Useful;
 using System.Reflection;
 
 #endregion
 
-namespace Bluedot.HabboServer.Rooms
+namespace IHI.Server.Rooms
 {
     public class RoomDistributor
     {

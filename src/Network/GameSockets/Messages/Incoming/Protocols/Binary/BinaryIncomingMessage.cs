@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Bluedot.HabboServer.Network
+namespace IHI.Server.Network
 {
     public class BinaryIncomingMessage : IncomingMessage
     {

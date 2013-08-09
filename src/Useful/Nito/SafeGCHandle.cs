@@ -2,7 +2,7 @@
 //     Copyright (c) 2009 Nito Programs.
 // </copyright>
 
-namespace Bluedot.HabboServer.Useful
+namespace IHI.Server.Useful
 {
     using System;
     using System.Runtime.CompilerServices;

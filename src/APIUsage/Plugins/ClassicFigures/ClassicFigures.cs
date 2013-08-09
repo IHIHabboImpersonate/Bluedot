@@ -1,14 +1,14 @@
 ﻿using System;
 
-using Bluedot.HabboServer.Habbos;
-using Bluedot.HabboServer.Rooms.Figure;
-using Bluedot.HabboServer.Network;
+using IHI.Server.Habbos;
+using IHI.Server.Rooms.Figure;
+using IHI.Server.Network;
 
-namespace Bluedot.HabboServer.ApiUsage.Plugins.ClassicFigures
+namespace IHI.Server.Plugins.ClassicFigures
 {
-    public class ClassicFigures : IPseudoPlugin
+    public class ClassicFigures : Plugin
     {
-        public void Start(EventFirer eventFirer)
+        public override void Start(EventFirer eventFirer)
         {
             HabboFigureFactory factory = CoreManager.ServerCore.HabboFigureFactory;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Bluedot.HabboServer.Useful
+namespace IHI.Server.Useful
 {
     /// <summary>
     /// This is a dictionary guaranteed to have only one of each value and key. 

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Bluedot.HabboServer.Useful
+namespace IHI.Server.Useful
 {
     public class CancelReasonEventArgs : CancelEventArgs
     {

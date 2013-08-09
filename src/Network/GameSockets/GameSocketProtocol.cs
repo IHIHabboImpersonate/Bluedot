@@ -1,15 +1,15 @@
-﻿using Bluedot.HabboServer.Network;
+﻿using IHI.Server.Network;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bluedot.HabboServer.Network.GameSockets
+namespace IHI.Server.Network.GameSockets
 {
     public class GameSocketProtocol
     {
-        public Version Version // They are not called versions anymore but this is the name of the type so it is clearer.
+        public Version Client
         {
             get;
             private set;
@@ -26,10 +26,15 @@ namespace Bluedot.HabboServer.Network.GameSockets
             private set;
         }
 
-        public GameSocketProtocol(Version version, GameSocketReader reader) : this(version, reader, new GameSocketMessageHandlerInvokerManager()) { }
-        public GameSocketProtocol(Version version, GameSocketReader reader, GameSocketMessageHandlerInvokerManager handlerInvokerManager)
+        public GameSocketProtocol(GameSocketReader reader, int clientRelease = 0, int clientDate = 0, int clientTime = 0, int clientBuild = 0) : this(reader, null)
+        {
+            Client =  new Version(clientRelease, clientDate, clientTime, clientBuild);
+        }
+        public GameSocketProtocol(GameSocketReader reader, Version client) : this(reader, client, new GameSocketMessageHandlerInvokerManager()) { }
+        public GameSocketProtocol(GameSocketReader reader, Version client, GameSocketMessageHandlerInvokerManager handlerInvokerManager)
         {
             Reader = reader;
+            Client = client;
             HandlerInvokerManager = handlerInvokerManager;
         }
     }

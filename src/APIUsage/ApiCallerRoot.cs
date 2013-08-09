@@ -1,13 +1,13 @@
-﻿using Bluedot.HabboServer.Events;
+﻿using IHI.Server.Events;
 using System.Collections.Generic;
 
-namespace Bluedot.HabboServer.ApiUsage.Plugins
+namespace IHI.Server.Plugins
 {
     public static class ApiCallerRoot
     {
         public static void Start()
         {
-            List<IPseudoPlugin> plugins = new List<IPseudoPlugin>();
+            List<Plugin> plugins = new List<Plugin>();
 
             //plugins.Add(new DefaultLoginFunctions.DefaultLoginFunctions());
             //plugins.Add(new DefaultHabboFunctions.DefaultHabboFunctions());
@@ -15,7 +15,7 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins
             //plugins.Add(new DefaultSubscriptionsFunctions.DefaultSubscriptionsFunctions());
             plugins.Add(new ClassicFigures.ClassicFigures());
 
-            foreach (IPseudoPlugin plugin in plugins)
+            foreach (Plugin plugin in plugins)
             {
                 EventFirer eventFirer = new EventFirer(plugin);
                 plugin.Start(eventFirer);

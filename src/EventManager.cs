@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using Bluedot.HabboServer.Useful;
-using Bluedot.HabboServer.ApiUsage.Plugins;
+using IHI.Server.Useful;
+using IHI.Server.Plugins;
 
-namespace Bluedot.HabboServer.Events
+namespace IHI.Server.Events
 {
     public class EventManager
     {
@@ -59,7 +59,7 @@ namespace Bluedot.HabboServer.Events
         #endregion
 
         #region Method: Fire
-        internal EventManager Fire(IPseudoPlugin plugin, string eventName, EventPriority priority, object source, EventArgs args)
+        internal EventManager Fire(Plugin plugin, string eventName, EventPriority priority, object source, EventArgs args)
         {
             EventIdentity identity = new EventIdentity(eventName, priority);
 

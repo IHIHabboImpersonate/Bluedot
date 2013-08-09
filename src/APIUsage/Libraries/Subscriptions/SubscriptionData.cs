@@ -1,12 +1,12 @@
 ﻿#region Usings
 
 using System;
-using Bluedot.HabboServer.Database.Actions;
-using Bluedot.HabboServer.Habbos;
+using IHI.Server.Database.Actions;
+using IHI.Server.Habbos;
 
 #endregion
 
-namespace Bluedot.HabboServer.ApiUsage.Libraries.Subscriptions
+namespace IHI.Server.Libraries.Subscriptions
 {
     public class SubscriptionData
     {

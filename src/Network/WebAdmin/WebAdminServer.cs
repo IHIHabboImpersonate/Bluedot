@@ -7,7 +7,7 @@ using System.Threading;
 
 #endregion
 
-namespace Bluedot.HabboServer.Network.WebAdmin
+namespace IHI.Server.Network.WebAdmin
 {
     internal sealed class WebAdminServer : IDisposable
     {

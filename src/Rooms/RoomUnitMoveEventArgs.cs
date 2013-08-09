@@ -1,6 +1,6 @@
-﻿using Bluedot.HabboServer.Useful;
+﻿using IHI.Server.Useful;
 
-namespace Bluedot.HabboServer.Rooms
+namespace IHI.Server.Rooms
 {
     public class RoomUnitMoveEventArgs : CancelReasonEventArgs
     {

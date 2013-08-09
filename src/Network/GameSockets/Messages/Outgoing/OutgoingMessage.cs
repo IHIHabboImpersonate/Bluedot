@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace Bluedot.HabboServer.Network
+namespace IHI.Server.Network
 {
     public abstract class OutgoingMessage
     {

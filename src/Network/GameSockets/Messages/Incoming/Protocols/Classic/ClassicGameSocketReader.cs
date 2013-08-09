@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bluedot.HabboServer.Network
+namespace IHI.Server.Network
 {
     public class ClassicGameSocketReader : GameSocketReader
     {

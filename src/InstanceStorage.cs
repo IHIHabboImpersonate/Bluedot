@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-using Bluedot.HabboServer.Database.Actions;
+using IHI.Server.Database.Actions;
 
-namespace Bluedot.HabboServer
+namespace IHI.Server
 {
     public class InstanceStorage
     {

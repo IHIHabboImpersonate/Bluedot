@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Bluedot.HabboServer.ApiUsage.Libraries.Subscriptions;
-using Bluedot.HabboServer.Database;
-using Bluedot.HabboServer.Database.Actions;
-using Bluedot.HabboServer.Events;
-using Bluedot.HabboServer.Rooms;
-using Bluedot.HabboServer.Rooms.Figure;
-using Bluedot.HabboServer.Useful;
-using Bluedot.HabboServer.Habbos.Messenger;
-using Bluedot.HabboServer.Network;
-using Bluedot.HabboServer.Permissions;
+using IHI.Server.Libraries.Subscriptions;
+using IHI.Server.Database;
+using IHI.Server.Database.Actions;
+using IHI.Server.Events;
+using IHI.Server.Rooms;
+using IHI.Server.Rooms.Figure;
+using IHI.Server.Useful;
+using IHI.Server.Habbos.Messenger;
+using IHI.Server.Network;
+using IHI.Server.Permissions;
 
-namespace Bluedot.HabboServer.Habbos
+namespace IHI.Server.Habbos
 {
     public class Habbo : IPlayerHuman, IMessageable, IInstanceStorage, IPersistableStorage, IRoomOwner
     {

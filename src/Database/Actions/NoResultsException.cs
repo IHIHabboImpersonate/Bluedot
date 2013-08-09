@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bluedot.HabboServer.Database.Actions
+namespace IHI.Server.Database.Actions
 {
     public class NoResultsException : Exception
     {

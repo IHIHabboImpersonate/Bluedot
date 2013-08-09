@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace Bluedot.HabboServer.Useful
+namespace IHI.Server.Useful
 {
     public class NestedSetList<T> : ICollection<T>
     {

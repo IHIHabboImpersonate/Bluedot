@@ -1,4 +1,4 @@
-namespace Bluedot.HabboServer.Rooms
+namespace IHI.Server.Rooms
 {
     public interface IRoomOwner
     {

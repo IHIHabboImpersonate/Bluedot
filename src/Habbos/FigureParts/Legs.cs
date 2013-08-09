@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Bluedot.HabboServer.Rooms.Figure
+namespace IHI.Server.Rooms.Figure
 {
     public abstract class Legs : FigureSet
     {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 #endregion
 
-namespace Bluedot.HabboServer.Network.WebAdmin
+namespace IHI.Server.Network.WebAdmin
 {
     public class WebAdminManager
     {

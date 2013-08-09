@@ -1,4 +1,4 @@
-﻿namespace Bluedot.HabboServer.Permissions
+﻿namespace IHI.Server.Permissions
 {
     public enum PermissionState
     {

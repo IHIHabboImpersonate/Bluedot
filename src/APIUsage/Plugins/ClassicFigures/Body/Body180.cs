@@ -1,6 +1,6 @@
-﻿using Bluedot.HabboServer.Rooms.Figure;
+﻿using IHI.Server.Rooms.Figure;
 
-namespace Bluedot.HabboServer.ApiUsage.Plugins.ClassicFigures
+namespace IHI.Server.Plugins.ClassicFigures
 {
     public class Body180 : Body
     {

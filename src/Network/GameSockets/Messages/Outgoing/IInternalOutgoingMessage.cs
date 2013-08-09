@@ -5,7 +5,7 @@ using System.Text;
 
 #endregion
 
-namespace Bluedot.HabboServer.Network
+namespace IHI.Server.Network
 {
     public interface IInternalOutgoingMessage
     {

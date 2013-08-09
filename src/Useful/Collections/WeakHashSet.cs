@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 #endregion
 
-namespace Bluedot.HabboServer.Useful
+namespace IHI.Server.Useful
 {
     public class WeakHashSet<T> : ISet<T> where T : class
     {

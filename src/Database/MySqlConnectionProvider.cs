@@ -1,7 +1,7 @@
 ﻿
 using MySql.Data.MySqlClient;
 
-namespace Bluedot.HabboServer.Database
+namespace IHI.Server.Database
 {
     public class MySqlConnectionProvider
     {

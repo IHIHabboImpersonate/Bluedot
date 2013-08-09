@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Bluedot.HabboServer
+namespace IHI.Server
 {
     public static class Extensions
     {

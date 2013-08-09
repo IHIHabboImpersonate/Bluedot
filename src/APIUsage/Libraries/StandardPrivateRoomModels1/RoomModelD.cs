@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-using Bluedot.HabboServer.ApiUsage.Libraries.Subscriptions;
-using Bluedot.HabboServer.Database;
-using Bluedot.HabboServer.Database.Actions;
-using Bluedot.HabboServer.Useful;
-using Bluedot.HabboServer.Rooms.Figure;
-using Bluedot.HabboServer.Habbos.Messenger;
-using Bluedot.HabboServer.Network;
-using Bluedot.HabboServer.Permissions;
+using IHI.Server.Libraries.Subscriptions;
+using IHI.Server.Database;
+using IHI.Server.Database.Actions;
+using IHI.Server.Useful;
+using IHI.Server.Rooms.Figure;
+using IHI.Server.Habbos.Messenger;
+using IHI.Server.Network;
+using IHI.Server.Permissions;
 
-namespace Bluedot.HabboServer.Rooms
+namespace IHI.Server.Rooms
 {
     [RoomModelAttribute("d")]
     public class RoomModelD : PrivateRoom

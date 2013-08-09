@@ -6,9 +6,9 @@ using System.Xml;
 
 #endregion
 
-namespace Bluedot.HabboServer.Configuration
+namespace IHI.Server.Configuration
 {
-    internal class XmlConfig
+    public class XmlConfig
     {
         private readonly XmlDocument _document;
         private readonly string _path;

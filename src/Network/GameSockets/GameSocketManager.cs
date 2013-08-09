@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Net;
 
-using Bluedot.HabboServer.Events;
-using Bluedot.HabboServer.Useful;
+using IHI.Server.Events;
+using IHI.Server.Useful;
 
 using Nito.Async;
 using Nito.Async.Sockets;
-using Bluedot.HabboServer.Network.GameSockets;
+using IHI.Server.Network.GameSockets;
 
-namespace Bluedot.HabboServer.Network
+namespace IHI.Server.Network
 {
     public class GameSocketManager
     {

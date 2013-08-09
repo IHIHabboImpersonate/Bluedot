@@ -1,4 +1,4 @@
-﻿namespace Bluedot.HabboServer.Network
+﻿namespace IHI.Server.Network
 {
     public class ClassicIncomingMessage : IncomingMessage
     {

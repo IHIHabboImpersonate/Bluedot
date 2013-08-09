@@ -1,6 +1,6 @@
 ﻿using System.Text;
-using Bluedot.HabboServer.Rooms.Figure;
-namespace Bluedot.HabboServer.Habbos
+using IHI.Server.Rooms.Figure;
+namespace IHI.Server.Habbos
 {
     public abstract class FigureWaistAccessory : FigureSet
     {

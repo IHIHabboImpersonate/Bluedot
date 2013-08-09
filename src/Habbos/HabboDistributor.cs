@@ -1,12 +1,12 @@
 ﻿#region Usings
 
-using Bluedot.HabboServer.Database.Actions;
-using Bluedot.HabboServer.Network;
-using Bluedot.HabboServer.Useful;
+using IHI.Server.Database.Actions;
+using IHI.Server.Network;
+using IHI.Server.Useful;
 
 #endregion
 
-namespace Bluedot.HabboServer.Habbos
+namespace IHI.Server.Habbos
 {
     public class HabboDistributor
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bluedot.HabboServer
+namespace IHI.Server
 {
     public class StringLocale
     {
@@ -48,7 +48,7 @@ namespace Bluedot.HabboServer
         {
             return String.Format(GetString(key), args);
         }
-        public void SetString(string key, string value, bool readOnly = false)
+        public StringLocale SetString(string key, string value, bool readOnly = false)
         {
             if (_readOnlyKeys.Contains(key))
                 throw new ReadOnlyException(GetString("CORE:ERROR_CONFIG_CREATION_FAILED", key));
@@ -57,14 +57,15 @@ namespace Bluedot.HabboServer
                 _readOnlyKeys.Add(key);
 
             _strings[key] = value;
+
+            return this;
         }
 
         #region Method: SetDefaults
         internal void SetDefaults()
         {
-            SetString("CORE:PROJECT_NAME",                          "Bluedot", true);
-            SetString("CORE:BOOT_STARTING_PLUGINS",                 "Plugin NavigatorManager => Starting Pseudo Plugin System...");
-            SetString("CORE:BOOT_COMPLETE",                         "Bluedot Habbo Server is now functional!");
+            SetString("CORE:PROJECT_NAME",                          "IHI Server", true);
+            SetString("CORE:BOOT_COMPLETE",                         "IHI Server is now functional!");
             SetString("CORE:BOOT_LOADING_CONFIG_AT",                "Loading config file at: ");
             SetString("CORE:BOOT_INSTALL_CHECKING",                 "Checking if basic installation tasks are required...");
             SetString("CORE:BOOT_INSTALL_SAVING",                   "Saving config file...");
@@ -79,8 +80,6 @@ namespace Bluedot.HabboServer
             SetString("CORE:BOOT_HABBODISTRIBUTOR_READY",           "Ready");
             SetString("CORE:BOOT_ROOMDISTRIBUTOR_PREPARE",          "Constructing...");
             SetString("CORE:BOOT_ROOMDISTRIBUTOR_READY",            "Ready");
-            SetString("CORE:BOOT_GAMESOCKETMANAGER_PREPARE",        "Starting...");
-            SetString("CORE:BOOT_GAMESOCKETMANAGER_READY",          "Ready");
             SetString("CORE:BOOT_WEBADMIN_PREPARE",                 "Starting...");
             SetString("CORE:BOOT_WEBADMIN_READY",                   "Ready");
             SetString("CORE:EXCEPTION_LOCALE_READONLY",             "The locale string key \"{0}\"  is marked as read only and cannot be changed.");
@@ -108,12 +107,13 @@ namespace Bluedot.HabboServer
             SetString("CORE:ERROR_WEBADMIN_PORT_CONFLICT",          "The WebAdminServer was unable to start. Is the port already in use?");
             SetString("CORE:ERROR_PERMISSIONS_UNDEFINED_GROUP",     "Undefined PermissionGroup \"{0}\" referenced by Habbo ID: {1}");
             SetString("CORE:ERROR_ROOM_MODEL_MISSING",              "Failed to load a room with model \"{0}\" because the model type was not found");
-            SetString("CORE:",                                      "");
-            SetString("CORE:",                                      "");
-            SetString("CORE:",                                      "");
-            SetString("CORE:",                                      "");
-            SetString("CORE:",                                      "");
-            SetString("CORE:",                                      "");
+            SetString("CORE:ERROR_PLUGIN_NOT_EXIST",                "Plugin does not exist: {0}");
+            SetString("CORE:ERROR_PLUGIN_NOT_PLUGIN",               "{0} is in the plugin directory but is not a plugin.");
+            SetString("CORE:PLUGIN_STARTED",                        "Plugin {0} has been started.");
+            SetString("CORE:BOOT_PLUGINS_LOADING",                  "Loading plugins...");
+            SetString("CORE:BOOT_PLUGINS_LOADED",                   "Plugins loaded!");
+            SetString("CORE:BOOT_PLUGINS_STARTING",                 "Starting plugins...");
+            SetString("CORE:BOOT_PLUGINS_STARTED",                  "Plugins started!");
             SetString("CORE:",                                      "");
             SetString("CORE:",                                      "");
             SetString("CORE:",                                      "");

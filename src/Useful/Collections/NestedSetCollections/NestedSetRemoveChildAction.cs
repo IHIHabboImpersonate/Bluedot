@@ -1,4 +1,4 @@
-﻿namespace Bluedot.HabboServer.Useful
+﻿namespace IHI.Server.Useful
 {
     public enum NestedSetRemoveChildAction
     {

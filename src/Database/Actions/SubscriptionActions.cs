@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 
-namespace Bluedot.HabboServer.Database.Actions
+namespace IHI.Server.Database.Actions
 {
     public static class SubscriptionActions
     {

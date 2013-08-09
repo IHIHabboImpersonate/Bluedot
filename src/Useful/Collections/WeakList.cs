@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 #endregion
 
-namespace Bluedot.HabboServer.Useful
+namespace IHI.Server.Useful
 {
     public class WeakList<T> : IList<T> where T : class
     {

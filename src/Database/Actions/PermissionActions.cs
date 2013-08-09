@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using MySql.Data.MySqlClient;
-using Bluedot.HabboServer.Permissions;
+using IHI.Server.Permissions;
 
-namespace Bluedot.HabboServer.Database.Actions
+namespace IHI.Server.Database.Actions
 {
     public static class PermissionActions
     {

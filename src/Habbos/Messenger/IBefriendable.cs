@@ -1,8 +1,8 @@
 ﻿using System;
-using Bluedot.HabboServer.Rooms;
-using Bluedot.HabboServer.Rooms.Figure;
+using IHI.Server.Rooms;
+using IHI.Server.Rooms.Figure;
 
-namespace Bluedot.HabboServer.Habbos.Messenger
+namespace IHI.Server.Habbos.Messenger
 {
     public interface IBefriendable
     {

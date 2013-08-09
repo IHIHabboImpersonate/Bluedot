@@ -4,7 +4,7 @@ using System;
 
 #endregion
 
-namespace Bluedot.HabboServer.Network
+namespace IHI.Server.Network
 {
     /// <summary>
     ///   Provides methods for encoding and decoding integers to byte arrays. This class is static.

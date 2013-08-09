@@ -1,10 +1,10 @@
 ﻿#region Usings
 
-using Bluedot.HabboServer.Habbos;
+using IHI.Server.Habbos;
 
 #endregion
 
-namespace Bluedot.HabboServer.Network
+namespace IHI.Server.Network
 {
     public delegate void GameSocketMessageHandler(Habbo sender, IncomingMessage message);
 
