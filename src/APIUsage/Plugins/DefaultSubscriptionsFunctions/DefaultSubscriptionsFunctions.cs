@@ -1,4 +1,5 @@
 ﻿using System;
+using Bluedot.HabboServer.Events;
 using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
 using Bluedot.HabboServer.Useful;
@@ -9,7 +10,7 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultSubscriptionsFunctions
     {
         public void Start()
         {
-            CoreManager.ServerCore.EventManager.StrongBind("habbo_login:after", RegisterSubscriptionHandlers);
+            CoreManager.ServerCore.EventManager.StrongBind("habbo_login", EventPriority.After, RegisterSubscriptionHandlers);
         }
 
         private static void RegisterSubscriptionHandlers(object source, EventArgs args)

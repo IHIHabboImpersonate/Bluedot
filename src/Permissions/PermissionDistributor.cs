@@ -58,7 +58,7 @@ namespace Bluedot.HabboServer.Permissions
             }
             _defaultPermissions = new Dictionary<string, PermissionState>();
 
-            CoreManager.ServerCore.BasicConsoleWrite("Permissions => Calculating default permissions for all Habbos.");
+            CoreManager.ServerCore.StandardOut.Info("Permissions => " + CoreManager.ServerCore.StringLocale.GetString("CORE:BOOT_PERMISSIONS_CALCULATE"));
             _defaultPermissions = GetHabboPermissions(DefaultPermissionsHabboId);
         }
         #endregion
@@ -82,7 +82,7 @@ namespace Bluedot.HabboServer.Permissions
                 {
                     if (!_permissionGroupCache.ContainsKey(groupName))
                     {
-                        CoreManager.ServerCore.StandardOutManager.WarningChannel.WriteMessage("Permissions => Undefined PermissionGroup \"" + groupName + "\" referenced by Habbo ID: " + habboId);
+                        CoreManager.ServerCore.StandardOut.Warn("Permissions => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_PERMISSIONS_UNDEFINED_GROUP", groupName, habboId));
                         continue;
                     }
                     foreach (KeyValuePair<string, PermissionState> permission in _permissionGroupCache[groupName])

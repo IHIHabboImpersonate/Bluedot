@@ -13,6 +13,7 @@ using Bluedot.HabboServer.Permissions;
 
 namespace Bluedot.HabboServer.Rooms
 {
+    [RoomModelAttribute("f")]
     public class RoomModelF : PrivateRoom
     {
         #region Properties

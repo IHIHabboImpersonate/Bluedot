@@ -64,7 +64,7 @@ namespace Bluedot.HabboServer.Network.WebAdmin
         {
             if (!HttpListener.IsSupported)
             {
-                throw new NotSupportedException("The HttpListener class is not supported on this operating system.");
+                throw new NotSupportedException(CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_WEBADMIN_OS_NOT_SUPPORTED"));
             }
             UniqueId = Guid.NewGuid();
             _listener = new HttpListener();
@@ -138,8 +138,8 @@ namespace Bluedot.HabboServer.Network.WebAdmin
             }
             catch (HttpListenerException e)
             {
-                if (e.Message == "The process cannot access the file because it is being used by another process")
-                    throw new Exception("The WebAdminServer was unable to start. Is the port already in use?", e);
+                if (e.ErrorCode == 32)
+                    throw new Exception(CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_WEBADMIN_PORT_CONFLICT"), e);
             }
             finally
             {
@@ -172,19 +172,19 @@ namespace Bluedot.HabboServer.Network.WebAdmin
                                                {
                                                    Name =
                                                        String.Format(CultureInfo.InvariantCulture,
-                                                                     "ConnectionManager_{0}",
+                                                                     "BLUEDOT-WebAdminConnectionManager_{0}",
                                                                      UniqueId)
                                                };
             }
             else if (_connectionManagerThread.ThreadState == ThreadState.Running)
             {
-                throw new ThreadStateException("The request handling process is already running.");
+                return;
+                //throw new ThreadStateException("The request handling process is already running.");
             }
 
             if (_connectionManagerThread.ThreadState != ThreadState.Unstarted)
             {
-                throw new ThreadStateException(
-                    "The request handling process was not properly initialized so it could not be started.");
+                throw new ThreadStateException(CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_WEBADMIN_INIT_FAILED"));
             }
             _connectionManagerThread.Start();
 
@@ -194,7 +194,7 @@ namespace Bluedot.HabboServer.Network.WebAdmin
                 Thread.Sleep(100);
                 if (DateTime.Now.Ticks > waitTime)
                 {
-                    throw new TimeoutException("Unable to start the request handling process.");
+                    throw new TimeoutException(CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_WEBADMIN_START_FAILED"));
                 }
             }
         }
@@ -218,7 +218,7 @@ namespace Bluedot.HabboServer.Network.WebAdmin
                 Thread.Sleep(100);
                 if (DateTime.Now.Ticks > waitTime)
                 {
-                    throw new TimeoutException("Unable to stop the web server process.");
+                    throw new TimeoutException(CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_WEBADMIN_STOP_FAILED"));
                 }
             }
 

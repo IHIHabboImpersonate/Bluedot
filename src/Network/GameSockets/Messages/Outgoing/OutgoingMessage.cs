@@ -16,7 +16,7 @@ namespace Bluedot.HabboServer.Network
         public OutgoingMessage Send(IEnumerable<IMessageable> targets, bool sendOncePerConnection = false)
         {
             if (sendOncePerConnection)
-                throw new NotImplementedException();
+                throw new NotImplementedException("sendOncePerConnection not implemented");
 
             foreach (IMessageable target in targets)
             {

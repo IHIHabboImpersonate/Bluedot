@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Bluedot.HabboServer.Events;
 using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
 using Bluedot.HabboServer.Useful;
@@ -12,8 +13,7 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultLoginFunctions
         {
             ClassicIncomingMessage classicMessage = (ClassicIncomingMessage)message;
 
-            Habbo fullHabbo = CoreManager.ServerCore.HabboDistributor.GetHabboFromSSOTicket(
-                classicMessage.PopPrefixedString());
+            Habbo fullHabbo = CoreManager.ServerCore.HabboDistributor.GetHabboFromSSOTicket(classicMessage.PopPrefixedString());
 
             if (fullHabbo == null)
             {
@@ -46,7 +46,7 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultLoginFunctions
         private static void LoginMerge(Habbo fullHabbo, Habbo connectionHabbo)
         {
             CancelReasonEventArgs eventArgs = new CancelReasonEventArgs();
-            CoreManager.ServerCore.EventManager.Fire("habbo_login:before", fullHabbo, eventArgs);
+            CoreManager.ServerCore.EventManager.Fire("habbo_login", EventPriority.Before, fullHabbo, eventArgs);
 
             if (eventArgs.Cancel)
             {
@@ -59,7 +59,7 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultLoginFunctions
             fullHabbo.Socket = connectionHabbo.Socket;
 
             fullHabbo.LastAccess = DateTime.Now;
-            CoreManager.ServerCore.EventManager.Fire("habbo_login:after", fullHabbo, eventArgs);
+            CoreManager.ServerCore.EventManager.Fire("habbo_login", EventPriority.After, fullHabbo, eventArgs);
         }
         #endregion
     }

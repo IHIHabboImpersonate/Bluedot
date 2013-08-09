@@ -11,7 +11,7 @@ namespace Bluedot.HabboServer.Network
     /// </summary>
     internal class Base64Encoding
     {
-        #region Fields
+        #region Constants
 
         internal const byte Negative = 64; // '@'
         internal const byte Positive = 65; // 'A'

@@ -167,15 +167,15 @@ namespace Bluedot.HabboServer.Rooms
         #region Method: AddRoomUnit
         public Room AddRoomUnit(IRoomUnit roomUnit)
         {
-            // TODO: Code this method.
-            throw new NotImplementedException();
+            _roomUnits.Add(roomUnit);
+            return this;
         }
         #endregion
         #region Method: AddRoomUnit
         public Room RemoveRoomUnit(IRoomUnit roomUnit)
         {
-            // TODO: Code this method.
-            throw new NotImplementedException();
+            _roomUnits.Remove(roomUnit);
+            return this;
         }
         #endregion
         #endregion

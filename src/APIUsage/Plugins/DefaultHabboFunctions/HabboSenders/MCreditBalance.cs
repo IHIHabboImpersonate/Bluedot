@@ -6,7 +6,15 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultHabboFunctions
 {
     public class MCreditBalance : OutgoingMessage
     {
+        #region Field: _balance
+        /// <summary>
+        /// 
+        /// </summary>
+        private int _balance;
+        #endregion
         public int Balance { get; set; }
+
+
 
         public override OutgoingMessage Send(IMessageable target)
         {
@@ -15,7 +23,7 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultHabboFunctions
                 InternalOutgoingMessage.Initialize(6)
                     .AppendString(Balance.ToString(CultureInfo.InvariantCulture));
             }
-
+            
             target.SendMessage(InternalOutgoingMessage);
             return this;
         }

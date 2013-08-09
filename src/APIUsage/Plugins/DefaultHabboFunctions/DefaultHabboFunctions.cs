@@ -1,6 +1,7 @@
 ﻿using System;
 using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
+using Bluedot.HabboServer.Events;
 
 namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultHabboFunctions
 {
@@ -8,7 +9,7 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultHabboFunctions
     {
         public void Start()
         {
-            CoreManager.ServerCore.EventManager.StrongBind("habbo_login:after", RegisterHabboHandlers);
+            CoreManager.ServerCore.EventManager.StrongBind("habbo_login", EventPriority.After, RegisterHabboHandlers);
         }
 
         private static void RegisterHabboHandlers(object source, EventArgs args)

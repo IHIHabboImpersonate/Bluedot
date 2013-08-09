@@ -8,6 +8,7 @@ using Bluedot.HabboServer.Database.Actions;
 using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
 using Bluedot.HabboServer.Useful;
+using System.Reflection;
 
 #endregion
 
@@ -28,6 +29,10 @@ namespace Bluedot.HabboServer.Rooms
         #endregion
         #region Field: _roomIdSync
         private ReaderWriterLockSlim _roomIdSync;
+        #endregion
+
+        #region Field: _modelTypeLookup
+        private Dictionary<string, Type> _modelTypeLookup;
         #endregion
         #endregion
 
@@ -52,14 +57,24 @@ namespace Bluedot.HabboServer.Rooms
 
             _lastFreeRoomId = -1;
             _roomIdSync = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+
+            _modelTypeLookup = new Dictionary<string, Type>();
         }
         #endregion
 
         #region Method: ConstructRoom
-        public static Room ConstructRoom(int id)
+        public Room ConstructRoom(int id)
         {
-            // TODO: Construct rooms based on model dynamically.
-            throw new Exception("TODO: Construct rooms based on model dynamically.");
+            string model = RoomActions.GetRoomModelFromRoomId(id);
+
+            if (!_modelTypeLookup.ContainsKey(model))
+                FindNewModelTypes();
+            if (!_modelTypeLookup.ContainsKey(model))
+                throw new Exception(CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_ROOM_MODEL_MISSING", model));
+
+            Type modelType = _modelTypeLookup[model];
+
+            return (Room)Activator.CreateInstance(modelType, new object[] {id}); // This might be slow. Keep that in mind if performance becomes a problem.
         }
         #endregion
 
@@ -172,6 +187,23 @@ namespace Bluedot.HabboServer.Rooms
             finally
             {
                 _roomIdSync.ExitReadLock();
+            }
+        }
+        #endregion
+
+        #region Method: FindNewModelTypes
+        private void FindNewModelTypes()
+        {
+            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (Type t in a.GetTypes())
+                {
+                    if (t.IsDefined(typeof(RoomModelAttribute), true))
+                    {
+                        RoomModelAttribute attr = t.GetCustomAttribute<RoomModelAttribute>(true);
+                        _modelTypeLookup.Add(attr.ModelName, t);
+                    }
+                }
             }
         }
         #endregion

@@ -1,25 +1,4 @@
-﻿#region GPLv3
-
-// 
-// Copyright (C) 2012  Chris Chenery
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General internal License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General internal License for more details.
-// 
-// You should have received a copy of the GNU General internal License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-// 
-
-#endregion
-
-#region Usings
+﻿#region Usings
 
 using System.Collections.Generic;
 using System.IO;
@@ -53,7 +32,7 @@ namespace Bluedot.HabboServer.Configuration
 
             if (!EnsureFile(new FileInfo(path), out wasCreated))
             {
-                CoreManager.ServerCore.BasicConsoleWrite("Config => File '" + path + "' does not exist and couldn't be created automatically! (XmlConfig)");
+                CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_CREATION_FAILED", path));
             }
             WasCreated = wasCreated;
 
@@ -102,7 +81,7 @@ namespace Bluedot.HabboServer.Configuration
             {
                 if (!byte.TryParse(ValueAsString(xPath), out result))
                 {
-                    CoreManager.ServerCore.BasicConsoleWrite("Config => Error: '" + xPath + "' is not a valid byte! Fallback: " + fallback);
+                    CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_BYTE", xPath, fallback));
                     return fallback;
                 }
             }
@@ -126,7 +105,7 @@ namespace Bluedot.HabboServer.Configuration
             {
                 if (!sbyte.TryParse(ValueAsString(xPath), out result))
                 {
-                    CoreManager.ServerCore.BasicConsoleWrite("Config => Error: '" + xPath + "' is not a valid sbyte! Fallback: " + fallback);
+                    CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_SBYTE", xPath, fallback));
                     return fallback;
                 }
             }
@@ -150,7 +129,7 @@ namespace Bluedot.HabboServer.Configuration
             {
                 if (!short.TryParse(ValueAsString(xPath), out result))
                 {
-                    CoreManager.ServerCore.BasicConsoleWrite("Config => Error: '" + xPath + "' is not a valid short! Fallback: " + fallback);
+                    CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_SHORT", xPath, fallback));
                     return fallback;
                 }
             }
@@ -174,7 +153,7 @@ namespace Bluedot.HabboServer.Configuration
             {
                 if (!ushort.TryParse(ValueAsString(xPath), out result))
                 {
-                    CoreManager.ServerCore.BasicConsoleWrite("Config => Error: '" + xPath + "' is not a valid ushort! Fallback: " + fallback);
+                    CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_USHORT", xPath, fallback));
                     return fallback;
                 }
             }
@@ -198,7 +177,7 @@ namespace Bluedot.HabboServer.Configuration
             {
                 if (!int.TryParse(ValueAsString(xPath), out result))
                 {
-                    CoreManager.ServerCore.BasicConsoleWrite("Config => Error: '" + xPath + "' is not a valid int! Fallback: " + fallback);
+                    CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_INT", xPath, fallback));
                     return fallback;
                 }
             }
@@ -222,7 +201,7 @@ namespace Bluedot.HabboServer.Configuration
             {
                 if (!uint.TryParse(ValueAsString(xPath), out result))
                 {
-                    CoreManager.ServerCore.BasicConsoleWrite("Config => Error: '" + xPath + "' is not a valid uint! Fallback: " + fallback);
+                    CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_UINT", xPath, fallback));
                     return fallback;
                 }
             }
@@ -246,7 +225,7 @@ namespace Bluedot.HabboServer.Configuration
             {
                 if (!long.TryParse(ValueAsString(xPath), out result))
                 {
-                    CoreManager.ServerCore.BasicConsoleWrite("Config => Error: '" + xPath + "' is not a valid long! Fallback: " + fallback);
+                    CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_LONG", xPath, fallback));
                     return fallback;
                 }
             }
@@ -270,7 +249,7 @@ namespace Bluedot.HabboServer.Configuration
             {
                 if (!ulong.TryParse(ValueAsString(xPath), out result))
                 {
-                    CoreManager.ServerCore.BasicConsoleWrite("Config => Error: '" + xPath + "' is not a valid ulong! Fallback: " + fallback);
+                    CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_ULONG", xPath, fallback));
                     return fallback;
                 }
             }

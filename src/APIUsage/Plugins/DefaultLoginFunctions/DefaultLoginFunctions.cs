@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Bluedot.HabboServer.Events;
 using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
 using Bluedot.HabboServer.Permissions;
@@ -12,15 +13,12 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultLoginFunctions
     {
         public void Start()
         {
-            CoreManager.ServerCore.EventManager.StrongBind("incoming_game_connection:after", RegisterLoginHandlers)
+            CoreManager.ServerCore.EventManager.StrongBind("incoming_game_connection", EventPriority.After, RegisterLoginHandlers)
 
                 // Inform the client of a successful login.
-                .StrongBind("habbo_login:after", ConfirmLogin)
-                .StrongBind("habbo_login:after", SendFuseRights);
-
-            FuseRightManager fuseManager = CoreManager.ServerCore.FuseRightManager;
-            
-            fuseManager.RegisterFuseRight("fuse_login", (s, collection) => true);
+                .StrongBind("habbo_login", EventPriority.After, ConfirmLogin)
+                .StrongBind("habbo_login", EventPriority.After, SendFuseRights)
+                .StrongBind("fuseright_request", EventPriority.Before, RegisterFuseRight);
         }
 
         private void ConfirmLogin(object source, EventArgs e)
@@ -32,11 +30,18 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultLoginFunctions
         private void SendFuseRights(object source, EventArgs e)
         {
             Habbo sender = (Habbo)source;
-            
+
+            FuseRightEventArgs fuseArgs = new FuseRightEventArgs();
+
+
+            CoreManager.ServerCore.EventManager.Fire("fuseright_request", EventPriority.Before, sender, fuseArgs);
+
             new MFuseRights
                 {
-                    FuseRights = new List<string>(CoreManager.ServerCore.FuseRightManager.ResolvePermissions(sender.Permissions))
+                    FuseRights = fuseArgs.GetFuseRights()
                 }.Send(sender);
+
+            CoreManager.ServerCore.EventManager.Fire("fuseright_request", EventPriority.After, sender, fuseArgs);
         }
 
         private static void RegisterLoginHandlers(object source, EventArgs args)
@@ -57,6 +62,12 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultLoginFunctions
                 cancelReasonEventArgs.Cancel = true;
                 cancelReasonEventArgs.CancelReason = "Permission \"habbo_login\" missing!";
             }
+        }
+
+        public void RegisterFuseRight(object source, EventArgs args)
+        {
+            FuseRightEventArgs fuseArgs = (FuseRightEventArgs)args;
+            fuseArgs.AddFuseRight("fuse_login");
         }
     }
 }

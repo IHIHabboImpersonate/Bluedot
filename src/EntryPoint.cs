@@ -1,25 +1,4 @@
-﻿#region GPLv3
-
-// 
-// Copyright (C) 2012  Chris Chenery
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General internal License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General internal License for more details.
-// 
-// You should have received a copy of the GNU General internal License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-// 
-
-#endregion
-
-#region Usings
+﻿#region Usings
 
 using System;
 using System.IO;
@@ -47,17 +26,21 @@ namespace Bluedot.HabboServer
 
         internal static void Main(string[] arguments)
         {
+            log4net.Config.BasicConfigurator.Configure();
+
+
             Console.Title = "Bluedot Habbo Server";
-            Console.WriteLine();
-            Console.WriteLine("Bluedot Habbo Server - Preparing...");
+
+            log4net.ILog stdOut = log4net.LogManager.GetLogger("DEFAULT_STDOUT");
+            stdOut.Info("Bluedot Habbo Server - Preparing...");
 
             #region Exit management
-            Console.WriteLine("Disabling close window button...");
+            stdOut.Debug("Disabling close window button...");
             // Disable close button to prevent unsafe closing.
             IntPtr current = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
             EnableMenuItem(GetSystemMenu(current, false), SC_CLOSE, MF_GRAYED);
 
-            Console.WriteLine("Binding shutdown to CTRL + C and CTRL + Break...");
+            stdOut.Debug("Binding shutdown to CTRL + C and CTRL + Break...");
             // Reassign CTRL+C and CTRL+BREAK to safely shutdown.
             Console.TreatControlCAsInput = false;
             Console.CancelKeyPress += ShutdownKey;
@@ -66,18 +49,18 @@ namespace Bluedot.HabboServer
 
             Thread.CurrentThread.Name = "BLUEDOT-EntryThread";
 
-            Console.WriteLine("Setting up packaged reference loading...");
+            stdOut.Debug("Setting up packaged reference loading...");
             // Allows embedded resources to be loaded.
             AppDomain.CurrentDomain.AssemblyResolve += LoadPackagedReferences;
 
-            Console.WriteLine("Setting up fatel exception handler (BSOD style)...");
+            stdOut.Debug("Setting up fatel exception handler (BSOD style)...");
             // Bluescreen in the event of a fatal unhandled exception.
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
 
 
-            string configFile = "config.xml";
+            string configFile = Path.Combine(Environment.CurrentDirectory, "config.xml");
 
-            Console.WriteLine("Parsing command line arguments...");
+            stdOut.Debug("Parsing command line arguments...");
             Regex nameValueRegex = new Regex("^--(?<name>[\\w-]+)=(?<value>.+)$");
 
             foreach (string argument in arguments)
@@ -102,16 +85,17 @@ namespace Bluedot.HabboServer
                         }
                 }
             }
-            Console.WriteLine("Config location: " + configFile);
-            
-            Console.WriteLine("Preparing installer core...");
+            stdOut.Info("Config location: " + configFile);
+            Environment.SetEnvironmentVariable("BLUEDOT_CONFIG_PATH", configFile);
+
+            stdOut.Info("Preparing installer core...");
             CoreManager.InitialiseInstallerCore();
 
-            Console.WriteLine("Preparing server core...");
+            stdOut.Info("Preparing server core...");
             CoreManager.InitialiseServerCore();
-            
-            Console.WriteLine("Starting server core...");
-            CoreManager.ServerCore.Boot(Path.Combine(Environment.CurrentDirectory, configFile));
+
+            stdOut.Info("Starting server core...");
+            CoreManager.ServerCore.Boot();
         }
 
         private static Assembly LoadPackagedReferences(object sender, ResolveEventArgs args)
@@ -137,8 +121,8 @@ namespace Bluedot.HabboServer
             
             if(_waitOnBsod)
             {
-                Console.WriteLine();
-                Console.WriteLine("BLUEDOT STOP ERROR - Press any key to show!");
+                log4net.ILog stdOut = log4net.LogManager.GetLogger("DEFAULT_STDOUT");
+                stdOut.Fatal("BLUEDOT STOP ERROR - Press any key to show!");
                 Console.ReadKey(true);
             }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Bluedot.HabboServer.Habbos;
 
 namespace Bluedot.HabboServer.Network
@@ -19,7 +20,7 @@ namespace Bluedot.HabboServer.Network
                 // Are there any handlers registered for this packet?
                 if (!_handlers.ContainsKey(message.HeaderId))
                 {
-                    CoreManager.ServerCore.StandardOutManager.DebugChannel.WriteMessage("Game Socket Manager => Unhandled HeaderID " + message.HeaderId + " (\"" + message.HeaderString + "\")");
+                    CoreManager.ServerCore.StandardOut.Debug("Game Socket Manager => Unhandled HeaderID " + message.HeaderId + " (\"" + message.HeaderString + "\")");
                     // No, do nothing.
                     return this;
                 }

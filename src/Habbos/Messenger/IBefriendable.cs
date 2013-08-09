@@ -1,4 +1,5 @@
 ﻿using System;
+using Bluedot.HabboServer.Rooms;
 using Bluedot.HabboServer.Rooms.Figure;
 
 namespace Bluedot.HabboServer.Habbos.Messenger
@@ -41,15 +42,14 @@ namespace Bluedot.HabboServer.Habbos.Messenger
             get;
         }
         #endregion
-        #region Property: Room
-        // TODO: Add Rooms
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //Room Room
-        //{
-        //    get;
-        //}
+        #region Property: Position
+        /// <summary>
+        /// 
+        /// </summary>
+        RoomPosition Position
+        {
+            get;
+        }
         #endregion
 
         #region Property: LoggedIn

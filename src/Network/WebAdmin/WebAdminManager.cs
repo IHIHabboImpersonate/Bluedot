@@ -1,30 +1,10 @@
-﻿#region GPLv3
-
-// 
-// Copyright (C) 2012  Chris Chenery
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-// 
-
-#endregion
-
-#region Usings
+﻿#region Usings
 
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 #endregion
 
@@ -71,11 +51,14 @@ namespace Bluedot.HabboServer.Network.WebAdmin
 
                     if (value == null)
                     {
-                        CoreManager.ServerCore.StandardOutManager.DebugChannel.WriteMessage("Web Admin => Handler removed: " + path);
+                        CoreManager.ServerCore.StandardOut.Debug("Web Admin => " + CoreManager.ServerCore.StringLocale.GetString("CORE:DEBUG_WEBADMIN_HANDLER_REMOVED",  path));
                         return;
                     }
                     _paths.Add(path, value);
-                    CoreManager.ServerCore.StandardOutManager.DebugChannel.WriteMessage("Web Admin => Handler " + (newEntry ? "added" : "changed") + ": " + path);
+                    if(newEntry)
+                        CoreManager.ServerCore.StandardOut.Debug("Web Admin => " + CoreManager.ServerCore.StringLocale.GetString("CORE:DEBUG_WEBADMIN_HANDLER_ADDED", path));
+                    else
+                        CoreManager.ServerCore.StandardOut.Debug("Web Admin => " + CoreManager.ServerCore.StringLocale.GetString("CORE:DEBUG_WEBADMIN_HANDLER_CHANGED", path));
                 }
             }
         }
@@ -119,12 +102,12 @@ namespace Bluedot.HabboServer.Network.WebAdmin
                 HttpPathHandler handler = this[path];
                 if (handler != null)
                 {
-                    CoreManager.ServerCore.StandardOutManager.DebugChannel.WriteMessage("Web Admin => WebAdmin Request [200]: " + path);
-                    handler(e.RequestContext);
+                    CoreManager.ServerCore.StandardOut.Debug("Web Admin => WebAdmin Request [200]: " + path);
+                    Task.Factory.StartNew(() => handler(e.RequestContext));
                     return;
                 }
             }
-            CoreManager.ServerCore.StandardOutManager.DebugChannel.WriteMessage("Web Admin => WebAdmin Request [404]: " + path);
+            CoreManager.ServerCore.StandardOut.Debug("Web Admin => WebAdmin Request [404]: " + path);
 
             HttpListenerResponse response = e.RequestContext.Response;
             byte[] buffer = Encoding.UTF8.GetBytes("Not Handled!");

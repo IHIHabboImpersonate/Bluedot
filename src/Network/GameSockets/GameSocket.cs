@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
+
 using Bluedot.HabboServer.Habbos;
-using Bluedot.HabboServer.Network.StandardOut;
 
 using Nito.Async;
 using Nito.Async.Sockets;
+using Bluedot.HabboServer.Network.GameSockets;
 
 namespace Bluedot.HabboServer.Network
 {
@@ -25,17 +27,9 @@ namespace Bluedot.HabboServer.Network
         private int _bytesReceived;
         private readonly byte[] _lengthBuffer;
         private byte[] _dataBuffer;
-        private readonly GameSocketReader _protocolReader;
         #endregion
 
         #region Properties
-        #region Property: PacketHandlers
-        public GameSocketMessageHandlerInvoker PacketHandlers
-        {
-            get;
-            set;
-        }
-        #endregion
         #region Property: Habbo
         public Habbo Habbo
         {
@@ -74,16 +68,30 @@ namespace Bluedot.HabboServer.Network
             }
         }
         #endregion
+        #region Property: Protocol
+        public GameSocketProtocol Protocol
+        {
+            get;
+            private set;
+        }
+        #endregion
+        #region Property: PacketHandlers
+        public GameSocketMessageHandlerInvoker PacketHandlers
+        {
+            get
+            {
+                return Protocol.HandlerInvokerManager[this];
+            }
+        }
+        #endregion
         #endregion
 
         #region Methods
         #region Method: GameSocket (Constructor)
-        internal GameSocket(ServerChildTcpSocket socket, GameSocketReader protocolReader)
+        internal GameSocket(ServerChildTcpSocket socket, GameSocketProtocol protocol)
         {
             _internalSocket = socket;
-            _protocolReader = protocolReader;
-            _lengthBuffer = new byte[_protocolReader.LengthBytes];
-            PacketHandlers = new GameSocketMessageHandlerInvoker();
+            _lengthBuffer = new byte[protocol.Reader.LengthBytes];
 
             Habbo = HabboDistributor.GetPreLoginHabbo(this);
         }
@@ -107,9 +115,9 @@ namespace Bluedot.HabboServer.Network
         {
             if (_internalSocket != null)
                 _internalSocket.Close();
-            CoreManager.ServerCore.StandardOutManager.NoticeChannel.WriteMessage("Game Socket Manager => Client Connection Closed: " + reason);
+            CoreManager.ServerCore.StandardOut.Info("Game Socket Manager => " + CoreManager.ServerCore.StringLocale.GetString("CORE:INFO_NETWORK_CONNECTION_CLOSED", reason));
 
-            PacketHandlers = null;
+            Protocol.HandlerInvokerManager.DeregisterGameSocket(this);
             Habbo.LoggedIn = false;
             Habbo.Socket = null;
             Habbo = null;
@@ -160,13 +168,13 @@ namespace Bluedot.HabboServer.Network
 
             if (_dataBuffer == null)
             {
-                if (_bytesReceived != _protocolReader.LengthBytes)
+                if (_bytesReceived != Protocol.Reader.LengthBytes)
                 {
                     ContinueReading();
                 }
                 else
                 {
-                    int length = _protocolReader.ParseLength(_lengthBuffer);
+                    int length = Protocol.Reader.ParseLength(_lengthBuffer);
 
                     _dataBuffer = new byte[length];
                     _bytesReceived = 0;
@@ -198,11 +206,11 @@ namespace Bluedot.HabboServer.Network
         /// <param name="data">The byte array to parse.</param>
         public GameSocket ParseByteData(byte[] data)
         {
-            IncomingMessage message = _protocolReader.ParseMessage(data);
+            IncomingMessage message = Protocol.Reader.ParseMessage(data);
 #if DEBUG
-            CoreManager.ServerCore.GameSocketManager.PacketOutputChannel.WriteMessage("INCOMING => " + data.ToUtf8String());
+            CoreManager.ServerCore.StandardOut.Debug("INCOMING => " + data.ToUtf8String());
 #endif
-            PacketHandlers.Invoke(Habbo, message);
+            Task.Factory.StartNew(() => Protocol.HandlerInvokerManager[this].Invoke(Habbo, message));
 
             return this;
         }
@@ -229,8 +237,7 @@ namespace Bluedot.HabboServer.Network
             {
                 if (args.Error != null)
                 {
-                    CoreManager.ServerCore.StandardOutManager.ErrorChannel.WriteMessage("Game Socket Manager => Client Connection Killed: ");
-                    // TODO: Pretty exception reporting
+                    CoreManager.ServerCore.StandardOut.Error("Game Socket Manager => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_NETWORK_CONNECTION_KILLED"));
                     Console.WriteLine();
                     Console.WriteLine(args.Error.Message);
                     Console.WriteLine(args.Error.StackTrace);

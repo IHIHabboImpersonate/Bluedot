@@ -1,85 +1,112 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using Bluedot.HabboServer.Useful;
+using Bluedot.HabboServer.ApiUsage.Plugins;
 
 namespace Bluedot.HabboServer.Events
 {
     public class EventManager
     {
-        private readonly Dictionary<string, WeakHashSet<EventHandler>> _weakEvents;
-        private readonly Dictionary<string, HashSet<EventHandler>> _strongEvents;
+        private struct EventIdentity
+        {
+            private string _eventName;
+            private EventPriority _priority;
+            
+            internal EventIdentity(string eventName, EventPriority priority)
+            {
+                _eventName = eventName;
+                _priority = priority;
+            }
+        }
+
+        private readonly Dictionary<EventIdentity, WeakHashSet<EventHandler>> _weakEvents;
+        private readonly Dictionary<EventIdentity, HashSet<EventHandler>> _strongEvents;
 
         #region Method: EventManager (Constructor)
         public EventManager()
         {
-            _weakEvents = new Dictionary<string, WeakHashSet<EventHandler>>();
-            _strongEvents = new Dictionary<string, HashSet<EventHandler>>();
+            _weakEvents = new Dictionary<EventIdentity, WeakHashSet<EventHandler>>();
+            _strongEvents = new Dictionary<EventIdentity, HashSet<EventHandler>>();
         }
         #endregion
 
 
         #region Method: StrongBind
-        public EventManager StrongBind(string eventName, EventHandler handler)
+        public EventManager StrongBind(string eventName, EventPriority priority, EventHandler handler)
         {
-            if (!_strongEvents.ContainsKey(eventName))
+            EventIdentity identity = new EventIdentity(eventName, priority);
+            if (!_strongEvents.ContainsKey(identity))
             {
-                _strongEvents.Add(eventName, new HashSet<EventHandler>());
+                _strongEvents.Add(identity, new HashSet<EventHandler>());
             }
-            _strongEvents[eventName].Add(handler);
+            _strongEvents[identity].Add(handler);
             return this;
         }
         #endregion
         #region Method: Bind
-        public EventManager Bind(string eventName, EventHandler handler)
+        public EventManager Bind(string eventName, EventPriority priority, EventHandler handler)
         {
-            if (!_weakEvents.ContainsKey(eventName))
+            EventIdentity identity = new EventIdentity(eventName, priority);
+            if (!_weakEvents.ContainsKey(identity))
             {
-                _weakEvents.Add(eventName, new WeakHashSet<EventHandler>());
+                _weakEvents.Add(identity, new WeakHashSet<EventHandler>());
             }
-            _weakEvents[eventName].Add(handler);
+            _weakEvents[identity].Add(handler);
             return this;
         }
         #endregion
 
         #region Method: Fire
-        public EventManager Fire(string eventName, object source, EventArgs args)
+        internal EventManager Fire(IPseudoPlugin plugin, string eventName, EventPriority priority, object source, EventArgs args)
         {
-            if (_strongEvents.ContainsKey(eventName))
+            EventIdentity identity = new EventIdentity(eventName, priority);
+
+            List<Task> tasks = new List<Task>();
+
+            if (_strongEvents.ContainsKey(identity))
             {
-                foreach (EventHandler handler in _strongEvents[eventName])
+                foreach (EventHandler handler in _strongEvents[identity])
                 {
-                    try
-                    {
-                        handler.Invoke(source, args);
-                    }
-                    catch (Exception e)
-                    {
-                        // TODO: Pretty exception reporting
-                        Console.WriteLine();
-                        Console.WriteLine(e.Message);
-                        Console.WriteLine(e.StackTrace);
-                    }
+                    EventHandler localHandler = handler;
+                    tasks.Add(Task.Factory.StartNew(() => SafeFire(localHandler, source, args)));
                 }
             }
-            if (_weakEvents.ContainsKey(eventName))
+            if (_weakEvents.ContainsKey(identity))
             {
-                foreach (EventHandler handler in _weakEvents[eventName])
+                foreach (EventHandler handler in _weakEvents[identity])
                 {
-                    try
-                    {
-                        handler.Invoke(source, args);
-                    }
-                    catch (Exception e)
-                    {
-                        // TODO: Pretty exception reporting
-                        Console.WriteLine();
-                        Console.WriteLine(e.Message);
-                        Console.WriteLine(e.StackTrace);
-                    }
+                    EventHandler localHandler = handler;
+                    tasks.Add(Task.Factory.StartNew(() => SafeFire(localHandler, source, args)));
                 }
             }
+
+            Task.WaitAll(tasks.ToArray());
             return this;
         }
+
+        #region Method: SafeFire
+        private void SafeFire(EventHandler handler, object source, EventArgs args)
+        {
+            try
+            {
+                handler.Invoke(source, args);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine();
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+            }
+        }
         #endregion
+        #endregion
+    }
+
+    public enum EventPriority
+    {
+        Before,
+        After
     }
 }

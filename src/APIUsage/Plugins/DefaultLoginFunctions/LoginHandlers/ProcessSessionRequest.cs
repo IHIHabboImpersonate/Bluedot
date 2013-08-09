@@ -26,7 +26,7 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.DefaultLoginFunctions
                 N = 7,
                 O = false,
                 P = 8,
-                URL = "http://ihi.cecer1.com",
+                URL = "http://null",
                 Q = "",
                 R = 9,
                 S = false

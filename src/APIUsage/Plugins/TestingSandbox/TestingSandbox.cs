@@ -1,4 +1,5 @@
 ﻿using System;
+using Bluedot.HabboServer.Events;
 using Bluedot.HabboServer.Habbos;
 using Bluedot.HabboServer.Network;
 using Bluedot.HabboServer.Rooms;
@@ -14,7 +15,7 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.TestingSandbox
         {
             CoreManager.ServerCore.RoomDistributor.AddOverrideLoader(GetVirtualTest);
 
-            CoreManager.ServerCore.EventManager.StrongBind("habbo_login:after", SendToVirtualTestRoom);
+            CoreManager.ServerCore.EventManager.StrongBind("habbo_login", EventPriority.After, SendToVirtualTestRoom);
         }
 
         private static Room GetVirtualTest(Habbo habbo)

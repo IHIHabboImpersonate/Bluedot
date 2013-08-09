@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Bluedot Habbo Server")]
-[assembly: AssemblyDescription("A Habbo server by Cecer1")]
+[assembly: AssemblyTitle("Bluedot Server")]
+[assembly: AssemblyDescription("A game server base by Cecer")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Bluedot Server")]
-[assembly: AssemblyCopyright("Copyright © Chris Chenery 2012")]
+[assembly: AssemblyCopyright("Copyright © Cecer 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -33,3 +33,6 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+
+[assembly: log4net.Config.XmlConfigurator(ConfigFile = "stdout.log4net.xml", Watch = true)]

@@ -2,7 +2,7 @@
 
 namespace Bluedot.HabboServer.Network
 {
-    public class EarlyIncomingMessage : IncomingMessage
+    internal class EarlyIncomingMessage : IncomingMessage
     {
         #region Header Related
         /// <summary>

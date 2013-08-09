@@ -8,7 +8,7 @@ namespace Bluedot.HabboServer.ApiUsage.Plugins.ClassicFigures
 {
     public class ClassicFigures : IPseudoPlugin
     {
-        public void Start()
+        public void Start(EventFirer eventFirer)
         {
             HabboFigureFactory factory = CoreManager.ServerCore.HabboFigureFactory;
 

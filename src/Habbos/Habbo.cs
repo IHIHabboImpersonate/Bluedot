@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Bluedot.HabboServer.ApiUsage.Libraries.Subscriptions;
 using Bluedot.HabboServer.Database;
 using Bluedot.HabboServer.Database.Actions;
+using Bluedot.HabboServer.Events;
 using Bluedot.HabboServer.Rooms;
 using Bluedot.HabboServer.Rooms.Figure;
 using Bluedot.HabboServer.Useful;
@@ -165,7 +166,6 @@ namespace Bluedot.HabboServer.Habbos
         }
         #endregion
 
-
         #region Property: Position
         private RoomPosition _position;
         public RoomPosition Position
@@ -177,19 +177,27 @@ namespace Bluedot.HabboServer.Habbos
             set
             {
                 RoomUnitMoveEventArgs args = new RoomUnitMoveEventArgs(_position, value);
-                CoreManager.ServerCore.EventManager.Fire("roomunit_move:before", this, args);
-
-                if (!args.Cancel)
+                if (_position.Room != value.Room) // Is the room unit changing rooms?
                 {
-                    if (_position.Room != value.Room) // Is the room unit changing rooms?
+                    CoreManager.ServerCore.OfficalEventFirer.Fire("roomunit_changeroom", EventPriority.Before, this, args);
+
+                    if (!args.Cancel)
                     {
-                        // TODO: Room changing logic here.
+                        _position.Room.RemoveRoomUnit(this);
+                        _position = value;
+                        _position.Room.AddRoomUnit(this);
+
+                        CoreManager.ServerCore.OfficalEventFirer.Fire("roomunit_changeroom", EventPriority.After, this, args);
                     }
-
-                    // TODO: Stuff here?
-
-                    _position = value;
-                    CoreManager.ServerCore.EventManager.Fire("roomunit_move:after", this, args);
+                }
+                else
+                {
+                    CoreManager.ServerCore.OfficalEventFirer.Fire("roomunit_move", EventPriority.Before, this, args);
+                    if (!args.Cancel)
+                    {
+                        _position = value;
+                        CoreManager.ServerCore.OfficalEventFirer.Fire("roomunit_move", EventPriority.After, this, args);
+                    }
                 }
             }
         }
@@ -247,7 +255,6 @@ namespace Bluedot.HabboServer.Habbos
             {
                 if (value == null)
                     throw new ArgumentNullException("value", "Setting the motto of a Habbo to null is not allowed!");
-                // TODO: Make this actually load.
                 _motto.Value = value;
             }
         }
@@ -393,13 +400,13 @@ namespace Bluedot.HabboServer.Habbos
         internal Habbo(int id)
         {
             if (!HabboActions.DoesHabboIdExist(id))
-                throw new Exception("Habbo doesn't exist!"); // TODO: Improve this exception to actually be helpful.
+                throw new Exception(CoreManager.ServerCore.StringLocale.GetString("CORE:EXCEPTION_HABBO_CONSTRUCT_BAD_ID"));
             Id = id;
             Init();
         }
         internal Habbo(string username)
         {
-            // The username really should be set here but it is not current possible with the lazy loading.
+            // The username really should be set here but it is not currently possible with the lazy loading.
             Id = HabboActions.GetHabboIdFromHabboUsername(username);
             Init();
         }
@@ -435,7 +442,7 @@ namespace Bluedot.HabboServer.Habbos
         public IMessageable SendMessage(IInternalOutgoingMessage message)
         {
 #if DEBUG
-            CoreManager.ServerCore.GameSocketManager.PacketOutputChannel.WriteMessage("OUTGOING => " + message.Header + message.ContentString);
+            CoreManager.ServerCore.StandardOut.Debug("OUTGOING => " + message.Header + message.ContentString);
 #endif
             Socket.Send(message.GetBytes());
             return this;
