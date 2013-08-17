@@ -18,7 +18,7 @@ namespace IHI.Server.Plugins
         /// Removed (To be rewritten) - Reason: Wrong documention is worse than none.
         /// </summary>
         /// <param name = "name">Removed (To be rewritten) - Reason: Wrong documention is worse than none.</param>
-        internal Plugin GetPlugin(string path)
+        public Plugin GetPlugin(string path)
         {
             if (_plugins.ContainsKey(path))
                 return _plugins[path];
@@ -34,7 +34,7 @@ namespace IHI.Server.Plugins
             EventFirer eventFirer = new EventFirer(plugin);
             plugin.Start(eventFirer);
             plugin.StartedResetEvent.Set();
-            CoreManager.ServerCore.StandardOut.Info(CoreManager.ServerCore.StringLocale.GetString("CORE:PLUGIN_STARTED", plugin.Name));
+            CoreManager.ServerCore.StandardOut.Notice("Plugin Manager", CoreManager.ServerCore.StringLocale.GetString("CORE:PLUGIN_STARTED", plugin.Name));
             return this;
         }
 
@@ -49,7 +49,7 @@ namespace IHI.Server.Plugins
 
             if (!new FileInfo(path).Exists)
             {
-                CoreManager.ServerCore.StandardOut.Warn(CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_PLUGIN_NOT_EXIST", path));
+                CoreManager.ServerCore.StandardOut.Notice("Plugin Manager", CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_PLUGIN_NOT_EXIST", path));
                 return null;
             }
 
@@ -59,8 +59,8 @@ namespace IHI.Server.Plugins
 
             if (specificPluginType == null)
             {
-                CoreManager.ServerCore.StandardOut.Warn(CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_PLUGIN_NOT_EXIST", Path.GetFileNameWithoutExtension(path)));
-                CoreManager.ServerCore.StandardOut.Debug(path);
+                CoreManager.ServerCore.StandardOut.Warning("Plugin Manager", CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_PLUGIN_NOT_EXIST", Path.GetFileNameWithoutExtension(path)));
+                CoreManager.ServerCore.StandardOut.Debug("Plugin Manager", path);
                 return null;
             }
 

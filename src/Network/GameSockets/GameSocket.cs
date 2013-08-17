@@ -115,7 +115,7 @@ namespace IHI.Server.Network
         {
             if (_internalSocket != null)
                 _internalSocket.Close();
-            CoreManager.ServerCore.StandardOut.Info("Game Socket Manager => " + CoreManager.ServerCore.StringLocale.GetString("CORE:INFO_NETWORK_CONNECTION_CLOSED", reason));
+            CoreManager.ServerCore.StandardOut.Notice("Game Socket Manager", CoreManager.ServerCore.StringLocale.GetString("CORE:INFO_NETWORK_CONNECTION_CLOSED", reason));
 
             Protocol.HandlerInvokerManager.DeregisterGameSocket(this);
             Habbo.LoggedIn = false;
@@ -208,7 +208,7 @@ namespace IHI.Server.Network
         {
             IncomingMessage message = Protocol.Reader.ParseMessage(data);
 #if DEBUG
-            CoreManager.ServerCore.StandardOut.Debug("INCOMING => " + data.ToUtf8String());
+            CoreManager.ServerCore.StandardOut.Debug("Packet Logging", "INCOMING => " + data.ToUtf8String());
 #endif
             Task.Factory.StartNew(() => Protocol.HandlerInvokerManager[this].Invoke(Habbo, message));
 
@@ -237,7 +237,7 @@ namespace IHI.Server.Network
             {
                 if (args.Error != null)
                 {
-                    CoreManager.ServerCore.StandardOut.Error("Game Socket Manager => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_NETWORK_CONNECTION_KILLED"));
+                    CoreManager.ServerCore.StandardOut.Error("Game Socket Manager", CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_NETWORK_CONNECTION_KILLED"));
                     Console.WriteLine();
                     Console.WriteLine(args.Error.Message);
                     Console.WriteLine(args.Error.StackTrace);

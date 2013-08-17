@@ -51,14 +51,14 @@ namespace IHI.Server.Network.WebAdmin
 
                     if (value == null)
                     {
-                        CoreManager.ServerCore.StandardOut.Debug("Web Admin => " + CoreManager.ServerCore.StringLocale.GetString("CORE:DEBUG_WEBADMIN_HANDLER_REMOVED",  path));
+                        CoreManager.ServerCore.StandardOut.Debug("Web Admin", CoreManager.ServerCore.StringLocale.GetString("CORE:DEBUG_WEBADMIN_HANDLER_REMOVED",  path));
                         return;
                     }
                     _paths.Add(path, value);
                     if(newEntry)
-                        CoreManager.ServerCore.StandardOut.Debug("Web Admin => " + CoreManager.ServerCore.StringLocale.GetString("CORE:DEBUG_WEBADMIN_HANDLER_ADDED", path));
+                        CoreManager.ServerCore.StandardOut.Debug("Web Admin",CoreManager.ServerCore.StringLocale.GetString("CORE:DEBUG_WEBADMIN_HANDLER_ADDED", path));
                     else
-                        CoreManager.ServerCore.StandardOut.Debug("Web Admin => " + CoreManager.ServerCore.StringLocale.GetString("CORE:DEBUG_WEBADMIN_HANDLER_CHANGED", path));
+                        CoreManager.ServerCore.StandardOut.Debug("Web Admin", CoreManager.ServerCore.StringLocale.GetString("CORE:DEBUG_WEBADMIN_HANDLER_CHANGED", path));
                 }
             }
         }
@@ -102,12 +102,12 @@ namespace IHI.Server.Network.WebAdmin
                 HttpPathHandler handler = this[path];
                 if (handler != null)
                 {
-                    CoreManager.ServerCore.StandardOut.Debug("Web Admin => WebAdmin Request [200]: " + path);
+                    CoreManager.ServerCore.StandardOut.Debug("Web Admin", "WebAdmin Request [200]: " + path);
                     Task.Factory.StartNew(() => handler(e.RequestContext));
                     return;
                 }
             }
-            CoreManager.ServerCore.StandardOut.Debug("Web Admin => WebAdmin Request [404]: " + path);
+            CoreManager.ServerCore.StandardOut.Debug("Web Admin", "WebAdmin Request [404]: " + path);
 
             HttpListenerResponse response = e.RequestContext.Response;
             byte[] buffer = Encoding.UTF8.GetBytes("Not Handled!");

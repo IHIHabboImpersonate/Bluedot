@@ -442,7 +442,7 @@ namespace IHI.Server.Habbos
         public IMessageable SendMessage(IInternalOutgoingMessage message)
         {
 #if DEBUG
-            CoreManager.ServerCore.StandardOut.Debug("OUTGOING => " + message.Header + message.ContentString);
+            CoreManager.ServerCore.StandardOut.Debug("Packet Logging", "OUTGOING => " + message.Header + message.ContentString);
 #endif
             Socket.Send(message.GetBytes());
             return this;

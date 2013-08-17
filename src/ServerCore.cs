@@ -76,9 +76,9 @@ namespace IHI.Server
             private set;
         }
         #endregion
-        #region Property: StandardOutManager
+        #region Property: LoggingManager
 
-        public log4net.ILog StandardOut
+        public LoggingManager StandardOut
         {
             get;
             private set;
@@ -146,7 +146,7 @@ namespace IHI.Server
         {
             lock (_bootInProgressLocker)
             {
-                StandardOut = log4net.LogManager.GetLogger("DEFAULT_STDOUT");
+                StandardOut = new LoggingManager();
                 StringLocale.SetDefaults();
 
                 #region Ensure Directory Structure
@@ -174,7 +174,7 @@ namespace IHI.Server
 
                 BootTaskStartPlugins();
 
-                StandardOut.Info("Core => " + StringLocale.GetString("CORE:BOOT_COMPLETE"));
+                StandardOut.Notice("Core", StringLocale.GetString("CORE:BOOT_COMPLETE"));
 
                 Console.Beep(500, 250);
             }
@@ -186,10 +186,10 @@ namespace IHI.Server
         {
             string configPath = Environment.GetEnvironmentVariable("BLUEDOT_CONFIG_PATH");
 
-            StandardOut.Info(StringLocale.GetString("CORE:BOOT_LOADING_CONFIG_AT") + configPath);
+            StandardOut.Notice("Boot", StringLocale.GetString("CORE:BOOT_LOADING_CONFIG_AT") + configPath);
             Config = new XmlConfig(configPath);
 
-            StandardOut.Info(StringLocale.GetString("CORE:BOOT_INSTALL_CHECKING"));
+            StandardOut.Notice("Boot", StringLocale.GetString("CORE:BOOT_INSTALL_CHECKING"));
             bool mainInstallRequired = PrepareInstall(); // Register the main installation if required.
         }
         #endregion
@@ -198,7 +198,7 @@ namespace IHI.Server
         {
             if (CoreManager.InstallerCore.Run())
             {
-                StandardOut.Info(StringLocale.GetString("CORE:BOOT_INSTALL_SAVING"));
+                StandardOut.Notice("Install", StringLocale.GetString("CORE:BOOT_INSTALL_SAVING"));
                 SaveConfigInstallation();
             }
         }
@@ -207,7 +207,7 @@ namespace IHI.Server
         #region Method: BootTaskConnectMySql
         private void BootTaskConnectMySql()
         {
-            StandardOut.Info("MySQL => " + StringLocale.GetString("CORE:BOOT_MYSQL_PREPARE"));
+            StandardOut.Notice("MySQL", StringLocale.GetString("CORE:BOOT_MYSQL_PREPARE"));
             MySqlConnectionProvider = new MySqlConnectionProvider
             {
                 Host = Config.ValueAsString("/config/mysql/host"),
@@ -216,33 +216,33 @@ namespace IHI.Server
                 Password = Config.ValueAsString("/config/mysql/password"),
                 Database = Config.ValueAsString("/config/mysql/database")
             };
-            StandardOut.Info("MySQL => " + StringLocale.GetString("CORE:BOOT_MYSQL_READY"));
+            StandardOut.Notice("MySQL", StringLocale.GetString("CORE:BOOT_MYSQL_READY"));
         }
         #endregion
         #region Method: BootTaskLoadPlugins
         private void BootTaskLoadPlugins()
         {
             List<Task> taskList = new List<Task>();
-            StandardOut.Info("Plugin Manager => " + StringLocale.GetString("CORE:BOOT_PLUGINS_LOADING"));
+            StandardOut.Notice("Plugin Manager", StringLocale.GetString("CORE:BOOT_PLUGINS_LOADING"));
             foreach (string path in PluginManager.GetAllPotentialPluginPaths())
             {
                 taskList.Add(Task.Factory.StartNew(() => { PluginManager.LoadPluginAtPath(path); }));
             }
             Task.WaitAll(taskList.ToArray());
-            StandardOut.Info("Plugin Manager => " + StringLocale.GetString("CORE:BOOT_PLUGINS_LOADED"));
+            StandardOut.Notice("Plugin Manager", StringLocale.GetString("CORE:BOOT_PLUGINS_LOADED"));
         }
         #endregion
         #region Method: BootTaskStartPlugins
         private void BootTaskStartPlugins()
         {
             List<Task> taskList = new List<Task>();
-            StandardOut.Info("Plugin Manager => " + StringLocale.GetString("CORE:BOOT_PLUGINS_STARTING"));
+            StandardOut.Notice("Plugin Manager", StringLocale.GetString("CORE:BOOT_PLUGINS_STARTING"));
             foreach (Plugin plugin in PluginManager.GetLoadedPlugins())
             {
                 taskList.Add(Task.Factory.StartNew(() => { PluginManager.StartPlugin(plugin); }));
             }
             Task.WaitAll(taskList.ToArray());
-            StandardOut.Info("Plugin Manager => " + StringLocale.GetString("CORE:BOOT_PLUGINS_STARTED"));
+            StandardOut.Notice("Plugin Manager", StringLocale.GetString("CORE:BOOT_PLUGINS_STARTED"));
         }
         #endregion
 
@@ -250,33 +250,33 @@ namespace IHI.Server
         #region Method: BootTaskPrepareFigures
         public void BootTaskPrepareFigures()
         {
-            StandardOut.Info("Habbo Figure Factory => " + StringLocale.GetString("CORE:BOOT_FIGURES_PREPARE"));
+            StandardOut.Notice("Habbo Figure Factory", StringLocale.GetString("CORE:BOOT_FIGURES_PREPARE"));
             HabboFigureFactory = new HabboFigureFactory();
-            StandardOut.Info("Habbo Figure Factory => " + StringLocale.GetString("CORE:BOOT_FIGURES_READY"));
+            StandardOut.Notice("Habbo Figure Factory", StringLocale.GetString("CORE:BOOT_FIGURES_READY"));
         }
         #endregion
         #region Method: BootTaskPreparePermissions
         public void BootTaskPreparePermissions()
         {
-            StandardOut.Info("Permission Distributor => " + StringLocale.GetString("CORE:BOOT_PERMISSIONS_PREPARE"));
+            StandardOut.Notice("Permission Distributor", StringLocale.GetString("CORE:BOOT_PERMISSIONS_PREPARE"));
             PermissionDistributor = new PermissionDistributor();
-            StandardOut.Info("Permission Distributor => " + StringLocale.GetString("CORE:BOOT_PERMISSIONS_READY"));
+            StandardOut.Notice("Permission Distributor", StringLocale.GetString("CORE:BOOT_PERMISSIONS_READY"));
         }
         #endregion
         #region Method: BootTaskPreparePermissions
         public void BootTaskPrepareHabbos()
         {
-            StandardOut.Info("Habbo Distributor => " + StringLocale.GetString("CORE:BOOT_HABBODISTRIBUTOR_PREPARE"));
+            StandardOut.Notice("Habbo Distributor", StringLocale.GetString("CORE:BOOT_HABBODISTRIBUTOR_PREPARE"));
             HabboDistributor = new HabboDistributor();
-            StandardOut.Info("Habbo Distributor => " + StringLocale.GetString("CORE:BOOT_HABBODISTRIBUTOR_READY"));
+            StandardOut.Notice("Habbo Distributor", StringLocale.GetString("CORE:BOOT_HABBODISTRIBUTOR_READY"));
         }
         #endregion
         #region Method: BootTaskPreparePermissions
         public void BootTaskPrepareRooms()
         {
-            StandardOut.Info("Room Distributor => " + StringLocale.GetString("CORE:BOOT_ROOMDISTRIBUTOR_PREPARE"));
+            StandardOut.Notice("Room Distributor", StringLocale.GetString("CORE:BOOT_ROOMDISTRIBUTOR_PREPARE"));
             RoomDistributor = new RoomDistributor();
-            StandardOut.Info("Room Distributor => " + StringLocale.GetString("CORE:BOOT_ROOMDISTRIBUTOR_READY"));
+            StandardOut.Notice("Room Distributor", StringLocale.GetString("CORE:BOOT_ROOMDISTRIBUTOR_READY"));
         }
         #endregion
 
@@ -313,9 +313,9 @@ namespace IHI.Server
         #region Method: BootTaskStartWebAdmin
         public void BootTaskStartWebAdmin()
         {
-            StandardOut.Info("Web Admin => " + StringLocale.GetString("CORE:BOOT_WEBADMIN_PREPARE"));
+            StandardOut.Notice("Web Admin", StringLocale.GetString("CORE:BOOT_WEBADMIN_PREPARE"));
             WebAdminManager = new WebAdminManager(Config.ValueAsUshort("/config/webadmin/port", 14480));
-            StandardOut.Info("Web Admin => " + StringLocale.GetString("CORE:BOOT_WEBADMIN_READY"));
+            StandardOut.Notice("Web Admin", StringLocale.GetString("CORE:BOOT_WEBADMIN_READY"));
         }
         #endregion
 

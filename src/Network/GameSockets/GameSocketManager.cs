@@ -54,10 +54,10 @@ namespace IHI.Server.Network
 
         public GameSocketManager Stop()
         {
-            CoreManager.ServerCore.StandardOut.Info("Game Socket Manager => Stopping...");
+            CoreManager.ServerCore.StandardOut.Notice("Game Socket Manager", "Stopping...");
             _listeningSocket.Close();
             _actionThread.Join();
-            CoreManager.ServerCore.StandardOut.Info("Game Socket Manager => Stopped!");
+            CoreManager.ServerCore.StandardOut.Notice("Game Socket Manager", "Stopped!");
 
             return this;
         }
@@ -67,7 +67,7 @@ namespace IHI.Server.Network
             if(args.Error != null)
             {
                 // TODO: Die safely?
-                CoreManager.ServerCore.StandardOut.Error("Game Socket Manager => Incoming connection failed!!");
+                CoreManager.ServerCore.StandardOut.Error("Game Socket Manager", "Incoming connection failed!!");
 
                 // TODO: Pretty exception reporting
                 Console.WriteLine();
@@ -93,7 +93,7 @@ namespace IHI.Server.Network
             socket.Start();
 
             CoreManager.ServerCore.OfficalEventFirer.Fire("incoming_game_connection", EventPriority.After, socket, connectionEventArgs);
-            CoreManager.ServerCore.StandardOut.Info("Game Socket Manager => Incoming connection accepted: " + internalSocket.RemoteEndPoint);
+            CoreManager.ServerCore.StandardOut.Notice("Game Socket Manager", "Incoming connection accepted: " + internalSocket.RemoteEndPoint);
 
             _listeningSocket.AcceptAsync();
         }

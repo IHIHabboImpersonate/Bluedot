@@ -58,7 +58,7 @@ namespace IHI.Server.Permissions
             }
             _defaultPermissions = new Dictionary<string, PermissionState>();
 
-            CoreManager.ServerCore.StandardOut.Info("Permissions => " + CoreManager.ServerCore.StringLocale.GetString("CORE:BOOT_PERMISSIONS_CALCULATE"));
+            CoreManager.ServerCore.StandardOut.Notice("Permissions", CoreManager.ServerCore.StringLocale.GetString("CORE:BOOT_PERMISSIONS_CALCULATE"));
             _defaultPermissions = GetHabboPermissions(DefaultPermissionsHabboId);
         }
         #endregion
@@ -82,7 +82,7 @@ namespace IHI.Server.Permissions
                 {
                     if (!_permissionGroupCache.ContainsKey(groupName))
                     {
-                        CoreManager.ServerCore.StandardOut.Warn("Permissions => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_PERMISSIONS_UNDEFINED_GROUP", groupName, habboId));
+                        CoreManager.ServerCore.StandardOut.Warning("Permissions", CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_PERMISSIONS_UNDEFINED_GROUP", groupName, habboId));
                         continue;
                     }
                     foreach (KeyValuePair<string, PermissionState> permission in _permissionGroupCache[groupName])

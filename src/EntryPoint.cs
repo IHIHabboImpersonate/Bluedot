@@ -26,21 +26,17 @@ namespace IHI.Server
 
         internal static void Main(string[] arguments)
         {
-            log4net.Config.BasicConfigurator.Configure();
-
-
             Console.Title = "Bluedot Habbo Server";
 
-            log4net.ILog stdOut = log4net.LogManager.GetLogger("DEFAULT_STDOUT");
-            stdOut.Info("Bluedot Habbo Server - Preparing...");
-
+            Console.WriteLine("Bluedot Habbo Server - Preparing...");
+            
             #region Exit management
-            stdOut.Debug("Disabling close window button...");
+            Console.WriteLine("Disabling close window button...");
             // Disable close button to prevent unsafe closing.
             IntPtr current = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
             EnableMenuItem(GetSystemMenu(current, false), SC_CLOSE, MF_GRAYED);
 
-            stdOut.Debug("Binding shutdown to CTRL + C and CTRL + Break...");
+            Console.WriteLine("Binding shutdown to CTRL + C and CTRL + Break...");
             // Reassign CTRL+C and CTRL+BREAK to safely shutdown.
             Console.TreatControlCAsInput = false;
             Console.CancelKeyPress += ShutdownKey;
@@ -49,18 +45,18 @@ namespace IHI.Server
 
             Thread.CurrentThread.Name = "BLUEDOT-EntryThread";
 
-            stdOut.Debug("Setting up packaged reference loading...");
+            Console.WriteLine("Setting up packaged reference loading...");
             // Allows embedded resources to be loaded.
             AppDomain.CurrentDomain.AssemblyResolve += LoadPackagedReferences;
 
-            stdOut.Debug("Setting up fatel exception handler (BSOD style)...");
+            Console.WriteLine("Setting up fatel exception handler (BSOD style)...");
             // Bluescreen in the event of a fatal unhandled exception.
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
 
 
             string configFile = Path.Combine(Environment.CurrentDirectory, "config.xml");
 
-            stdOut.Debug("Parsing command line arguments...");
+            Console.WriteLine("Parsing command line arguments...");
             Regex nameValueRegex = new Regex("^--(?<name>[\\w-]+)=(?<value>.+)$");
 
             foreach (string argument in arguments)
@@ -83,18 +79,23 @@ namespace IHI.Server
                             _waitOnBsod = true;
                             break;
                         }
+                    default:
+                        {
+                            Console.WriteLine("Unknown command line argument (" + name + "=" + value + ")");
+                            break;
+                        }
                 }
             }
-            stdOut.Info("Config location: " + configFile);
+            Console.WriteLine("Config location: " + configFile);
             Environment.SetEnvironmentVariable("BLUEDOT_CONFIG_PATH", configFile);
 
-            stdOut.Info("Preparing installer core...");
+            Console.WriteLine("Preparing installer core...");
             CoreManager.InitialiseInstallerCore();
 
-            stdOut.Info("Preparing server core...");
+            Console.WriteLine("Preparing server core...");
             CoreManager.InitialiseServerCore();
 
-            stdOut.Info("Starting server core...");
+            Console.WriteLine("Starting server core...");
             CoreManager.ServerCore.Boot();
         }
 
@@ -121,8 +122,8 @@ namespace IHI.Server
             
             if(_waitOnBsod)
             {
-                log4net.ILog stdOut = log4net.LogManager.GetLogger("DEFAULT_STDOUT");
-                stdOut.Fatal("BLUEDOT STOP ERROR - Press any key to show!");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("BLUEDOT STOP ERROR - Press any key to show!");
                 Console.ReadKey(true);
             }
 

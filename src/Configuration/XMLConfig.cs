@@ -32,7 +32,7 @@ namespace IHI.Server.Configuration
 
             if (!EnsureFile(new FileInfo(path), out wasCreated))
             {
-                CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_CREATION_FAILED", path));
+                CoreManager.ServerCore.StandardOut.Error("CONFIG",CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_CREATION_FAILED", path));
             }
             WasCreated = wasCreated;
 
@@ -81,7 +81,7 @@ namespace IHI.Server.Configuration
             {
                 if (!byte.TryParse(ValueAsString(xPath), out result))
                 {
-                    CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_BYTE", xPath, fallback));
+                    CoreManager.ServerCore.StandardOut.Error("Config", CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_BYTE", xPath, fallback));
                     return fallback;
                 }
             }
@@ -105,7 +105,7 @@ namespace IHI.Server.Configuration
             {
                 if (!sbyte.TryParse(ValueAsString(xPath), out result))
                 {
-                    CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_SBYTE", xPath, fallback));
+                    CoreManager.ServerCore.StandardOut.Error("CONFIG", CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_SBYTE", xPath, fallback));
                     return fallback;
                 }
             }
@@ -129,7 +129,7 @@ namespace IHI.Server.Configuration
             {
                 if (!short.TryParse(ValueAsString(xPath), out result))
                 {
-                    CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_SHORT", xPath, fallback));
+                    CoreManager.ServerCore.StandardOut.Error("CONFIG", CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_SHORT", xPath, fallback));
                     return fallback;
                 }
             }
@@ -153,7 +153,7 @@ namespace IHI.Server.Configuration
             {
                 if (!ushort.TryParse(ValueAsString(xPath), out result))
                 {
-                    CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_USHORT", xPath, fallback));
+                    CoreManager.ServerCore.StandardOut.Error("CONFIG", CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_USHORT", xPath, fallback));
                     return fallback;
                 }
             }
@@ -177,7 +177,7 @@ namespace IHI.Server.Configuration
             {
                 if (!int.TryParse(ValueAsString(xPath), out result))
                 {
-                    CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_INT", xPath, fallback));
+                    CoreManager.ServerCore.StandardOut.Error("CONFIG", CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_INT", xPath, fallback));
                     return fallback;
                 }
             }
@@ -201,7 +201,7 @@ namespace IHI.Server.Configuration
             {
                 if (!uint.TryParse(ValueAsString(xPath), out result))
                 {
-                    CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_UINT", xPath, fallback));
+                    CoreManager.ServerCore.StandardOut.Error("CONFIG", CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_UINT", xPath, fallback));
                     return fallback;
                 }
             }
@@ -225,7 +225,7 @@ namespace IHI.Server.Configuration
             {
                 if (!long.TryParse(ValueAsString(xPath), out result))
                 {
-                    CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_LONG", xPath, fallback));
+                    CoreManager.ServerCore.StandardOut.Error("CONFIG", CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_LONG", xPath, fallback));
                     return fallback;
                 }
             }
@@ -249,7 +249,7 @@ namespace IHI.Server.Configuration
             {
                 if (!ulong.TryParse(ValueAsString(xPath), out result))
                 {
-                    CoreManager.ServerCore.StandardOut.Error("CONFIG => " + CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_ULONG", xPath, fallback));
+                    CoreManager.ServerCore.StandardOut.Error("CONFIG", CoreManager.ServerCore.StringLocale.GetString("CORE:ERROR_CONFIG_INVALID_ULONG", xPath, fallback));
                     return fallback;
                 }
             }

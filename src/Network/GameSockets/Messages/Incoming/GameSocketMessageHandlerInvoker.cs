@@ -20,7 +20,7 @@ namespace IHI.Server.Network
                 // Are there any handlers registered for this packet?
                 if (!_handlers.ContainsKey(message.HeaderId))
                 {
-                    CoreManager.ServerCore.StandardOut.Debug("Game Socket Manager => Unhandled HeaderID " + message.HeaderId + " (\"" + message.HeaderString + "\")");
+                    CoreManager.ServerCore.StandardOut.Debug("Game Socket Manager", "Unhandled HeaderID " + message.HeaderId + " (\"" + message.HeaderString + "\")");
                     // No, do nothing.
                     return this;
                 }

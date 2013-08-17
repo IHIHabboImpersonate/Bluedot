@@ -18,7 +18,7 @@ namespace IHI.Server.Plugins
         }
 
         #region Method: Fire
-        internal EventFirer Fire(string eventName, EventPriority priority, object source, EventArgs args)
+        public EventFirer Fire(string eventName, EventPriority priority, object source, EventArgs args)
         {
             CoreManager.ServerCore.EventManager.Fire(_plugin, eventName, priority, source, args);
             return this;

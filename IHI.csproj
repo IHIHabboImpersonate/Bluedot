@@ -8,8 +8,8 @@
     <ProjectGuid>{C4A7184F-5843-4D97-889F-FBC8153007F1}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bluedot.HabboServer</RootNamespace>
-    <AssemblyName>BluedotHabboServer</AssemblyName>
+    <RootNamespace>IHI.Server</RootNamespace>
+    <AssemblyName>IHI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -39,10 +39,26 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG; </DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
-      <HintPath>..\..\..\Libs\Log4Net\1.2.11\bin\cli\1.0\release\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="MySql.Data, Version=6.5.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference Packaging\MySql.Data.dll</HintPath>
@@ -61,7 +77,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\APIUsage\ApiCallerRoot.cs" />
-    <Compile Include="src\APIUsage\IPseudoPlugin.cs" />
+    <Compile Include="src\LoggingReader.cs" />
+    <Compile Include="src\LoggingManager.cs" />
+    <Compile Include="src\Plugins\PluginManager.cs" />
+    <Compile Include="src\Plugins\Plugin.cs" />
     <Compile Include="src\APIUsage\Libraries\StandardPrivateRoomModels1\RoomModelB.cs" />
     <Compile Include="src\APIUsage\Libraries\StandardPrivateRoomModels1\RoomModelC.cs" />
     <Compile Include="src\APIUsage\Libraries\StandardPrivateRoomModels1\RoomModelD.cs" />
@@ -70,11 +89,8 @@
     <Compile Include="src\APIUsage\Libraries\StandardPrivateRoomModels1\RoomModelA.cs" />
     <Compile Include="src\APIUsage\Plugins\ClassicFigures\ClassicFigures.cs" />
     <Compile Include="src\APIUsage\Plugins\ClassicFigures\Body\Body180.cs" />
-    <Compile Include="src\APIUsage\Plugins\SomeFlashProtocol\SomeFlashProtocol.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="src\Configuration\XMLConfig.cs" />
-    <Compile Include="src\EventFirer.cs" />
+    <Compile Include="src\Plugins\EventFirer.cs" />
     <Compile Include="src\Database\Actions\RoomActions.cs" />
     <Compile Include="src\Network\Encoding\BinaryEncoding.cs" />
     <Compile Include="src\Network\GameSockets\GameSocketProtocol.cs" />
